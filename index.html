@@ -38,6 +38,7 @@
         font-family: var(--sans);
         -webkit-font-smoothing: antialiased;
         line-height: 1.55;
+        overflow-x: hidden;
       }
       ::selection {
         background: color-mix(in oklab, var(--primary) 35%, transparent);
@@ -45,14 +46,51 @@
       a {
         color: var(--primary);
         text-decoration: none;
+        transition: text-shadow 0.3s;
       }
       a:hover {
         text-decoration: underline;
+        text-shadow: 0 0 8px color-mix(in oklab, var(--primary) 50%, transparent);
       }
+      
+      /* Interactive Background Canvas */
+      #bg-canvas {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        z-index: 0;
+        pointer-events: none;
+        opacity: 0.4;
+      }
+
+      /* Custom Cursor Glow */
+      #cursor-glow {
+        position: fixed;
+        width: 400px;
+        height: 400px;
+        background: radial-gradient(circle, color-mix(in oklab, var(--primary) 15%, transparent) 0%, transparent 60%);
+        border-radius: 50%;
+        transform: translate(-50%, -50%);
+        pointer-events: none;
+        z-index: 0;
+        transition: width 0.3s, height 0.3s, background 0.3s;
+      }
+      body.matrix-mode #cursor-glow {
+        background: radial-gradient(circle, rgba(0, 255, 65, 0.15) 0%, transparent 60%);
+      }
+      body.matrix-mode {
+        --primary: #00ff41;
+        --accent: #008f11;
+      }
+
       .wrap {
         max-width: 52rem;
         margin: 0 auto;
         padding: 0 1.5rem 7rem;
+        position: relative;
+        z-index: 1;
       }
       .wrap.wide {
         max-width: 68rem;
@@ -167,6 +205,8 @@
         gap: 0.5rem;
         margin-top: 1.25rem;
       }
+      
+      /* Interactive Tags */
       .tag {
         border: 1px solid var(--border);
         border-radius: 999px;
@@ -174,7 +214,17 @@
         font-family: var(--mono);
         font-size: 0.68rem;
         color: var(--muted-foreground);
+        cursor: pointer;
+        transition: all 0.3s ease;
       }
+      .tag:hover, .tag.highlight {
+        background: color-mix(in oklab, var(--primary) 20%, transparent);
+        color: var(--foreground);
+        border-color: var(--primary);
+        box-shadow: 0 0 10px color-mix(in oklab, var(--primary) 40%, transparent);
+        transform: translateY(-2px);
+      }
+
       .grid2 {
         display: grid;
         gap: 2rem;
@@ -201,31 +251,13 @@
         font-size: 0.85rem;
         color: var(--muted-foreground);
       }
-      /* interactive styling */
-      .spotlight {
-        position: fixed;
-        inset: 0;
-        pointer-events: none;
-        z-index: 0;
-        background: radial-gradient(
-          360px circle at var(--x, 50%) var(--y, 20%),
-          color-mix(in oklab, var(--primary) 15%, transparent),
-          transparent 70%
-        );
+
+      /* 3D Transform Elements */
+      .tilt-element {
+        transition: transform 0.1s ease, box-shadow 0.3s ease;
+        transform-style: preserve-3d;
       }
-      .grid-field {
-        position: fixed;
-        inset: 0;
-        pointer-events: none;
-        z-index: 0;
-        opacity: 0.35;
-        background-image:
-          linear-gradient(to right, var(--border) 1px, transparent 1px),
-          linear-gradient(to bottom, var(--border) 1px, transparent 1px);
-        background-size: 64px 64px;
-        -webkit-mask-image: radial-gradient(ellipse at 50% 0%, black, transparent 75%);
-        mask-image: radial-gradient(ellipse at 50% 0%, black, transparent 75%);
-      }
+
       .panel {
         position: relative;
         z-index: 1;
@@ -233,8 +265,13 @@
         border-radius: 1rem;
         background: color-mix(in oklab, var(--card) 75%, transparent);
         padding: 1.75rem;
-        backdrop-filter: blur(6px);
+        backdrop-filter: blur(12px);
       }
+      .panel:hover {
+        border-color: color-mix(in oklab, var(--primary) 50%, transparent);
+        box-shadow: 0 10px 30px -10px rgba(0,0,0,0.5);
+      }
+      
       .dots span {
         display: inline-block;
         width: 0.6rem;
@@ -270,11 +307,17 @@
       .node:hover {
         color: var(--foreground);
         border-color: color-mix(in oklab, var(--primary) 60%, transparent);
+        box-shadow: 0 5px 15px color-mix(in oklab, var(--primary) 20%, transparent);
+      }
+      .node.highlight-node {
+        border-color: var(--accent);
+        box-shadow: 0 0 15px color-mix(in oklab, var(--accent) 50%, transparent);
       }
       .node[aria-pressed="true"] {
         border-color: var(--primary);
         color: var(--foreground);
         background: color-mix(in oklab, var(--primary) 12%, transparent);
+        box-shadow: inset 0 0 10px color-mix(in oklab, var(--primary) 20%, transparent);
       }
       .node b {
         display: block;
@@ -294,11 +337,11 @@
         border-radius: 0.75rem;
         background: color-mix(in oklab, var(--card) 45%, transparent);
         padding: 1.25rem;
-        transition: transform 0.25s, border-color 0.25s;
+        transition: transform 0.1s, border-color 0.25s, box-shadow 0.25s;
       }
       .card:hover {
-        transform: translateY(-3px);
         border-color: var(--primary);
+        box-shadow: 0 10px 20px rgba(0,0,0,0.2);
       }
       .card h3 {
         font-family: var(--display);
@@ -318,23 +361,31 @@
         border-radius: 1rem;
         padding: 1rem 0;
         margin-top: 3.5rem;
+        background: color-mix(in oklab, var(--card) 20%, transparent);
+        backdrop-filter: blur(4px);
       }
       .marquee {
         display: flex;
         width: max-content;
-        animation: scroll 45s linear infinite;
+        animation: scroll 35s linear infinite;
         font-family: var(--mono);
         font-size: 0.85rem;
         color: var(--muted-foreground);
       }
+      .marquee-wrap:hover .marquee {
+        animation-play-state: paused;
+      }
       .marquee span {
         margin: 0 1.25rem;
         white-space: nowrap;
+        cursor: pointer;
+        transition: color 0.3s;
+      }
+      .marquee span:hover {
+        color: var(--primary);
       }
       @keyframes scroll {
-        to {
-          transform: translateX(-50%);
-        }
+        to { transform: translateX(-50%); }
       }
       .tabs {
         position: fixed;
@@ -349,6 +400,7 @@
         border-radius: 999px;
         background: color-mix(in oklab, var(--background) 88%, transparent);
         backdrop-filter: blur(10px);
+        box-shadow: 0 5px 20px rgba(0,0,0,0.3);
       }
       .tabs button {
         font-family: var(--mono);
@@ -371,21 +423,33 @@
         color: var(--background);
         font-weight: 600;
       }
+      
+      /* Advanced Terminal */
       .interactive-console {
         margin-top: 1.5rem;
         border: 1px solid var(--border);
         border-radius: 0.75rem;
-        background: color-mix(in oklab, var(--background) 92%, transparent);
+        background: rgba(0, 0, 0, 0.6);
         padding: 1rem;
         font-family: var(--mono);
         font-size: 0.8rem;
+        box-shadow: inset 0 0 20px rgba(0,0,0,0.5);
+        backdrop-filter: blur(5px);
       }
       .console-log {
-        max-height: 160px;
+        max-height: 180px;
         overflow-y: auto;
         color: var(--muted-foreground);
         margin-bottom: 0.75rem;
-        line-height: 1.45;
+        line-height: 1.5;
+      }
+      .console-log div {
+        animation: slideIn 0.2s ease-out forwards;
+        opacity: 0;
+        transform: translateX(-10px);
+      }
+      @keyframes slideIn {
+        to { opacity: 1; transform: translateX(0); }
       }
       .console-input-row {
         display: flex;
@@ -396,26 +460,35 @@
         background: transparent;
         border: none;
         outline: none;
-        color: var(--foreground);
+        color: var(--primary);
         font-family: var(--mono);
-        font-size: 0.8rem;
+        font-size: 0.85rem;
         width: 100%;
+        text-shadow: 0 0 5px color-mix(in oklab, var(--primary) 40%, transparent);
       }
       @media (prefers-reduced-motion: reduce) {
-        .marquee, .caret {
+        .marquee, .caret, .console-log div, .tilt-element {
           animation: none;
+          transition: none;
+          transform: none !important;
         }
       }
     </style>
   </head>
   <body>
+    <!-- Interactive Backgrounds -->
+    <canvas id="bg-canvas"></canvas>
+    <div id="cursor-glow"></div>
+    
     <div id="app"></div>
+    
     <div class="tabs" id="tabs" role="tablist" aria-label="Portfolio themes">
       <button type="button" role="tab" data-theme="classic">Classic</button>
       <button type="button" role="tab" data-theme="interactive">Interactive</button>
     </div>
 
     <script>
+      // --- CONTENT PAYLOAD (STRICTLY UNEDITED FROM DOCX) ---
       const profile = {
         name: "Sameer Bandi",
         title: "Data Analytics Engineer",
@@ -483,18 +556,7 @@
             "As a BA: Elicited requirements directly from business stakeholders and translated business questions into Power BI reporting and BI solutions spanning SQL, KQL, and Fabric data sources.",
             "Created and managed dimensional data models, complex DAX calculations, and automated deployments in Power BI Service.",
           ],
-          stack: [
-            "ADLS Gen2",
-            "Azure Data Factory (ADF)",
-            "Databricks",
-            "PySpark",
-            "Azure Synapse",
-            "Microsoft Fabric",
-            "Power BI",
-            "DAX",
-            "RLS",
-            "Azure DevOps",
-          ],
+          stack: ["ADLS Gen2", "Azure Data Factory (ADF)", "Databricks", "PySpark", "Azure Synapse", "Microsoft Fabric", "Power BI", "DAX", "RLS", "Azure DevOps"],
         },
         {
           role: "Power BI Developer / Analytics Engineer (Internship)",
@@ -531,54 +593,19 @@
       const skills = [
         {
           group: "Data Engineering & Architecture",
-          items: [
-            "Azure Data Factory (ADF)",
-            "Azure Synapse Analytics",
-            "Databricks",
-            "Microsoft Fabric (Lakehouse/Warehouse)",
-            "ADLS Gen2",
-            "Medallion Architecture",
-            "ETL/ELT Pipelines",
-            "Real-Time/Streaming Data",
-          ],
+          items: ["Azure Data Factory (ADF)", "Azure Synapse Analytics", "Databricks", "Microsoft Fabric (Lakehouse/Warehouse)", "ADLS Gen2", "Medallion Architecture", "ETL/ELT Pipelines", "Real-Time/Streaming Data"],
         },
         {
           group: "Languages & Databases",
-          items: [
-            "Python",
-            "PySpark",
-            "SQL (T-SQL)",
-            "KQL (Kusto Query Language)",
-            "Azure SQL Database",
-            "SQL Server",
-            "Oracle",
-            "REST APIs",
-          ],
+          items: ["Python", "PySpark", "SQL (T-SQL)", "KQL (Kusto Query Language)", "Azure SQL Database", "SQL Server", "Oracle", "REST APIs"],
         },
         {
           group: "Business Intelligence & Analytics",
-          items: [
-            "Power BI (Desktop & Service)",
-            "DAX (Performance Optimization & Measures)",
-            "Power Query",
-            "Semantic Data Modeling (Dimensional)",
-            "Row-Level Security (RLS)",
-            "SSRS",
-            "Azure Analysis Services",
-          ],
+          items: ["Power BI (Desktop & Service)", "DAX (Performance Optimization & Measures)", "Power Query", "Semantic Data Modeling (Dimensional)", "Row-Level Security (RLS)", "SSRS", "Azure Analysis Services"],
         },
         {
           group: "DevOps & Cloud Governance",
-          items: [
-            "Azure DevOps",
-            "GitHub & Git",
-            "CI/CD Pipelines",
-            "Databricks Notebooks",
-            "RBAC & Cloud Security",
-            "Azure Monitor & Log Analytics",
-            "Data Dictionaries & Governance",
-            "Healthcare Privacy Compliance",
-          ],
+          items: ["Azure DevOps", "GitHub & Git", "CI/CD Pipelines", "Databricks Notebooks", "RBAC & Cloud Security", "Azure Monitor & Log Analytics", "Data Dictionaries & Governance", "Healthcare Privacy Compliance"],
         },
       ];
 
@@ -592,13 +619,19 @@
         ["Microsoft Certified: Azure Architect Technologies", "AZ-300"],
       ];
 
+      // --- STATE MANAGEMENT ---
       const app = document.getElementById("app");
       let theme = location.hash === "#interactive" ? "interactive" : "classic";
       let active = 0;
+      let activeTag = null;
+      
+      // Terminal State
       let consoleLogs = [
         "System initialized: Welcome to Sameer Bandi's interactive terminal.",
         "Type 'help', 'roles', 'skills', 'certifications', or 'contact' to explore.",
       ];
+      let cmdHistory = [];
+      let historyIdx = -1;
 
       const contact = `
         <div class="tags mono" style="margin-top:2rem;gap:2rem">
@@ -607,6 +640,7 @@
           <a href="${profile.linkedin}" target="_blank" rel="noreferrer">LinkedIn</a>
         </div>`;
 
+      // --- VIEWS ---
       function classicView() {
         return `
         <div class="wrap">
@@ -614,7 +648,7 @@
             <span style="font-family:var(--display);font-size:1.25rem">SB.</span>
             <nav><a href="#work">Work</a><a href="#stack">Stack</a><a href="#education">Education</a><a href="mailto:${profile.email}">Connect</a></nav>
           </header>
-          <section class="hero">
+          <section class="hero tilt-element">
             <p class="eyebrow">${profile.title}</p>
             <h1>Data should <em>feel</em> trustworthy</h1>
             <p class="lead">${profile.summary}</p>
@@ -624,7 +658,7 @@
             <h2 class="eyebrow">Guiding Principles</h2>
             ${beliefs
               .map(
-                (b, i) => `<div class="belief"><span class="num">0${i + 1}</span><div>
+                (b, i) => `<div class="belief tilt-element"><span class="num">0${i + 1}</span><div>
                   <h3 class="display" style="font-size:1.5rem">${b.title}</h3>
                   <p class="muted" style="margin-top:.5rem;max-width:34rem">${b.body}</p></div></div>`,
               )
@@ -634,12 +668,12 @@
             <h2 class="eyebrow">Work Experience</h2>
             ${work
               .map(
-                (j) => `<article class="job">
+                (j) => `<article class="job tilt-element">
                   <div class="job-head"><h3>${j.role}</h3><span class="eyebrow">${j.period}</span></div>
                   <p style="color:var(--primary);font-size:.88rem;margin-top:.25rem">${j.company} ·${j.place}</p>
                   <p class="muted" style="margin-top:1rem;max-width:44rem">${j.summary}</p>
                   <ul>${j.points.map((p) => `<li>${p}</li>`).join("")}</ul>
-                  <div class="tags">${j.stack.map((s) => `<span class="tag">${s}</span>`).join("")}</div>
+                  <div class="tags">${j.stack.map((s) => `<span class="tag tech-tag" data-skill="${s}">${s}</span>`).join("")}</div>
                 </article>`,
               )
               .join("")}
@@ -649,7 +683,7 @@
             <div class="grid2">
               ${skills
                 .map(
-                  (s) => `<div><h3 class="display" style="font-size:1.3rem">${s.group}</h3>
+                  (s) => `<div class="tilt-element"><h3 class="display" style="font-size:1.3rem">${s.group}</h3>
                   <ul class="muted" style="list-style:none;margin-top:.75rem;font-size:.9rem;line-height:1.7">${s.items.map((i) => `<li>› ${i}</li>`).join("")}</ul></div>`,
                 )
                 .join("")}
@@ -657,12 +691,12 @@
           </section>
           <section id="education">
             <h2 class="eyebrow">Education & Certifications</h2>
-            <ul class="edu">
+            <ul class="edu tilt-element">
               ${education.map(([t, s]) => `<li><span>${t}</span><span>${s}</span></li>`).join("")}
               ${certifications.map(([t, s]) => `<li><span>${t}</span><span>${s}</span></li>`).join("")}
             </ul>
           </section>
-          <section>
+          <section class="tilt-element">
             <h2 class="display" style="font-size:2.5rem;line-height:1.15">Need high-trust data pipelines or BI reporting?</h2>
             <p class="muted" style="margin-top:1rem;max-width:34rem">Always ready to discuss data platform architectures, Medallion implementations, Power BI semantic models, or analytics reliability.</p>
             ${contact}
@@ -674,13 +708,12 @@
         const j = work[active];
         const allStack = skills.flatMap((s) => s.items);
         return `
-        <div class="spotlight" id="spot"></div><div class="grid-field"></div>
         <div class="wrap wide" style="position:relative;z-index:1">
           <header class="bar mono" style="text-transform:uppercase;letter-spacing:.2em;font-size:.7rem">
             <span style="color:var(--primary)">~/sameer.terminal</span>
             <span class="muted">${profile.location}</span>
           </header>
-          <div class="panel">
+          <div class="panel tilt-element">
             <div class="dots">
               <span style="background:oklch(.6 .2 27)"></span><span style="background:var(--primary)"></span><span style="background:var(--accent)"></span>
             </div>
@@ -693,19 +726,19 @@
           </div>
 
           <section style="border:0">
-            <h2 class="eyebrow">Experience Timeline — Click stage to inspect</h2>
+            <h2 class="eyebrow">Experience Timeline — Click stage to inspect (Click tags to filter)</h2>
             <div class="nodes">
               ${work
                 .map(
                   (w, i) =>
-                    `<button class="node" aria-pressed="${i === active}" data-i="${i}">
+                    `<button class="node tilt-element ${activeTag && w.stack.some(s=>s.includes(activeTag)) ? 'highlight-node' : ''}" aria-pressed="${i === active}" data-i="${i}">
                       <span>${w.period.split("–")[0].trim()}</span>
                       <b>${w.company}</b>
                     </button>`,
                 )
                 .join("")}
             </div>
-            <div class="panel" style="margin-top:1.5rem">
+            <div class="panel tilt-element" style="margin-top:1.5rem">
               <div class="job-head">
                 <h3 class="display" style="font-size:1.85rem">${j.role}</h3>
                 <span class="eyebrow" style="color:var(--primary)">${j.period}</span>
@@ -713,29 +746,29 @@
               <p class="muted" style="font-size:.9rem;margin-top:.25rem">${j.company} · ${j.place}</p>
               <p class="muted" style="margin-top:1rem;max-width:44rem">${j.summary}</p>
               <div class="cards">
-                ${j.points.map((p) => `<div class="card muted" style="font-size:.86rem;line-height:1.5">${p}</div>`).join("")}
+                ${j.points.map((p) => `<div class="card muted tilt-element" style="font-size:.86rem;line-height:1.5">${p}</div>`).join("")}
               </div>
               <div class="tags" style="margin-top:1.5rem">
-                ${j.stack.map((s) => `<span class="tag" style="border-color:color-mix(in oklab,var(--primary) 40%,transparent);color:var(--primary)">${s}</span>`).join("")}
+                ${j.stack.map((s) => `<span class="tag tech-tag ${activeTag === s ? 'highlight' : ''}" data-skill="${s}" style="border-color:color-mix(in oklab,var(--primary) 40\%,transparent);color:var(--primary)">${s}</span>`).join("")}
               </div>
             </div>
           </section>
 
-          <div class="marquee-wrap">
+          <div class="marquee-wrap tilt-element">
             <div class="marquee">
-              ${[...allStack, ...allStack].map((s) => `<span>${s} <b style="color:var(--primary)">/</b></span>`).join("")}
+              ${[...allStack, ...allStack].map((s) => `<span class="tech-tag ${activeTag === s ? 'highlight' : ''}" data-skill="${s}">${s} <b style="color:var(--primary)">/</b></span>`).join("")}
             </div>
           </div>
 
           <section style="border:0">
             <h2 class="eyebrow">Interactive CLI Console</h2>
-            <div class="interactive-console">
+            <div class="interactive-console tilt-element">
               <div class="console-log" id="consoleLog">
                 ${consoleLogs.map((l) => `<div>&gt; ${l}</div>`).join("")}
               </div>
-              <form id="consoleForm" class="console-input-row" onsubmit="handleConsoleSubmit(event)">
+              <form id="consoleForm" class="console-input-row">
                 <span style="color:var(--accent)">$</span>
-                <input type="text" id="consoleInput" class="console-input" placeholder="Type command here (try 'skills' or 'help')..." autocomplete="off" />
+                <input type="text" id="consoleInput" class="console-input" placeholder="Type command here (Up/Down for history)..." autocomplete="off" autofocus />
               </form>
             </div>
           </section>
@@ -746,9 +779,11 @@
               ${skills
                 .map(
                   (s) =>
-                    `<div class="card">
+                    `<div class="card tilt-element">
                       <h3>${s.group}</h3>
-                      <ul>${s.items.map((i) => `<li>› ${i}</li>`).join("")}</ul>
+                      <ul style="margin-top:1rem">
+                        ${s.items.map((i) => `<li style="margin-bottom:0.4rem"><span class="tag tech-tag ${activeTag === i ? 'highlight' : ''}" data-skill="${i}">${i}</span></li>`).join("")}
+                      </ul>
                     </div>`,
                 )
                 .join("")}
@@ -758,18 +793,20 @@
           <section style="border:0">
             <h2 class="eyebrow">Education & Certifications</h2>
             <div class="cards">
-              ${education.map(([t, s]) => `<div class="card"><h3>${t}</h3><p class="mono muted" style="font-size:.75rem;margin-top:.4rem">${s}</p></div>`).join("")}
-              ${certifications.map(([t, s]) => `<div class="card"><h3>${t}</h3><p class="mono muted" style="font-size:.75rem;margin-top:.4rem">${s}</p></div>`).join("")}
+              ${education.map(([t, s]) => `<div class="card tilt-element"><h3>${t}</h3><p class="mono muted" style="font-size:.75rem;margin-top:.4rem">${s}</p></div>`).join("")}
+              ${certifications.map(([t, s]) => `<div class="card tilt-element"><h3>${t}</h3><p class="mono muted" style="font-size:.75rem;margin-top:.4rem">${s}</p></div>`).join("")}
             </div>
           </section>
 
-          <div class="panel">
+          <div class="panel tilt-element">
             <p class="mono" style="color:var(--accent);font-size:.85rem">$ open connection</p>
             <h2 class="display" style="font-size:2.5rem;line-height:1.15;margin-top:.75rem">Let's build reliable reporting solutions.</h2>
             ${contact}
           </div>
         </div>`;
       }
+
+      // --- CLIENT SIDE INTERACTIVITY LOGIC ---
 
       let typeTimer;
       function startTypewriter() {
@@ -784,9 +821,7 @@
           "Healthcare reporting & governance",
           "KQL diagnostics & Log Analytics",
         ];
-        let i = 0,
-          n = 0,
-          deleting = false;
+        let i = 0, n = 0, deleting = false;
         (function tick() {
           const word = words[i % words.length];
           n += deleting ? -1 : 1;
@@ -804,85 +839,264 @@
         })();
       }
 
-      function handleConsoleSubmit(e) {
-        e.preventDefault();
+      function attachTerminalEvents() {
+        const form = document.getElementById("consoleForm");
         const input = document.getElementById("consoleInput");
-        const val = input.value.trim().toLowerCase();
-        if (!val) return;
-        input.value = "";
+        if (!form || !input) return;
 
-        consoleLogs.push(val);
-        switch (val) {
-          case "help":
-            consoleLogs.push("Available commands: roles, skills, certifications, contact, clear, whoami");
-            break;
-          case "whoami":
-            consoleLogs.push(`${profile.name} — ${profile.title}. Open for Data Engineer, Data Analytics Engineer, or Analytics Engineer roles based in ${profile.location}`);
-            break;
-          case "roles":
-            work.forEach((w) => consoleLogs.push(`• ${w.role} @ ${w.company} (${w.period})`));
-            break;
-          case "skills":
-            skills.forEach((s) => consoleLogs.push(`[${s.group}]: ${s.items.join(", ")}`));
-            break;
-          case "certifications":
-            certifications.forEach(([c, code]) => consoleLogs.push(`• ${c} (${code})`));
-            break;
-          case "contact":
-            consoleLogs.push(`Email: ${profile.email} | Phone: ${profile.phone} | LinkedIn: ${profile.linkedin}`);
-            break;
-          case "clear":
-            consoleLogs = [];
-            break;
-          default:
-            consoleLogs.push(`Command not recognized: '${val}'. Type 'help' for options.`);
-        }
-        const logBox = document.getElementById("consoleLog");
-        if (logBox) {
-          logBox.innerHTML = consoleLogs.map((l) => `<div>&gt; ${l}</div>`).join("");
-          logBox.scrollTop = logBox.scrollHeight;
-        }
+        // Command Submission
+        form.addEventListener("submit", (e) => {
+          e.preventDefault();
+          const val = input.value.trim();
+          if (!val) return;
+          input.value = "";
+          
+          cmdHistory.push(val);
+          historyIdx = cmdHistory.length;
+
+          consoleLogs.push(`<span style="color:var(--foreground)">$ ${val}</span>`);
+          
+          const cmd = val.toLowerCase();
+          switch (cmd) {
+            case "help":
+              consoleLogs.push("Commands: roles, skills, certifications, contact, clear, whoami, matrix");
+              break;
+            case "whoami":
+              consoleLogs.push(`${profile.name} — ${profile.title}. Open for Data Analytics roles based in ${profile.location}`);
+              break;
+            case "roles":
+              work.forEach((w) => consoleLogs.push(`• ${w.role} @ ${w.company} (${w.period})`));
+              break;
+            case "skills":
+              skills.forEach((s) => consoleLogs.push(`[${s.group}]: ${s.items.join(", ")}`));
+              break;
+            case "certifications":
+              certifications.forEach(([c, code]) => consoleLogs.push(`• ${c} (${code})`));
+              break;
+            case "contact":
+              consoleLogs.push(`Email: ${profile.email} | Phone: ${profile.phone}`);
+              break;
+            case "matrix":
+              document.body.classList.toggle('matrix-mode');
+              consoleLogs.push(document.body.classList.contains('matrix-mode') ? "Wake up, Neo..." : "System restored.");
+              break;
+            case "clear":
+              consoleLogs = [];
+              break;
+            default:
+              consoleLogs.push(`Command not recognized: '${val}'. Type 'help'.`);
+          }
+          
+          const logBox = document.getElementById("consoleLog");
+          if (logBox) {
+            logBox.innerHTML = consoleLogs.map((l) => `<div>&gt; ${l}</div>`).join("");
+            logBox.scrollTop = logBox.scrollHeight;
+          }
+        });
+
+        // Command History Tracking
+        input.addEventListener("keydown", (e) => {
+          if (e.key === "ArrowUp") {
+            e.preventDefault();
+            if (historyIdx > 0) {
+              historyIdx--;
+              input.value = cmdHistory[historyIdx];
+            }
+          } else if (e.key === "ArrowDown") {
+            e.preventDefault();
+            if (historyIdx < cmdHistory.length - 1) {
+              historyIdx++;
+              input.value = cmdHistory[historyIdx];
+            } else {
+              historyIdx = cmdHistory.length;
+              input.value = "";
+            }
+          }
+        });
       }
 
+      function init3DTilt() {
+        if(window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+        
+        document.querySelectorAll('.tilt-element').forEach(el => {
+          el.addEventListener('mousemove', e => {
+            const rect = el.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+            const xc = rect.width / 2;
+            const yc = rect.height / 2;
+            const dx = (x - xc) / xc;
+            const dy = (y - yc) / yc;
+            // Apply a subtle 3D rotation based on mouse coordinates
+            el.style.transform = `perspective(1000px) rotateY(${dx * 3}deg) rotateX(${-dy * 3}deg) scale3d(1.01, 1.01, 1.01)`;
+          });
+          
+          el.addEventListener('mouseleave', () => {
+            el.style.transform = 'perspective(1000px) rotateY(0deg) rotateX(0deg) scale3d(1, 1, 1)';
+          });
+        });
+      }
+
+      function attachSkillHighlighting() {
+        document.querySelectorAll('.tech-tag').forEach(tag => {
+          tag.addEventListener('click', (e) => {
+            e.stopPropagation();
+            const skill = tag.dataset.skill;
+            // Toggle filter
+            activeTag = (activeTag === skill) ? null : skill;
+            render(); // Re-render page to apply highlights globally
+          });
+        });
+      }
+
+      // Dynamic Canvas Particle Network
+      function initCanvas() {
+        const canvas = document.getElementById('bg-canvas');
+        const ctx = canvas.getContext('2d');
+        let width, height;
+        let particles = [];
+
+        function resize() {
+          width = canvas.width = window.innerWidth;
+          height = canvas.height = window.innerHeight;
+        }
+        window.addEventListener('resize', resize);
+        resize();
+
+        class Particle {
+          constructor() {
+            this.x = Math.random() * width;
+            this.y = Math.random() * height;
+            this.vx = (Math.random() - 0.5) * 0.5;
+            this.vy = (Math.random() - 0.5) * 0.5;
+            this.radius = Math.random() * 1.5 + 0.5;
+          }
+          update() {
+            this.x += this.vx;
+            this.y += this.vy;
+            if (this.x < 0 || this.x > width) this.vx *= -1;
+            if (this.y < 0 || this.y > height) this.vy *= -1;
+          }
+          draw() {
+            ctx.beginPath();
+            ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+            // Color adapts if matrix mode is on
+            ctx.fillStyle = document.body.classList.contains('matrix-mode') ? '#00ff41' : 'rgba(130, 190, 240, 0.5)';
+            ctx.fill();
+          }
+        }
+
+        // Create particles
+        for (let i = 0; i < 50; i++) particles.push(new Particle());
+
+        // Mouse tracking for canvas lines
+        let mouse = { x: null, y: null };
+        window.addEventListener('mousemove', e => {
+          mouse.x = e.x;
+          mouse.y = e.y;
+        });
+
+        function animate() {
+          ctx.clearRect(0, 0, width, height);
+          
+          particles.forEach(p => {
+            p.update();
+            p.draw();
+          });
+
+          // Draw connections
+          for (let i = 0; i < particles.length; i++) {
+            for (let j = i; j < particles.length; j++) {
+              const dx = particles[i].x - particles[j].x;
+              const dy = particles[i].y - particles[j].y;
+              const dist = Math.sqrt(dx * dx + dy * dy);
+
+              if (dist < 120) {
+                ctx.beginPath();
+                const strokeColor = document.body.classList.contains('matrix-mode') ? `rgba(0, 255, 65, ${0.2 - dist/600})` : `rgba(130, 190, 240, ${0.2 - dist/600})`;
+                ctx.strokeStyle = strokeColor;
+                ctx.lineWidth = 0.5;
+                ctx.moveTo(particles[i].x, particles[i].y);
+                ctx.lineTo(particles[j].x, particles[j].y);
+                ctx.stroke();
+              }
+            }
+
+            // Connect to mouse
+            if (mouse.x != null) {
+              const dxM = particles[i].x - mouse.x;
+              const dyM = particles[i].y - mouse.y;
+              const distM = Math.sqrt(dxM * dxM + dyM * dyM);
+              if (distM < 180) {
+                ctx.beginPath();
+                const strokeColor = document.body.classList.contains('matrix-mode') ? `rgba(0, 255, 65, ${0.4 - distM/450})` : `rgba(180, 200, 255, ${0.4 - distM/450})`;
+                ctx.strokeStyle = strokeColor;
+                ctx.lineWidth = 1;
+                ctx.moveTo(particles[i].x, particles[i].y);
+                ctx.lineTo(mouse.x, mouse.y);
+                ctx.stroke();
+              }
+            }
+          }
+          requestAnimationFrame(animate);
+        }
+        animate();
+      }
+
+      // Custom Mouse Tracker Glow
+      function initGlow() {
+        const glow = document.getElementById("cursor-glow");
+        window.addEventListener("mousemove", (e) => {
+          glow.style.left = e.clientX + "px";
+          glow.style.top = e.clientY + "px";
+        });
+      }
+
+      // --- MAIN RENDER LOOP ---
       function render() {
         app.innerHTML = theme === "classic" ? classicView() : interactiveView();
-        document
-          .querySelectorAll("#tabs button")
-          .forEach((b) =>
-            b.setAttribute("aria-selected", String(b.dataset.theme === theme)),
-          );
+        
+        document.querySelectorAll("#tabs button").forEach((b) =>
+          b.setAttribute("aria-selected", String(b.dataset.theme === theme)),
+        );
+
+        // Attach specialized interactivity based on theme
         if (theme === "interactive") {
           startTypewriter();
+          attachTerminalEvents();
+          
           app.querySelectorAll(".node").forEach((btn) =>
             btn.addEventListener("click", () => {
               active = Number(btn.dataset.i);
-              render();
+              render(); // Re-render panel
             }),
           );
+          
           const logBox = document.getElementById("consoleLog");
           if (logBox) logBox.scrollTop = logBox.scrollHeight;
         }
+
+        // Attach global interactivity
+        init3DTilt();
+        attachSkillHighlighting();
       }
 
+      // --- BOOTSTRAP ---
       document.querySelectorAll("#tabs button").forEach((btn) =>
         btn.addEventListener("click", () => {
           if (theme === btn.dataset.theme) return;
           theme = btn.dataset.theme;
           location.hash = theme === "interactive" ? "#interactive" : "";
+          activeTag = null; // Reset filters on theme switch
           render();
           scrollTo({ top: 0 });
         }),
       );
 
-      window.addEventListener("pointermove", (e) => {
-        const spot = document.getElementById("spot");
-        if (spot) {
-          spot.style.setProperty("--x", e.clientX + "px");
-          spot.style.setProperty("--y", e.clientY + "px");
-        }
-      });
-
+      // Initialize all systems
       render();
+      initCanvas();
+      initGlow();
     </script>
   </body>
 </html>
