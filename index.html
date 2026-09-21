@@ -2,952 +2,768 @@
 <html lang="en">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Sameer Bandi — Data Analytics Engineer & Platform Architect</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Sameer Bandi — Data Analytics Engineer</title>
     <meta
       name="description"
-      content="Portfolio of Sameer Bandi, expert Data Analytics Engineer specializing in Azure, Databricks, PySpark, Delta Lake, and Enterprise Power BI."
+      content="Interactive portfolio of Sameer Bandi, Data Analytics Engineer specializing in Azure, Databricks, Microsoft Fabric, and Power BI."
     />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
       rel="stylesheet"
-      href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500;700&display=swap"
     />
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-      tailwind.config = {
-        darkMode: 'class',
-        theme: {
-          extend: {
-            fontFamily: {
-              sans: ['"Plus Jakarta Sans"', 'sans-serif'],
-              serif: ['"Instrument Serif"', 'Georgia', 'serif'],
-              mono: ['"JetBrains Mono"', 'monospace'],
-            },
-          }
-        }
-      }
-    </script>
     <style>
       :root {
-        --bg: #090a0f;
-        --fg: #f1f5f9;
-        --card: rgba(18, 22, 33, 0.7);
-        --border: rgba(255, 255, 255, 0.08);
-        --primary: #f59e0b;
-        --primary-rgb: 245, 158, 11;
-        --accent: #38bdf8;
-        --muted: #94a3b8;
-        --glow: rgba(245, 158, 11, 0.15);
+        --bg-dark: #0f172a;
+        --bg-panel: #1e293b;
+        --text-main: #f8fafc;
+        --text-muted: #94a3b8;
+        --primary: #38bdf8;
+        --primary-glow: rgba(56, 189, 248, 0.4);
+        --accent: #818cf8;
+        --border: #334155;
+        --display: "Instrument Serif", Georgia, serif;
+        --sans: "Inter", system-ui, sans-serif;
+        --mono: "JetBrains Mono", ui-monospace, monospace;
       }
-
-      [data-theme="cyber"] {
-        --bg: #020617;
-        --fg: #00ffcc;
-        --card: rgba(2, 6, 23, 0.85);
-        --border: rgba(0, 255, 204, 0.25);
-        --primary: #00ffcc;
-        --primary-rgb: 0, 255, 204;
-        --accent: #ff0077;
-        --muted: #009977;
-        --glow: rgba(0, 255, 204, 0.2);
-      }
-
-      [data-theme="neon"] {
-        --bg: #0f0c1b;
-        --fg: #f8fafc;
-        --card: rgba(26, 20, 45, 0.75);
-        --border: rgba(168, 85, 247, 0.3);
-        --primary: #c084fc;
-        --primary-rgb: 192, 132, 252;
-        --accent: #f43f5e;
-        --muted: #a78bfa;
-        --glow: rgba(192, 132, 252, 0.25);
-      }
-
-      [data-theme="light"] {
-        --bg: #f8fafc;
-        --fg: #0f172a;
-        --card: rgba(255, 255, 255, 0.85);
-        --border: rgba(15, 23, 42, 0.1);
-        --primary: #d97706;
-        --primary-rgb: 217, 119, 6;
-        --accent: #0284c7;
-        --muted: #64748b;
-        --glow: rgba(217, 119, 6, 0.1);
+      
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
       }
 
       body {
-        background-color: var(--bg);
-        color: var(--fg);
-        font-family: 'Plus Jakarta Sans', sans-serif;
+        background: var(--bg-dark);
+        color: var(--text-main);
+        font-family: var(--sans);
+        -webkit-font-smoothing: antialiased;
+        line-height: 1.6;
         overflow-x: hidden;
-        transition: background-color 0.4s ease, color 0.4s ease;
+        cursor: none; 
       }
 
-      /* Custom Scrollbar */
-      ::-webkit-scrollbar {
-        width: 8px;
-      }
-      ::-webkit-scrollbar-track {
-        background: var(--bg);
-      }
-      ::-webkit-scrollbar-thumb {
-        background: var(--border);
-        border-radius: 4px;
-      }
-      ::-webkit-scrollbar-thumb:hover {
+      ::selection {
         background: var(--primary);
+        color: var(--bg-dark);
       }
 
-      canvas.bg-canvas {
+      a {
+        color: var(--primary);
+        text-decoration: none;
+        transition: all 0.3s ease;
+      }
+
+      a:hover {
+        text-shadow: 0 0 8px var(--primary-glow);
+      }
+
+      /* Custom Cursor */
+      #cursor, #cursor-trail {
+        position: fixed;
+        top: 0;
+        left: 0;
+        pointer-events: none;
+        border-radius: 50%;
+        transform: translate(-50%, -50%);
+        z-index: 9999;
+      }
+      #cursor {
+        width: 8px;
+        height: 8px;
+        background: var(--primary);
+        transition: width 0.2s, height 0.2s;
+      }
+      #cursor-trail {
+        width: 32px;
+        height: 32px;
+        border: 1px solid var(--primary);
+        transition: transform 0.1s, width 0.2s, height 0.2s;
+      }
+      body:hover #cursor { width: 12px; height: 12px; }
+
+      /* Background Canvas */
+      #network-canvas {
         position: fixed;
         top: 0;
         left: 0;
         width: 100vw;
         height: 100vh;
-        pointer-events: none;
-        z-index: 0;
+        z-index: -1;
+        opacity: 0.6;
       }
 
+      .container {
+        max-width: 72rem;
+        margin: 0 auto;
+        padding: 2rem 1.5rem 8rem;
+        position: relative;
+        z-index: 1;
+      }
+
+      .mono { font-family: var(--mono); }
+      .eyebrow {
+        font-family: var(--mono);
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 0.2em;
+        color: var(--primary);
+      }
+
+      /* Header */
+      header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 1rem 0 3rem;
+        border-bottom: 1px solid var(--border);
+        margin-bottom: 4rem;
+      }
+
+      .logo {
+        font-family: var(--display);
+        font-size: 1.8rem;
+        color: var(--text-main);
+      }
+
+      /* Hero Section */
+      .hero-title {
+        font-family: var(--display);
+        font-size: clamp(3rem, 8vw, 5rem);
+        line-height: 1;
+        margin: 1rem 0 1.5rem;
+      }
+      .hero-title span {
+        background: linear-gradient(to right, var(--primary), var(--accent));
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+      }
+      .hero-desc {
+        font-size: 1.1rem;
+        color: var(--text-muted);
+        max-width: 50rem;
+        margin-bottom: 2rem;
+      }
+
+      /* Panels */
       .glass-panel {
-        background: var(--card);
+        background: rgba(30, 41, 59, 0.4);
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
         border: 1px solid var(--border);
-        backdrop-filter: blur(16px);
-        -webkit-backdrop-filter: blur(16px);
-        transition: border-color 0.3s, transform 0.3s, box-shadow 0.3s;
+        border-radius: 1rem;
+        padding: 2rem;
+        transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
       }
       .glass-panel:hover {
-        border-color: rgba(var(--primary-rgb), 0.4);
-        box-shadow: 0 10px 30px -10px var(--glow);
+        border-color: var(--primary);
+        box-shadow: 0 0 20px var(--primary-glow);
+        transform: translateY(-2px);
       }
 
-      .glow-text {
-        text-shadow: 0 0 20px rgba(var(--primary-rgb), 0.5);
+      /* Grid Layouts */
+      .grid-2 {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 2rem;
+        margin: 2rem 0 4rem;
       }
 
-      @keyframes pulseGlow {
-        0%, 100% { opacity: 0.4; }
-        50% { opacity: 0.8; }
+      /* Experience Timeline */
+      .timeline {
+        border-left: 2px solid var(--border);
+        padding-left: 2rem;
+        margin-left: 1rem;
+        display: flex;
+        flex-direction: column;
+        gap: 3rem;
       }
-      .animate-glow {
-        animation: pulseGlow 4s infinite ease-in-out;
+      .job-card {
+        position: relative;
+        opacity: 0.5;
+        transition: opacity 0.4s ease;
+      }
+      .job-card:hover, .job-card.active-filter {
+        opacity: 1;
+      }
+      .job-card::before {
+        content: '';
+        position: absolute;
+        left: -2.4rem;
+        top: 0.3rem;
+        width: 12px;
+        height: 12px;
+        border-radius: 50%;
+        background: var(--bg-dark);
+        border: 2px solid var(--primary);
+        transition: background 0.3s ease, box-shadow 0.3s ease;
+      }
+      .job-card:hover::before {
+        background: var(--primary);
+        box-shadow: 0 0 10px var(--primary-glow);
+      }
+      .job-header {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
+        align-items: baseline;
+        margin-bottom: 0.5rem;
+      }
+      .job-title {
+        font-family: var(--display);
+        font-size: 1.8rem;
+        color: var(--text-main);
+      }
+      .job-company {
+        color: var(--accent);
+        font-family: var(--mono);
+        font-size: 0.85rem;
+      }
+      .job-bullets {
+        margin-top: 1rem;
+        list-style: none;
+      }
+      .job-bullets li {
+        color: var(--text-muted);
+        font-size: 0.95rem;
+        margin-bottom: 0.75rem;
+        padding-left: 1.5rem;
+        position: relative;
+      }
+      .job-bullets li::before {
+        content: "›";
+        position: absolute;
+        left: 0;
+        color: var(--primary);
+        font-family: var(--mono);
+        font-weight: bold;
+      }
+
+      /* Interactive Skills */
+      .skill-tag {
+        display: inline-block;
+        padding: 0.4rem 0.8rem;
+        margin: 0.25rem;
+        border: 1px solid var(--border);
+        border-radius: 2rem;
+        font-family: var(--mono);
+        font-size: 0.75rem;
+        color: var(--text-muted);
+        background: transparent;
+        cursor: pointer;
+        transition: all 0.2s ease;
+      }
+      .skill-tag:hover, .skill-tag.active {
+        border-color: var(--primary);
+        color: var(--primary);
+        background: rgba(56, 189, 248, 0.1);
+        box-shadow: 0 0 10px var(--primary-glow);
+      }
+
+      /* Terminal Emulator */
+      .terminal {
+        background: #000;
+        border: 1px solid var(--border);
+        border-radius: 0.5rem;
+        padding: 1.5rem;
+        font-family: var(--mono);
+        font-size: 0.85rem;
+        box-shadow: inset 0 0 20px rgba(0,0,0,0.8);
+      }
+      .terminal-header {
+        display: flex;
+        gap: 0.5rem;
+        margin-bottom: 1rem;
+        padding-bottom: 1rem;
+        border-bottom: 1px dashed var(--border);
+      }
+      .t-dot { width: 12px; height: 12px; border-radius: 50%; }
+      .terminal-output {
+        color: var(--text-muted);
+        min-height: 150px;
+        max-height: 300px;
+        overflow-y: auto;
+        margin-bottom: 1rem;
+      }
+      .terminal-output p { margin-bottom: 0.5rem; }
+      .terminal-input-line {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+      }
+      .terminal-input {
+        background: transparent;
+        border: none;
+        color: var(--primary);
+        font-family: var(--mono);
+        font-size: 0.85rem;
+        width: 100%;
+        outline: none;
+      }
+
+      /* Interactive Marquee */
+      .marquee-container {
+        overflow: hidden;
+        white-space: nowrap;
+        position: relative;
+        padding: 2rem 0;
+        margin: 4rem 0;
+        border-top: 1px solid var(--border);
+        border-bottom: 1px solid var(--border);
+      }
+      .marquee-content {
+        display: inline-block;
+        animation: marquee 25s linear infinite;
+        font-family: var(--mono);
+        color: var(--border);
+        font-size: 2rem;
+        text-transform: uppercase;
+      }
+      .marquee-container:hover .marquee-content {
+        animation-play-state: paused;
+        color: var(--primary);
+        text-shadow: 0 0 15px var(--primary-glow);
+        transition: color 0.5s;
+      }
+      @keyframes marquee {
+        0% { transform: translateX(0); }
+        100% { transform: translateX(-50%); }
+      }
+
+      /* Animations */
+      .fade-up {
+        opacity: 0;
+        transform: translateY(30px);
+        transition: opacity 0.8s ease, transform 0.8s ease;
+      }
+      .fade-up.visible {
+        opacity: 1;
+        transform: translateY(0);
+      }
+
+      @media (max-width: 768px) {
+        body { cursor: auto; }
+        #cursor, #cursor-trail { display: none; }
+        .hero-title { font-size: 2.5rem; }
+        .container { padding: 1rem 1rem 4rem; }
+        .timeline { margin-left: 0; padding-left: 1.5rem; }
       }
     </style>
   </head>
-  <body class="relative min-h-screen selection:bg-amber-500/30">
-    <canvas id="bgCanvas" class="bg-canvas"></canvas>
+  <body>
+    <!-- Custom Cursor -->
+    <div id="cursor"></div>
+    <div id="cursor-trail"></div>
 
-    <header class="fixed top-0 left-0 right-0 z-50 px-4 py-3 md:px-8">
-      <div class="max-w-6xl mx-auto flex items-center justify-between glass-panel rounded-2xl px-4 py-2.5 shadow-xl">
-        <a href="#" class="flex items-center gap-3 group">
-          <div class="w-9 h-9 rounded-xl bg-gradient-to-br from-amber-500 to-rose-500 flex items-center justify-center font-bold text-white font-mono text-sm shadow-md group-hover:scale-105 transition-transform">
-            SB
-          </div>
-          <div>
-            <span class="font-serif text-lg tracking-wide block leading-tight">Sameer Bandi</span>
-            <span class="text-[10px] font-mono text-[var(--muted)] tracking-widest uppercase">Data Analytics Eng</span>
-          </div>
-        </a>
+    <!-- Interactive Background -->
+    <canvas id="network-canvas"></canvas>
 
-        <nav class="hidden md:flex items-center gap-6 text-sm font-medium">
-          <a href="#about" class="text-[var(--muted)] hover:text-[var(--fg)] transition-colors">About</a>
-          <a href="#pipeline-sim" class="text-[var(--muted)] hover:text-[var(--fg)] transition-colors">Pipeline Sim</a>
-          <a href="#experience" class="text-[var(--muted)] hover:text-[var(--fg)] transition-colors">Experience</a>
-          <a href="#skills" class="text-[var(--muted)] hover:text-[var(--fg)] transition-colors">Stack Matrix</a>
-          <a href="#terminal" class="text-[var(--muted)] hover:text-[var(--fg)] transition-colors">Terminal</a>
+    <div class="container">
+      <header class="fade-up">
+        <div class="logo">SB.</div>
+        <nav style="display: flex; gap: 1.5rem;" class="mono">
+          <a href="#experience">~/experience</a>
+          <a href="#skills">~/skills</a>
+          <a href="#terminal">~/terminal</a>
         </nav>
+      </header>
 
-        <div class="flex items-center gap-2">
-          <!-- Theme Switcher dropdown / buttons -->
-          <div class="flex items-center gap-1 glass-panel rounded-xl p-1">
-            <button onclick="setTheme('classic')" title="Classic Theme" class="px-2.5 py-1 text-xs rounded-lg font-mono transition-all theme-btn" data-target="classic">Classic</button>
-            <button onclick="setTheme('cyber')" title="Cyber Terminal" class="px-2.5 py-1 text-xs rounded-lg font-mono transition-all theme-btn" data-target="cyber">Cyber</button>
-            <button onclick="setTheme('neon')" title="Neon Glass" class="px-2.5 py-1 text-xs rounded-lg font-mono transition-all theme-btn" data-target="neon">Neon</button>
-            <button onclick="setTheme('light')" title="Light Mode" class="px-2.5 py-1 text-xs rounded-lg font-mono transition-all theme-btn" data-target="light">Light</button>
-          </div>
+      <section class="fade-up" style="margin-bottom: 6rem;">
+        <p class="eyebrow" id="typewriter-title"></p>
+        <h1 class="hero-title">Engineering <span>Trust</span> Into Data Ecosystems</h1>
+        <p class="hero-desc">
+          I'm <strong>Sameer Bandi</strong>, based in Moncton, NB (Open to Relocate). With 8+ years of cross-industry experience spanning healthcare, supply chain, and IT consulting, I architect scalable Medallion data platforms, build reliable ETL pipelines, and deliver DAX-driven enterprise Power BI solutions that leadership can actually trust.
+        </p>
+        <div style="display: flex; gap: 1rem; margin-top: 2rem;">
+          <a href="#experience" class="glass-panel" style="padding: 0.75rem 1.5rem; color: var(--primary); display: inline-block; font-family: var(--mono);">Deploy Pipeline ›</a>
+          <a href="mailto:bsameer1995@gmail.com" class="glass-panel" style="padding: 0.75rem 1.5rem; display: inline-block; font-family: var(--mono);">init_contact()</a>
+        </div>
+      </section>
 
-          <button onclick="toggleAudio()" id="audioToggle" class="p-2.5 rounded-xl glass-panel text-[var(--muted)] hover:text-[var(--fg)] transition-all" title="Toggle UI Sound Effects">
-            <svg id="audioIcon" class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z"></path></svg>
-          </button>
+      <section id="skills" class="fade-up" style="margin-bottom: 6rem;">
+        <h2 class="eyebrow" style="margin-bottom: 1.5rem;">Interactive Skills Matrix (Click to Filter Experience)</h2>
+        <div class="glass-panel" id="skills-container">
+          <!-- Populated by JS -->
+        </div>
+      </section>
+
+      <section id="experience" class="fade-up" style="margin-bottom: 6rem;">
+        <h2 class="eyebrow" style="margin-bottom: 2rem;">Professional Execution</h2>
+        <div class="timeline" id="experience-timeline">
+          <!-- Populated by JS -->
+        </div>
+      </section>
+
+      <div class="marquee-container fade-up">
+        <div class="marquee-content">
+          AZURE DATA FACTORY • DATABRICKS • PYSPARK • POWER BI • DELTA LAKE • MICROSOFT FABRIC • SQL SERVER • KQL • DAX • AZURE SYNAPSE • 
+          AZURE DATA FACTORY • DATABRICKS • PYSPARK • POWER BI • DELTA LAKE • MICROSOFT FABRIC • SQL SERVER • KQL • DAX • AZURE SYNAPSE •
         </div>
       </div>
-    </header>
 
-    <main class="relative z-10 max-w-6xl mx-auto px-4 pt-32 pb-20">
-      <section id="about" class="grid lg:grid-cols-12 gap-12 items-center py-12">
-        <div class="lg:col-span-7 space-y-6">
-          <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full glass-panel text-xs font-mono text-[var(--primary)] border-[var(--primary)]/30 animate-pulse">
-            <span class="w-2 h-2 rounded-full bg-[var(--primary)]"></span>
-            Available for Senior Platform & Analytics Roles
+      <section id="terminal" class="fade-up" style="margin-bottom: 4rem;">
+        <h2 class="eyebrow" style="margin-bottom: 1.5rem;">System Console</h2>
+        <div class="terminal">
+          <div class="terminal-header">
+            <div class="t-dot" style="background: #ef4444;"></div>
+            <div class="t-dot" style="background: #eab308;"></div>
+            <div class="t-dot" style="background: #22c55e;"></div>
           </div>
-          <h1 class="text-5xl sm:text-7xl font-serif leading-[1.05] tracking-tight">
-            Data should <span class="italic text-[var(--primary)] glow-text">feel</span> trustworthy.
-          </h1>
-          <p class="text-lg text-[var(--muted)] max-w-xl font-light leading-relaxed">
-            Hey, I'm Sameer — a Senior Data Analytics Engineer based in New Brunswick, Canada. For 8+ years I've engineered cloud data platforms on Azure, Databricks, PySpark, and Power BI that scale seamlessly and reconcile with absolute precision.
-          </p>
-          <div class="flex flex-wrap gap-4 pt-2">
-            <a href="#pipeline-sim" onclick="playSound()" class="px-6 py-3.5 rounded-xl bg-[var(--primary)] text-slate-950 font-semibold shadow-lg hover:opacity-90 transition-all flex items-center gap-2">
-              <span>Test Live Pipeline Simulator</span>
-              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"></path></svg>
-            </a>
-            <button onclick="copyEmail()" class="px-6 py-3.5 rounded-xl glass-panel font-semibold hover:border-[var(--primary)] transition-all flex items-center gap-2 text-[var(--fg)]">
-              <svg class="w-4 h-4 text-[var(--primary)]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
-              <span id="emailText">bsameer1995@gmail.com</span>
-            </button>
+          <div class="terminal-output" id="terminal-output">
+            <p style="color: var(--accent);">SameerOS (v2.0.26) loaded.</p>
+            <p>Type <span style="color:var(--primary)">'help'</span> to see available commands.</p>
           </div>
-          <div class="flex items-center gap-6 pt-4 text-xs font-mono text-[var(--muted)]">
-            <div>📍 New Brunswick, CA</div>
-            <div>📞 506-566-5115</div>
-            <div><a href="https://linkedin.com/in/bsameer95" target="_blank" class="hover:text-[var(--primary)] underline underline-offset-4">LinkedIn Profile ↗</a></div>
-          </div>
-        </div>
-
-        <div class="lg:col-span-5">
-          <div class="glass-panel p-6 rounded-3xl space-y-6 relative overflow-hidden">
-            <div class="absolute -top-24 -right-24 w-48 h-48 rounded-full bg-[var(--primary)] opacity-10 blur-3xl"></div>
-            <div class="flex items-center justify-between border-b border-[var(--border)] pb-4">
-              <div class="flex items-center gap-2">
-                <span class="w-3 h-3 rounded-full bg-red-500/80 inline-block"></span>
-                <span class="w-3 h-3 rounded-full bg-yellow-500/80 inline-block"></span>
-                <span class="w-3 h-3 rounded-full bg-green-500/80 inline-block"></span>
-              </div>
-              <span class="text-xs font-mono text-[var(--muted)]">Core Principles</span>
-            </div>
-            <div class="space-y-4">
-              <div class="p-3.5 rounded-2xl glass-panel border-[var(--border)]">
-                <div class="flex items-center justify-between mb-1">
-                  <span class="text-xs font-mono text-[var(--primary)]">01 / RELIABILITY</span>
-                  <span class="text-xs font-mono text-[var(--muted)]">Delta Lake</span>
-                </div>
-                <h3 class="font-serif text-xl">Pipelines should be boring.</h3>
-                <p class="text-xs text-[var(--muted)] mt-1">The best data platform is the one nobody talks about, because it simply runs every night on schedule with zero drift.</p>
-              </div>
-              <div class="p-3.5 rounded-2xl glass-panel border-[var(--border)]">
-                <div class="flex items-center justify-between mb-1">
-                  <span class="text-xs font-mono text-[var(--primary)]">02 / SIMPLICITY</span>
-                  <span class="text-xs font-mono text-[var(--muted)]">Clean Query</span>
-                </div>
-                <h3 class="font-serif text-xl">Chase clarity, not cleverness.</h3>
-                <p class="text-xs text-[var(--muted)] mt-1">A query someone else can read beats a clever one they can't. Same for models, dashboards, and architecture diagrams.</p>
-              </div>
-              <div class="p-3.5 rounded-2xl glass-panel border-[var(--border)]">
-                <div class="flex items-center justify-between mb-1">
-                  <span class="text-xs font-mono text-[var(--primary)]">03 / GOVERNANCE</span>
-                  <span class="text-xs font-mono text-[var(--muted)]">Trust</span>
-                </div>
-                <h3 class="font-serif text-xl">Trust is the real deliverable.</h3>
-                <p class="text-xs text-[var(--muted)] mt-1">Validation, reconciliation and governance aren't overhead. They are the reason leadership acts on the report.</p>
-              </div>
-            </div>
-          </div>
+          <form class="terminal-input-line" id="terminal-form">
+            <span style="color: var(--accent);">guest@sameer-portfolio:~$</span>
+            <input type="text" id="terminal-input" class="terminal-input" autocomplete="off" autofocus />
+          </form>
         </div>
       </section>
 
-      <section id="pipeline-sim" class="py-16">
-        <div class="glass-panel p-8 rounded-3xl space-y-6">
-          <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-[var(--border)] pb-6">
-            <div>
-              <div class="text-xs font-mono text-[var(--primary)] uppercase tracking-wider mb-1">Interactive Sandbox</div>
-              <h2 class="text-3xl font-serif">Live Data Pipeline Simulator</h2>
-              <p class="text-sm text-[var(--muted)] mt-1">Simulate PySpark Medallion jobs, execute Delta Lake transformations, and monitor real-time ingestion streams.</p>
-            </div>
-            <div class="flex items-center gap-3">
-              <button onclick="runPipelineJob()" id="runJobBtn" class="px-5 py-2.5 rounded-xl bg-[var(--primary)] text-slate-950 font-semibold text-sm shadow hover:opacity-90 transition-all flex items-center gap-2">
-                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-                <span>Trigger Ingestion Job</span>
-              </button>
-              <button onclick="resetPipelineSim()" class="px-4 py-2.5 rounded-xl glass-panel text-sm hover:border-[var(--primary)] transition-all">Reset State</button>
-            </div>
-          </div>
-
-          <div class="grid lg:grid-cols-12 gap-6">
-            <!-- Pipeline Pipeline Steps Visualizer -->
-            <div class="lg:col-span-5 space-y-4">
-              <h3 class="text-xs font-mono text-[var(--muted)] uppercase tracking-wider">Medallion Pipeline Topology</h3>
-              <div class="space-y-3">
-                <div id="stage-bronze" class="p-4 rounded-2xl glass-panel border border-[var(--border)] transition-all flex items-center justify-between">
-                  <div class="flex items-center gap-3">
-                    <div class="w-8 h-8 rounded-lg bg-amber-500/20 text-amber-500 flex items-center justify-center font-mono text-xs font-bold">01</div>
-                    <div>
-                      <h4 class="font-semibold text-sm">Bronze Ingestion (Raw CDC)</h4>
-                      <p class="text-xs text-[var(--muted)]">Kafka / ADF incremental batch</p>
-                    </div>
-                  </div>
-                  <span id="status-bronze" class="text-xs font-mono px-2.5 py-1 rounded-full bg-slate-800 text-[var(--muted)]">IDLE</span>
-                </div>
-
-                <div id="stage-silver" class="p-4 rounded-2xl glass-panel border border-[var(--border)] transition-all flex items-center justify-between">
-                  <div class="flex items-center gap-3">
-                    <div class="w-8 h-8 rounded-lg bg-cyan-500/20 text-cyan-500 flex items-center justify-center font-mono text-xs font-bold">02</div>
-                    <div>
-                      <h4 class="font-semibold text-sm">Silver Clean & Transform</h4>
-                      <p class="text-xs text-[var(--muted)]">PySpark Delta Live Tables & Deduplication</p>
-                    </div>
-                  </div>
-                  <span id="status-silver" class="text-xs font-mono px-2.5 py-1 rounded-full bg-slate-800 text-[var(--muted)]">IDLE</span>
-                </div>
-
-                <div id="stage-gold" class="p-4 rounded-2xl glass-panel border border-[var(--border)] transition-all flex items-center justify-between">
-                  <div class="flex items-center gap-3">
-                    <div class="w-8 h-8 rounded-lg bg-purple-500/20 text-purple-500 flex items-center justify-center font-mono text-xs font-bold">03</div>
-                    <div>
-                      <h4 class="font-semibold text-sm">Gold Aggregations & RLS</h4>
-                      <p class="text-xs text-[var(--muted)]">Semantic Power BI / Synapse Warehouse</p>
-                    </div>
-                  </div>
-                  <span id="status-gold" class="text-xs font-mono px-2.5 py-1 rounded-full bg-slate-800 text-[var(--muted)]">IDLE</span>
-                </div>
-              </div>
-
-              <div class="grid grid-cols-3 gap-3 pt-2">
-                <div class="p-3 rounded-xl glass-panel text-center">
-                  <div class="text-[10px] font-mono text-[var(--muted)]">PROCESSED ROWS</div>
-                  <div id="metric-rows" class="text-lg font-mono font-bold text-[var(--primary)] mt-1">0</div>
-                </div>
-                <div class="p-3 rounded-xl glass-panel text-center">
-                  <div class="text-[10px] font-mono text-[var(--muted)]">LATENCY</div>
-                  <div id="metric-latency" class="text-lg font-mono font-bold text-[var(--accent)] mt-1">0 ms</div>
-                </div>
-                <div class="p-3 rounded-xl glass-panel text-center">
-                  <div class="text-[10px] font-mono text-[var(--muted)]">DATA DRIFT</div>
-                  <div id="metric-drift" class="text-lg font-mono font-bold text-emerald-400 mt-1">0.00%</div>
-                </div>
-              </div>
-            </div>
-
-            <!-- Terminal / Log Output Stream -->
-            <div class="lg:col-span-7 flex flex-col">
-              <div class="flex items-center justify-between mb-2">
-                <span class="text-xs font-mono text-[var(--muted)] uppercase tracking-wider">Databricks Execution Logs / Spark Driver Output</span>
-                <button onclick="clearPipelineLogs()" class="text-xs font-mono text-[var(--muted)] hover:text-[var(--fg)] underline">Clear Console</button>
-              </div>
-              <div id="pipelineLogBox" class="flex-1 min-h-[260px] max-h-[320px] overflow-y-auto p-4 rounded-2xl bg-slate-950/80 border border-[var(--border)] font-mono text-xs text-slate-300 space-y-2">
-                <div class="text-slate-500">System ready. Click "Trigger Ingestion Job" to execute PySpark cluster pipeline...</div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <section id="experience" class="py-16">
-        <div class="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-4">
-          <div>
-            <div class="text-xs font-mono text-[var(--primary)] uppercase tracking-wider mb-1">Career Journey</div>
-            <h2 class="text-4xl font-serif">Selected Professional Experience</h2>
-          </div>
-          <p class="text-sm text-[var(--muted)] max-w-sm">Click any technology node below to instantly filter roles where that tool was actively deployed.</p>
-        </div>
-
-        <!-- Interactive Filter Nodes -->
-        <div class="glass-panel p-6 rounded-3xl mb-8 space-y-4">
-          <div class="flex items-center justify-between">
-            <span class="text-xs font-mono text-[var(--muted)] uppercase tracking-wider">Filter Experience by Tech Stack:</span>
-            <button onclick="filterSkill('ALL')" class="text-xs font-mono text-[var(--primary)] hover:underline">Reset Filter (Show All)</button>
-          </div>
-          <div id="filterNodes" class="flex flex-wrap gap-2">
-            <!-- Populated via JS -->
-          </div>
-        </div>
-
-        <!-- Experience Cards Grid -->
-        <div id="experienceList" class="space-y-6">
-          <!-- Populated via JS -->
-        </div>
-      </section>
-
-      <section id="skills" class="py-16">
-        <div class="text-center max-w-2xl mx-auto mb-16 space-y-3">
-          <div class="text-xs font-mono text-[var(--primary)] uppercase tracking-wider">Expertise</div>
-          <h2 class="text-4xl font-serif">Comprehensive Tech Stack Matrix</h2>
-          <p class="text-sm text-[var(--muted)]">Built on robust cloud architectures, distributed processing, and enterprise semantic layers.</p>
-        </div>
-
-        <div id="skillsGrid" class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-          <!-- Populated via JS -->
-        </div>
-
-        <!-- Education & Certifications -->
-        <div class="mt-16 glass-panel p-8 rounded-3xl">
-          <h3 class="text-xs font-mono text-[var(--primary)] uppercase tracking-wider mb-6">Education & Professional Certifications</h3>
-          <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-            <div class="p-4 rounded-2xl glass-panel border-[var(--border)]">
-              <span class="text-xs font-mono text-[var(--muted)]">2021</span>
-              <h4 class="font-serif text-xl mt-1">MBA, Business Administration</h4>
-              <p class="text-xs text-[var(--primary)] mt-1">University of New Brunswick</p>
-            </div>
-            <div class="p-4 rounded-2xl glass-panel border-[var(--border)]">
-              <span class="text-xs font-mono text-[var(--muted)]">2017</span>
-              <h4 class="font-serif text-xl mt-1">BSc, Computer Science</h4>
-              <p class="text-xs text-[var(--primary)] mt-1">GITAM University</p>
-            </div>
-            <div class="p-4 rounded-2xl glass-panel border-[var(--border)]">
-              <span class="text-xs font-mono text-[var(--muted)]">Microsoft Azure</span>
-              <h4 class="font-serif text-xl mt-1">Azure Fundamentals</h4>
-              <p class="text-xs text-[var(--primary)] mt-1">AZ-900 Certified</p>
-            </div>
-            <div class="p-4 rounded-2xl glass-panel border-[var(--border)]">
-              <span class="text-xs font-mono text-[var(--muted)]">Microsoft Azure</span>
-              <h4 class="font-serif text-xl mt-1">Architect Technologies</h4>
-              <p class="text-xs text-[var(--primary)] mt-1">AZ-300 Certified</p>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <section id="terminal" class="py-16">
-        <div class="glass-panel rounded-3xl overflow-hidden shadow-2xl border border-[var(--border)]">
-          <div class="bg-slate-900/90 px-6 py-4 flex items-center justify-between border-b border-[var(--border)]">
-            <div class="flex items-center gap-3">
-              <div class="flex items-center gap-2">
-                <span class="w-3 h-3 rounded-full bg-red-500"></span>
-                <span class="w-3 h-3 rounded-full bg-yellow-500"></span>
-                <span class="w-3 h-3 rounded-full bg-green-500"></span>
-              </div>
-              <span class="text-xs font-mono text-[var(--muted)]">sameer-bandi@databricks-cluster:~ (bash)</span>
-            </div>
-            <div class="text-xs font-mono text-[var(--primary)]">Interactive CLI</div>
-          </div>
-          <div id="terminalBody" class="p-6 bg-slate-950/90 min-h-[280px] max-h-[380px] overflow-y-auto font-mono text-sm text-slate-300 space-y-3">
-            <div>Welcome to Sameer Bandi's interactive terminal. Type <span class="text-[var(--primary)] font-bold">'help'</span> to see available commands.</div>
-          </div>
-          <div class="p-4 bg-slate-900/80 border-t border-[var(--border)] flex items-center gap-3">
-            <span class="text-[var(--primary)] font-mono font-bold">$</span>
-            <input type="text" id="terminalInput" placeholder="Type a command (e.g. skills, contact, hire, theme, clear)..." class="flex-1 bg-transparent border-none outline-none font-mono text-sm text-[var(--fg)] placeholder-slate-600" onkeydown="handleTerminalKey(event)" />
-            <button onclick="executeTerminalCommand()" class="px-4 py-2 rounded-xl bg-[var(--primary)] text-slate-950 font-semibold text-xs hover:opacity-90 transition-all font-mono">Execute</button>
-          </div>
-        </div>
-      </section>
-
-      <footer class="py-12 border-t border-[var(--border)] mt-20 flex flex-col md:flex-row items-center justify-between gap-6 text-sm text-[var(--muted)]">
-        <div>© 2026 Sameer Bandi. Built with extreme interactivity & precision.</div>
-        <div class="flex items-center gap-6 font-mono text-xs">
-          <a href="mailto:bsameer1995@gmail.com" class="hover:text-[var(--primary)] transition-colors">Email</a>
-          <a href="https://linkedin.com/in/bsameer95" target="_blank" class="hover:text-[var(--primary)] transition-colors">LinkedIn</a>
-          <a href="tel:5065665115" class="hover:text-[var(--primary)] transition-colors">Phone</a>
-        </div>
+      <footer class="glass-panel fade-up" style="text-align: center; margin-top: 4rem; padding: 2rem;">
+        <h3 class="display" style="font-size: 1.8rem; margin-bottom: 1rem;">Let's talk data architecture.</h3>
+        <p class="mono" style="color: var(--text-muted); font-size: 0.85rem;">bsameer1995@gmail.com | 506-566-5115 | Moncton, NB</p>
       </footer>
-    </main>
-
-    <!-- Toast Notification Container -->
-    <div id="toast" class="fixed bottom-6 right-6 z-50 transform translate-y-24 opacity-0 transition-all duration-300 glass-panel px-6 py-3 rounded-2xl shadow-2xl flex items-center gap-3 border-[var(--primary)]">
-      <span class="w-2.5 h-2.5 rounded-full bg-[var(--primary)] animate-ping"></span>
-      <span id="toastMsg" class="text-sm font-medium">Copied to clipboard!</span>
     </div>
 
     <script>
-      // Profile and Work Data Source
-      const profile = {
-        name: "Sameer Bandi",
-        title: "Data Analytics Engineer",
-        location: "New Brunswick, Canada",
-        email: "bsameer1995@gmail.com",
-        phone: "506-566-5115",
-        linkedin: "https://linkedin.com/in/bsameer95",
-        intro: "Hey, I'm Sameer — a data analytics engineer based in New Brunswick, Canada. For 8+ years I've designed cloud data platforms on Azure, Databricks and Power BI: pipelines that hold up, numbers that reconcile, and reporting leadership can act on.",
+      // --- Data Payload ---
+      const resumeData = {
+        skills: [
+          "Azure Data Factory (ADF)", "Azure Synapse Analytics", "Databricks", "Microsoft Fabric", 
+          "ADLS Gen2", "Medallion Architecture", "ETL/ELT", "PySpark", "SQL (T-SQL)", 
+          "Python", "KQL", "Power BI", "DAX", "Power Query", "Data Modeling", "RLS", 
+          "SSRS", "Azure DevOps", "CI/CD", "Data Governance"
+        ],
+        experience: [
+          {
+            role: "Data Analytics Engineer (DA)",
+            company: "Medavie Health Services",
+            period: "August 2025 – Present",
+            location: "NB, Canada",
+            tags: ["SQL (T-SQL)", "SSRS", "Power BI", "Data Governance", "Healthcare Privacy"],
+            bullets: [
+              "Design, maintain, and optimize SQL Server, SSRS, and Power BI reporting solutions supporting healthcare leadership and enterprise reporting requirements.",
+              "Develop and maintain SQL-driven datasets by consolidating data from multiple departmental sources to provide consistent and reliable reporting.",
+              "Perform data validation, reconciliation, and quality checks across multiple sources to identify inconsistencies and improve data accuracy.",
+              "Collaborate with IT, HR, PMO, Quality, Finance, Governance, and healthcare stakeholders to translate business requirements into reliable data and reporting solutions.",
+              "Support healthcare leadership and governance committees by preparing SQL-driven reporting outputs and data insights for quality, finance, operational, and governance decision-making.",
+              "Analyze data requirements and develop SQL queries, reporting datasets, and analytical models aligned with stakeholder needs.",
+              "Troubleshoot SQL, reporting, and data-related issues, performing root-cause analysis and coordinating solutions with technical and business teams.",
+              "Support data governance and quality practices by maintaining accurate, consistent, and appropriately controlled healthcare reporting datasets.",
+              "Work with sensitive healthcare information while following organizational requirements for data accuracy, confidentiality, security, and appropriate data handling.",
+              "Identify opportunities to improve reporting workflows, standardize datasets, and increase reliability of recurring analytical processes."
+            ]
+          },
+          {
+            role: "Data Engineer",
+            company: "Source Atlantic Limited",
+            period: "April 2022 – July 2025",
+            location: "NB, Canada",
+            tags: ["ADLS Gen2", "Azure Data Factory (ADF)", "Databricks", "PySpark", "Azure Synapse", "Microsoft Fabric", "Power BI", "DAX", "RLS", "Azure DevOps", "CI/CD"],
+            bullets: [
+              "Architected scalable Medallion data architecture (Bronze, Silver, Gold) within Azure Data Lake Storage (ADLS Gen2) to centralize enterprise-wide inventory data, reducing overall cloud storage costs by 75%.",
+              "Engineered robust ETL data pipelines utilizing Azure Data Factory (ADF) and SQL to extract, orchestrate, and ingest distributed relational data, cutting data processing and ingestion costs by 50%.",
+              "Developed distributed data processing workflows using PySpark and Databricks Notebooks to execute large-scale data cleansing and transformations for the silver layer.",
+              "Designed predictive analysis models utilizing PySpark within Databricks to forecast branch inventory trends and optimize regional stock distribution.",
+              "Implemented a high-performance cloud data warehouse using Azure Synapse Analytics to host the curated gold layer, significantly optimizing downstream query execution.",
+              "Built comprehensive tabular data models and wrote advanced DAX measures in Power BI to track complex supply chain metrics, KPIs, and historical stock fluctuations.",
+              "Developed and deployed an enterprise Power BI dashboard via Power BI Service, eliminating hours of data lag to deliver near real-time inventory insights.",
+              "Enforced strict data governance and cloud security by configuring Role-Based Access Control (RBAC) across the Azure ecosystem to manage administrative data access.",
+              "Configured Row-Level Security (RLS) within Power BI data models, ensuring branch managers and regional staff only accessed authorized, location-specific data.",
+              "Orchestrated CI/CD pipelines and version control using GitHub and Azure DevOps to securely manage pipeline code, track Databricks notebooks, and streamline deployment life cycles.",
+              "As a BA: Elicited requirements directly from business stakeholders and translated business questions into Power BI reporting and BI solutions spanning SQL, KQL, and Fabric data sources.",
+              "Created and managed dimensional data models to support analytics, reporting, and business intelligence needs.",
+              "Designed and developed Power BI reports and dashboards, including complex DAX calculations and measures, tailored to specific stakeholder requirements.",
+              "Managed Power BI Desktop and Power BI Service deployment, including automation of cloud updates."
+            ]
+          },
+          {
+            role: "Power BI Developer / Analytics Engineer (Internship)",
+            company: "New Brunswick Energy and Utilities Board",
+            period: "October 2021 – December 2021",
+            location: "NB, Canada",
+            tags: ["Power BI", "Power Query", "DAX", "Data Modeling"],
+            bullets: [
+              "Developed dynamic Power BI dashboards to conduct complex economic analysis on motor fuel gas stations, visualizing metrics critical to provincial supply continuity.",
+              "Engineered data transformation workflows using Power Query and advanced Excel to ingest, clean, and model raw economic data into structured relational models.",
+              "Wrote custom DAX measures and KPIs to track fuel supply trends, pricing fluctuations, and regional distribution for regulatory stakeholders.",
+              "Translated complex economic data into intuitive visual reports, enabling faster, data-driven decision-making for provincial utility analysts."
+            ]
+          },
+          {
+            role: "Associate Consultant",
+            company: "Hitachi Solutions India Pvt. Ltd.",
+            period: "2017 – 2020",
+            location: "India",
+            tags: ["Power BI", "DAX", "KQL", "Azure Monitor", "Data Modeling"],
+            bullets: [
+              "Engineered enterprise Power BI dashboards and semantic datasets, utilizing advanced visualization techniques (bookmarks, multi-level slicing, drill-throughs) to translate complex requirements into actionable business insights.",
+              "Designed and maintained robust tabular data models, writing complex DAX measures to optimize reporting performance and support enterprise-wide business intelligence needs.",
+              "Integrated KQL-based Log Analytics queries with Azure Monitor to establish automated, data-driven alerting systems, significantly reducing system downtime.",
+              "Conducted comprehensive requirement-gathering sessions with cross-functional stakeholders to document technical specifications and ensure reporting alignment with business objectives."
+            ]
+          }
+        ],
+        education: [
+          "MBA, University of New Brunswick (2021)",
+          "BSc Computer Science, GITAM University (2017)",
+          "Azure Fundamentals (AZ-900)",
+          "Azure Architect Technologies (AZ-300)"
+        ]
       };
 
-      const work = [
-        {
-          role: "Data Analyst",
-          company: "Medavie Health Services",
-          place: "New Brunswick, Canada",
-          period: "Aug 2025 — Present",
-          summary: "Reporting for healthcare leadership and governance committees, built on SQL Server, SSRS and Power BI.",
-          points: [
-            "Consolidate departmental sources into SQL-driven datasets teams can rely on",
-            "Run validation, reconciliation and quality checks across systems to catch drift early",
-            "Partner with IT, HR, PMO, Quality, Finance and Governance to turn asks into reporting",
-            "Handle sensitive health data with strict accuracy, confidentiality and access controls"
-          ],
-          stack: ["SQL Server", "SSRS", "Power BI", "Data Governance", "SQL"]
-        },
-        {
-          role: "Data Engineer",
-          company: "Source Atlantic Limited",
-          place: "New Brunswick, Canada",
-          period: "Dec 2022 — Jul 2025",
-          summary: "Enterprise Azure data platform work: Databricks, Delta Live Tables, ADF orchestration and Medallion architecture.",
-          points: [
-            "Built scalable PySpark pipelines in Azure Databricks across structured and semi-structured data",
-            "Shipped Delta Lake and DLT pipelines that raised reliability and data quality for analytics",
-            "Tuned Spark jobs — partitioning, executor sizing, shuffle and skew — to cut processing time",
-            "Orchestrated ingestion with ADF, including CDC workflows for incremental sync",
-            "Monitored the platform with Azure Monitor, Log Analytics and KQL to catch issues first",
-            "Led a Snowflake proof of concept evaluated alongside Synapse and Databricks"
-          ],
-          stack: ["Azure Databricks", "PySpark", "Delta Live Tables", "ADF", "Synapse", "Kafka", "Snowflake", "Azure Monitor", "KQL"]
-        },
-        {
-          role: "Business Analyst",
-          company: "Source Atlantic Limited",
-          place: "New Brunswick, Canada",
-          period: "Apr 2022 — Dec 2022",
-          summary: "Translated stakeholder requirements into data models and Power BI reporting for BI initiatives.",
-          points: [
-            "Gathered requirements and defined solution approaches with business stakeholders",
-            "Built data models and semantic layers supporting analytics and reporting",
-            "Developed complex DAX measures and deployed through Power BI Service"
-          ],
-          stack: ["Power BI", "DAX", "SQL", "Fabric"]
-        },
-        {
-          role: "Associate Consultant",
-          company: "Hitachi Solutions India",
-          place: "India",
-          period: "2017 — 2020",
-          summary: "Monitoring, diagnostics and reporting for large-scale operations using KQL and Azure Monitor.",
-          points: [
-            "Wrote KQL queries in Azure Monitor and Log Analytics for fast root-cause diagnostics",
-            "Built alerting and automated actions that cut manual intervention at scale",
-            "Delivered Power BI dashboards on top of KQL datasets for operational teams"
-          ],
-          stack: ["Azure Monitor", "KQL", "Log Analytics", "Power BI"]
-        }
-      ];
-
-      const skills = [
-        {
-          group: "Big data & processing",
-          items: ["PySpark", "Spark architecture & tuning", "Delta Live Tables", "Spark SQL"]
-        },
-        {
-          group: "Azure platform",
-          items: ["Data Factory", "Synapse Analytics", "Data Lake Gen1/Gen2", "Azure SQL", "Stream Analytics", "Monitor & Log Analytics"]
-        },
-        {
-          group: "Modern ecosystem",
-          items: ["Snowflake", "Kafka & streaming", "Event-driven processing", "AI/ML in Databricks"]
-        },
-        {
-          group: "Microsoft Fabric",
-          items: ["Data engineering", "Warehouse", "Real-time intelligence", "KQL integration"]
-        },
-        {
-          group: "Languages & databases",
-          items: ["SQL Server (T-SQL)", "Python", "PySpark", "KQL"]
-        },
-        {
-          group: "BI & delivery",
-          items: ["Power BI, DAX & RLS", "SSRS", "Semantic models", "Azure DevOps CI/CD", "GitHub"]
-        }
-      ];
-
-      // State variables
-      let currentTheme = localStorage.getItem('sameer_portfolio_theme') || 'cyber';
-      let audioEnabled = false;
-      let activeFilter = 'ALL';
-
-      // Initialize theme on load
-      setTheme(currentTheme, false);
-
-      function setTheme(themeName, playSnd = true) {
-        currentTheme = themeName;
-        localStorage.setItem('sameer_portfolio_theme', themeName);
-        document.body.setAttribute('data-theme', themeName);
-
-        // Update active button state
-        document.querySelectorAll('.theme-btn').forEach(btn => {
-          if(btn.dataset.target === themeName) {
-            btn.classList.add('bg-[var(--primary)]', 'text-slate-950', 'font-bold');
-            btn.classList.remove('text-[var(--muted)]');
-          } else {
-            btn.classList.remove('bg-[var(--primary)]', 'text-slate-950', 'font-bold');
-            btn.classList.add('text-[var(--muted)]');
-          }
-        });
-
-        if(playSnd) playSound();
-      }
-
-      // Audio Sound Synthesizer (No external MP3 files needed)
-      let audioCtx = null;
-      function playSound() {
-        if(!audioEnabled) return;
-        try {
-          if(!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-          const osc = audioCtx.createOscillator();
-          const gain = audioCtx.createGain();
-          osc.type = 'sine';
-          osc.frequency.setValueAtTime(580, audioCtx.currentTime);
-          osc.frequency.exponentialRampToValueAtTime(880, audioCtx.currentTime + 0.08);
-          gain.gain.setValueAtTime(0.08, audioCtx.currentTime);
-          gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.08);
-          osc.connect(gain);
-          gain.connect(audioCtx.destination);
-          osc.start();
-          osc.stop(audioCtx.currentTime + 0.08);
-        } catch(e) { console.error(e); }
-      }
-
-      function toggleAudio() {
-        audioEnabled = !audioEnabled;
-        const icon = document.getElementById('audioIcon');
-        const btn = document.getElementById('audioToggle');
-        if(audioEnabled) {
-          icon.classList.add('text-[var(--primary)]');
-          btn.classList.add('border-[var(--primary)]');
-          showToast('UI Sound Effects Enabled 🔊');
-          playSound();
-        } else {
-          icon.classList.remove('text-[var(--primary)]');
-          btn.classList.remove('border-[var(--primary)]');
-          showToast('UI Sound Effects Muted 🔇');
-        }
-      }
-
-      // Toast Notification helper
-      function showToast(msg) {
-        const toast = document.getElementById('toast');
-        const msgEl = document.getElementById('toastMsg');
-        msgEl.textContent = msg;
-        toast.classList.remove('translate-y-24', 'opacity-0');
-        setTimeout(() => {
-          toast.classList.add('translate-y-24', 'opacity-0');
-        }, 3000);
-      }
-
-      function copyEmail() {
-        playSound();
-        const email = profile.email;
-        const dummy = document.createElement('textarea');
-        document.body.appendChild(dummy);
-        dummy.value = email;
-        dummy.select();
-        document.execCommand('copy');
-        document.body.removeChild(dummy);
-        showToast('Email address copied to clipboard! 📋');
-      }
-
-      // Render Experience and Filter Nodes
-      function renderExperience() {
-        const filterContainer = document.getElementById('filterNodes');
-        const listContainer = document.getElementById('experienceList');
-
-        // Extract all unique tech stack tags
-        const allTags = [...new Set(work.flatMap(w => w.stack))];
-
-        filterContainer.innerHTML = `
-          <button onclick="filterSkill('ALL')" class="px-3 py-1.5 rounded-lg text-xs font-mono transition-all ${activeFilter === 'ALL' ? 'bg-[var(--primary)] text-slate-950 font-bold' : 'glass-panel text-[var(--muted)] hover:text-[var(--fg)]'}">ALL</button>
-          ${allTags.map(tag => `
-            <button onclick="filterSkill('${tag}')" class="px-3 py-1.5 rounded-lg text-xs font-mono transition-all ${activeFilter === tag ? 'bg-[var(--primary)] text-slate-950 font-bold' : 'glass-panel text-[var(--muted)] hover:text-[var(--fg)]'}">${tag}</button>
-          `).join('')}
-        `;
-
-        const filteredWork = activeFilter === 'ALL' ? work : work.filter(w => w.stack.includes(activeFilter));
-
-        listContainer.innerHTML = filteredWork.map(w => `
-          <div class="glass-panel p-8 rounded-3xl space-y-4 hover:border-[var(--primary)] transition-all">
-            <div class="flex flex-col md:flex-row md:items-center justify-between gap-2">
-              <div>
-                <span class="text-xs font-mono text-[var(--primary)]">${w.company} · ${w.place}</span>
-                <h3 class="text-2xl font-serif mt-0.5">${w.role}</h3>
-              </div>
-              <span class="px-3 py-1 rounded-full glass-panel text-xs font-mono text-[var(--muted)]">${w.period}</span>
-            </div>
-            <p class="text-sm text-[var(--muted)] max-w-2xl">${w.summary}</p>
-            <ul class="space-y-2 pt-2 border-t border-[var(--border)]">
-              ${w.points.map(pt => `
-                <li class="flex items-start gap-2.5 text-sm text-[var(--fg)]/90">
-                  <span class="text-[var(--primary)] font-mono mt-0.5">›</span>
-                  <span>${pt}</span>
-                </li>
-              `).join('')}
-            </ul>
-            <div class="flex flex-wrap gap-2 pt-2">
-              ${w.stack.map(s => `
-                <span class="px-2.5 py-1 rounded-md text-[10px] font-mono glass-panel ${activeFilter === s ? 'border-[var(--primary)] text-[var(--primary)]' : 'text-[var(--muted)]'}">${s}</span>
-              `).join('')}
-            </div>
-          </div>
-        `).join('');
-      }
-
-      function filterSkill(tag) {
-        playSound();
-        activeFilter = tag;
+      // --- DOM Initialization & Client-Side Interactivity ---
+      document.addEventListener("DOMContentLoaded", () => {
+        initCustomCursor();
+        initTypewriter();
+        renderSkills();
         renderExperience();
-      }
+        initScrollAnimations();
+        initTerminal();
+        initCanvasNetwork();
+      });
 
-      // Render Skills Matrix
-      function renderSkills() {
-        const grid = document.getElementById('skillsGrid');
-        grid.innerHTML = skills.map(cat => `
-          <div class="glass-panel p-6 rounded-3xl space-y-4">
-            <h3 class="font-serif text-xl text-[var(--primary)]">${cat.group}</h3>
-            <ul class="space-y-2 font-mono text-xs">
-              ${cat.items.map(item => `
-                <li class="flex items-center gap-2 text-[var(--muted)]">
-                  <span class="w-1.5 h-1.5 rounded-full bg-[var(--primary)]"></span>
-                  <span class="text-[var(--fg)]">${item}</span>
-                </li>
-              `).join('')}
-            </ul>
-          </div>
-        `).join('');
-      }
+      // 1. Custom Cursor Logic
+      function initCustomCursor() {
+        const cursor = document.getElementById('cursor');
+        const trail = document.getElementById('cursor-trail');
+        
+        let mouseX = 0, mouseY = 0;
+        let trailX = 0, trailY = 0;
 
-      // Interactive Data Pipeline Simulator Logic
-      let isRunningPipeline = false;
-      function runPipelineJob() {
-        if(isRunningPipeline) return;
-        isRunningPipeline = true;
-        playSound();
-        const btn = document.getElementById('runJobBtn');
-        btn.disabled = true;
-        btn.classList.add('opacity-50');
-
-        const logBox = document.getElementById('pipelineLogBox');
-        logBox.innerHTML = '';
-
-        const appendLog = (msg, type = 'info') => {
-          const color = type === 'success' ? 'text-emerald-400' : type === 'warn' ? 'text-amber-400' : 'text-cyan-300';
-          logBox.innerHTML += `<div class="${color}">[${new Date().toLocaleTimeString()}] ${msg}</div>`;
-          logBox.scrollTop = logBox.scrollHeight;
-        };
-
-        // Reset metrics
-        document.getElementById('metric-rows').textContent = '0';
-        document.getElementById('metric-latency').textContent = '0 ms';
-        document.getElementById('metric-drift').textContent = '0.00%';
-
-        // Stage transitions
-        const setStageStatus = (stage, status, badgeClass) => {
-          const el = document.getElementById(`status-${stage}`);
-          el.textContent = status;
-          el.className = `text-xs font-mono px-2.5 py-1 rounded-full ${badgeClass}`;
-        };
-
-        appendLog('Initializing Spark Cluster (Databricks Runtime 14.3 LTS)...');
-        setStageStatus('bronze', 'RUNNING...', 'bg-amber-500/20 text-amber-400 animate-pulse');
-
-        setTimeout(() => {
-          appendLog('Reading raw CDC stream from Kafka topic [enterprise_orders_v2]...', 'info');
-          document.getElementById('stage-bronze').classList.add('border-[var(--primary)]');
-        }, 800);
-
-        setTimeout(() => {
-          appendLog('Bronze ingestion complete. 1,482,910 rows ingested into Delta Lake raw zone.', 'success');
-          setStageStatus('bronze', 'COMPLETED', 'bg-emerald-500/20 text-emerald-400');
-          setStageStatus('silver', 'RUNNING...', 'bg-cyan-500/20 text-cyan-400 animate-pulse');
-          document.getElementById('stage-bronze').classList.remove('border-[var(--primary)]');
-          document.getElementById('stage-silver').classList.add('border-cyan-400');
-          document.getElementById('metric-rows').textContent = '1.48M';
-          document.getElementById('metric-latency').textContent = '142 ms';
-        }, 2200);
-
-        setTimeout(() => {
-          appendLog('Executing Delta Live Tables (DLT) validation & deduplication pipeline...', 'info');
-          appendLog('Spark shuffle partition tuning applied: 200 partitions optimized.', 'info');
-        }, 3400);
-
-        setTimeout(() => {
-          appendLog('Silver transformation successful. Zero null anomalies detected in key constraints.', 'success');
-          setStageStatus('silver', 'COMPLETED', 'bg-emerald-500/20 text-emerald-400');
-          setStageStatus('gold', 'RUNNING...', 'bg-purple-500/20 text-purple-400 animate-pulse');
-          document.getElementById('stage-silver').classList.remove('border-cyan-400');
-          document.getElementById('stage-gold').classList.add('border-purple-400');
-          document.getElementById('metric-latency').textContent = '68 ms';
-          document.getElementById('metric-drift').textContent = '0.01%';
-        }, 4800);
-
-        setTimeout(() => {
-          appendLog('Publishing Gold semantic aggregates to Synapse / Power BI direct query model...', 'info');
-        }, 5800);
-
-        setTimeout(() => {
-          appendLog('Pipeline execution finished successfully in 6.42s. All data reconciled.', 'success');
-          setStageStatus('gold', 'COMPLETED', 'bg-emerald-500/20 text-emerald-400');
-          document.getElementById('stage-gold').classList.remove('border-purple-400');
-          btn.disabled = false;
-          btn.classList.remove('opacity-50');
-          isRunningPipeline = false;
-          playSound();
-          showToast('Data Pipeline Execution Successful! 🚀');
-        }, 7000);
-      }
-
-      function resetPipelineSim() {
-        playSound();
-        if(isRunningPipeline) return;
-        ['bronze', 'silver', 'gold'].forEach(s => {
-          const el = document.getElementById(`status-${s}`);
-          el.textContent = 'IDLE';
-          el.className = 'text-xs font-mono px-2.5 py-1 rounded-full bg-slate-800 text-[var(--muted)]';
-          document.getElementById(`stage-${s}`).className = 'p-4 rounded-2xl glass-panel border border-[var(--border)] transition-all flex items-center justify-between';
+        window.addEventListener('mousemove', (e) => {
+          mouseX = e.clientX;
+          mouseY = e.clientY;
+          cursor.style.left = mouseX + 'px';
+          cursor.style.top = mouseY + 'px';
         });
-        document.getElementById('metric-rows').textContent = '0';
-        document.getElementById('metric-latency').textContent = '0 ms';
-        document.getElementById('metric-drift').textContent = '0.00%';
-        document.getElementById('pipelineLogBox').innerHTML = '<div class="text-slate-500">System reset. Ready to execute new PySpark job.</div>';
-        showToast('Simulator state reset.');
-      }
 
-      function clearPipelineLogs() {
-        playSound();
-        document.getElementById('pipelineLogBox').innerHTML = '<div class="text-slate-500">Console cleared.</div>';
-      }
-
-      // Interactive Terminal Logic
-      function handleTerminalKey(e) {
-        if(e.key === 'Enter') {
-          executeTerminalCommand();
+        function animateTrail() {
+          trailX += (mouseX - trailX) * 0.15;
+          trailY += (mouseY - trailY) * 0.15;
+          trail.style.left = trailX + 'px';
+          trail.style.top = trailY + 'px';
+          requestAnimationFrame(animateTrail);
         }
+        animateTrail();
       }
 
-      function executeTerminalCommand() {
-        const input = document.getElementById('terminalInput');
-        const cmd = input.value.trim().toLowerCase();
-        if(!cmd) return;
-        playSound();
-
-        const terminalBody = document.getElementById('terminalBody');
-        terminalBody.innerHTML += `<div class="text-[var(--primary)]">$ ${escapeHtml(input.value)}</div>`;
-        input.value = '';
-
-        let response = '';
-        switch(cmd) {
-          case 'help':
-            response = `Available commands:<br>
-            &nbsp;&nbsp;<span class="text-[var(--primary)]">skills</span> - List core technical stack & competencies<br>
-            &nbsp;&nbsp;<span class="text-[var(--primary)]">experience</span> - View recent employment history<br>
-            &nbsp;&nbsp;<span class="text-[var(--primary)]">contact</span> - Show contact details & email<br>
-            &nbsp;&nbsp;<span class="text-[var(--primary)]">theme</span> - Switch theme (classic, cyber, neon, light)<br>
-            &nbsp;&nbsp;<span class="text-[var(--primary)]">hire</span> - Display hiring pitch & availability<br>
-            &nbsp;&nbsp;<span class="text-[var(--primary)]">clear</span> - Clear terminal window`;
-            break;
-          case 'skills':
-            response = `Core Skills: PySpark, Azure Databricks, Delta Live Tables, Spark SQL, Power BI, DAX, SQL Server, KQL, Snowflake, ADF, Kafka, Python.`;
-            break;
-          case 'experience':
-            response = `1. Medavie Health Services (Data Analyst, 2025-Present)<br>2. Source Atlantic Limited (Data Engineer, 2022-2025)<br>3. Hitachi Solutions India (Assoc. Consultant, 2017-2020)`;
-            break;
-          case 'contact':
-            response = `Email: ${profile.email}<br>Phone: ${profile.phone}<br>LinkedIn: ${profile.linkedin}`;
-            break;
-          case 'theme':
-            const themes = ['classic', 'cyber', 'neon', 'light'];
-            const next = themes[(themes.indexOf(currentTheme) + 1) % themes.length];
-            setTheme(next);
-            response = `Theme switched to: <span class="text-[var(--primary)] font-bold">${next}</span>`;
-            break;
-          case 'hire':
-            response = `Sameer Bandi is currently open for senior roles in Data Engineering, Analytics Platform Architecture, and Databricks engineering. Contact via bsameer1995@gmail.com.`;
-            break;
-          case 'clear':
-            terminalBody.innerHTML = '';
-            return;
-          default:
-            response = `Command not recognized: '${escapeHtml(cmd)}'. Type 'help' for available commands.`;
-        }
-
-        terminalBody.innerHTML += `<div class="text-slate-300 pl-4 border-l border-[var(--border)]">${response}</div>`;
-        terminalBody.scrollTop = terminalBody.scrollHeight;
-      }
-
-      function escapeHtml(text) {
-        return text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
-      }
-
-      // Responsive Particle / Grid Background Canvas
-      const canvas = document.getElementById('bgCanvas');
-      const ctx = canvas.getContext('2d');
-      let width, height;
-      let particles = [];
-      let mouse = { x: null, y: null, radius: 140 };
-
-      function resizeCanvas() {
-        width = canvas.width = window.innerWidth;
-        height = canvas.height = window.innerHeight;
-      }
-      window.addEventListener('resize', resizeCanvas);
-      resizeCanvas();
-
-      window.addEventListener('mousemove', e => {
-        mouse.x = e.clientX;
-        mouse.y = e.clientY;
-      });
-      window.addEventListener('mouseout', () => {
-        mouse.x = null;
-        mouse.y = null;
-      });
-
-      class Particle {
-        constructor() {
-          this.x = Math.random() * width;
-          this.y = Math.random() * height;
-          this.vx = (Math.random() - 0.5) * 0.6;
-          this.vy = (Math.random() - 0.5) * 0.6;
-          this.size = Math.random() * 1.8 + 0.8;
-        }
-        update() {
-          this.x += this.vx;
-          this.y += this.vy;
-          if(this.x < 0 || this.x > width) this.vx *= -1;
-          if(this.y < 0 || this.y > height) this.vy *= -1;
-
-          // Mouse interactivity repulsion / attraction
-          if(mouse.x !== null && mouse.y !== null) {
-            let dx = mouse.x - this.x;
-            let dy = mouse.y - this.y;
-            let dist = Math.sqrt(dx * dx + dy * dy);
-            if(dist < mouse.radius) {
-              let angle = Math.atan2(dy, dx);
-              this.x -= Math.cos(angle) * 1.5;
-              this.y -= Math.sin(angle) * 1.5;
-            }
+      // 2. Typewriter Effect
+      function initTypewriter() {
+        const text = "> Data Analytics Engineer";
+        const el = document.getElementById("typewriter-title");
+        let i = 0;
+        function type() {
+          if (i < text.length) {
+            el.innerHTML += text.charAt(i);
+            i++;
+            setTimeout(type, 100);
+          } else {
+            el.innerHTML += '<span style="animation: blink 1s infinite">_</span>';
           }
         }
-        draw() {
-          ctx.fillStyle = currentTheme === 'light' ? 'rgba(15, 23, 42, 0.25)' : 'rgba(255, 255, 255, 0.35)';
-          ctx.beginPath();
-          ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-          ctx.fill();
-        }
+        setTimeout(type, 500);
       }
 
-      function initParticles() {
-        particles = [];
-        const count = Math.floor((width * height) / 18000);
-        for(let i = 0; i < count; i++) {
-          particles.push(new Particle());
-        }
+      // 3. Render Skills with Filtering Logic
+      let activeFilter = null;
+      function renderSkills() {
+        const container = document.getElementById('skills-container');
+        resumeData.skills.forEach(skill => {
+          const btn = document.createElement('button');
+          btn.className = 'skill-tag';
+          btn.innerText = skill;
+          btn.onclick = () => toggleSkillFilter(skill, btn);
+          container.appendChild(btn);
+        });
       }
-      initParticles();
 
-      function animateParticles() {
-        ctx.clearRect(0, 0, width, height);
-
-        // Draw connecting lines if close
-        const maxDist = 110;
-        for(let i = 0; i < particles.length; i++) {
-          particles[i].update();
-          particles[i].draw();
-
-          for(let j = i + 1; j < particles.length; j++) {
-            let dx = particles[i].x - particles[j].x;
-            let dy = particles[i].y - particles[j].y;
-            let dist = Math.sqrt(dx * dx + dy * dy);
-            if(dist < maxDist) {
-              let opacity = (1 - (dist / maxDist)) * 0.18;
-              ctx.strokeStyle = currentTheme === 'light' ? `rgba(15, 23, 42, ${opacity})` : `rgba(245, 158, 11, ${opacity})`;
-              ctx.lineWidth = 0.8;
-              ctx.beginPath();
-              ctx.moveTo(particles[i].x, particles[i].y);
-              ctx.lineTo(particles[j].x, particles[j].y);
-              ctx.stroke();
+      function toggleSkillFilter(skill, btn) {
+        document.querySelectorAll('.skill-tag').forEach(el => el.classList.remove('active'));
+        if (activeFilter === skill) {
+          activeFilter = null; // Turn off filter
+          document.querySelectorAll('.job-card').forEach(card => card.classList.remove('active-filter'));
+        } else {
+          activeFilter = skill;
+          btn.classList.add('active');
+          document.querySelectorAll('.job-card').forEach(card => {
+            const tags = JSON.parse(card.dataset.tags || '[]');
+            if (tags.some(t => t.toLowerCase().includes(skill.toLowerCase()) || skill.toLowerCase().includes(t.toLowerCase()))) {
+              card.classList.add('active-filter');
+            } else {
+              card.classList.remove('active-filter');
             }
+          });
+        }
+      }
+
+      // 4. Render Experience Timeline
+      function renderExperience() {
+        const container = document.getElementById('experience-timeline');
+        resumeData.experience.forEach((job, index) => {
+          const card = document.createElement('article');
+          card.className = 'job-card glass-panel';
+          card.dataset.tags = JSON.stringify(job.tags);
+          card.innerHTML = `
+            <div class="job-header">
+              <h3 class="job-title">${job.role}</h3>
+              <span class="mono" style="color:var(--primary); font-size: 0.85rem">${job.period}</span>
+            </div>
+            <p class="job-company">${job.company} · ${job.location}</p>
+            <div style="margin-top: 1rem;">
+              ${job.tags.map(tag => `<span class="skill-tag" style="padding: 0.2rem 0.5rem; font-size: 0.65rem;">${tag}</span>`).join('')}
+            </div>
+            <ul class="job-bullets">
+              ${job.bullets.map(bullet => `<li>${bullet}</li>`).join('')}
+            </ul>
+          `;
+          container.appendChild(card);
+        });
+      }
+
+      // 5. Scroll Animations (Intersection Observer)
+      function initScrollAnimations() {
+        const observer = new IntersectionObserver((entries) => {
+          entries.forEach(entry => {
+            if (entry.isIntersecting) {
+              entry.target.classList.add('visible');
+            }
+          });
+        }, { threshold: 0.1 });
+
+        document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
+      }
+
+      // 6. Interactive Terminal
+      function initTerminal() {
+        const form = document.getElementById('terminal-form');
+        const input = document.getElementById('terminal-input');
+        const output = document.getElementById('terminal-output');
+
+        function printLog(html) {
+          const p = document.createElement('p');
+          p.innerHTML = html;
+          output.appendChild(p);
+          output.scrollTop = output.scrollHeight;
+        }
+
+        form.addEventListener('submit', (e) => {
+          e.preventDefault();
+          const val = input.value.trim();
+          if (!val) return;
+          
+          printLog(`<span style="color:var(--text-muted)">guest@sameer-portfolio:~$</span> ${val}`);
+          input.value = '';
+
+          const cmd = val.toLowerCase();
+          if (cmd === 'help') {
+            printLog('Available commands: <br> - <span style="color:var(--primary)">whoami</span>: Display profile summary <br> - <span style="color:var(--primary)">education</span>: List degrees and certifications <br> - <span style="color:var(--primary)">hire</span>: Get contact info <br> - <span style="color:var(--primary)">clear</span>: Clear terminal');
+          } else if (cmd === 'whoami') {
+            printLog('Sameer Bandi.<br>Data Analytics Engineer building scalable pipelines across Azure, Databricks, and Fabric.<br>Location: Moncton, NB (Open to Relocate).');
+          } else if (cmd === 'education') {
+            resumeData.education.forEach(ed => printLog(`- ${ed}`));
+          } else if (cmd === 'hire') {
+            printLog('Initiating contact sequence...<br>Email: bsameer1995@gmail.com<br>Phone: 506-566-5115<br>Ready to build reliable data ecosystems.');
+          } else if (cmd === 'clear') {
+            output.innerHTML = '';
+          } else {
+            printLog(`Command not found: ${cmd}. Type 'help' for available commands.`);
+          }
+        });
+      }
+
+      // 7. HTML5 Canvas Network Background
+      function initCanvasNetwork() {
+        const canvas = document.getElementById('network-canvas');
+        const ctx = canvas.getContext('2d');
+        let width, height;
+        let particles = [];
+
+        function resize() {
+          width = canvas.width = window.innerWidth;
+          height = canvas.height = window.innerHeight;
+        }
+        window.addEventListener('resize', resize);
+        resize();
+
+        class Particle {
+          constructor() {
+            this.x = Math.random() * width;
+            this.y = Math.random() * height;
+            this.vx = (Math.random() - 0.5) * 0.5;
+            this.vy = (Math.random() - 0.5) * 0.5;
+            this.radius = Math.random() * 1.5 + 0.5;
+          }
+          update() {
+            this.x += this.vx;
+            this.y += this.vy;
+            if (this.x < 0 || this.x > width) this.vx *= -1;
+            if (this.y < 0 || this.y > height) this.vy *= -1;
+          }
+          draw() {
+            ctx.beginPath();
+            ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+            ctx.fillStyle = 'rgba(56, 189, 248, 0.5)';
+            ctx.fill();
           }
         }
-        requestAnimationFrame(animateParticles);
-      }
-      animateParticles();
 
-      // Initial component rendering
-      renderExperience();
-      renderSkills();
+        for (let i = 0; i < 70; i++) particles.push(new Particle());
+
+        // Mouse interaction
+        let mouse = { x: null, y: null };
+        window.addEventListener('mousemove', e => {
+          mouse.x = e.x;
+          mouse.y = e.y;
+        });
+
+        function animate() {
+          ctx.clearRect(0, 0, width, height);
+          
+          particles.forEach(p => {
+            p.update();
+            p.draw();
+          });
+
+          // Connect particles
+          for (let i = 0; i < particles.length; i++) {
+            for (let j = i; j < particles.length; j++) {
+              const dx = particles[i].x - particles[j].x;
+              const dy = particles[i].y - particles[j].y;
+              const dist = Math.sqrt(dx * dx + dy * dy);
+
+              if (dist < 120) {
+                ctx.beginPath();
+                ctx.strokeStyle = `rgba(56, 189, 248, ${0.2 - dist/600})`;
+                ctx.lineWidth = 0.5;
+                ctx.moveTo(particles[i].x, particles[i].y);
+                ctx.lineTo(particles[j].x, particles[j].y);
+                ctx.stroke();
+              }
+            }
+
+            // Connect to mouse
+            if (mouse.x != null) {
+              const dxM = particles[i].x - mouse.x;
+              const dyM = particles[i].y - mouse.y;
+              const distM = Math.sqrt(dxM * dxM + dyM * dyM);
+              if (distM < 150) {
+                ctx.beginPath();
+                ctx.strokeStyle = `rgba(129, 140, 248, ${0.4 - distM/375})`;
+                ctx.lineWidth = 1;
+                ctx.moveTo(particles[i].x, particles[i].y);
+                ctx.lineTo(mouse.x, mouse.y);
+                ctx.stroke();
+              }
+            }
+          }
+          requestAnimationFrame(animate);
+        }
+        animate();
+      }
     </script>
   </body>
 </html>
