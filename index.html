@@ -6,20 +6,13 @@
     <title>Sameer Bandi — Data Analytics Engineer</title>
     <meta
       name="description"
-      content="Portfolio of Sameer Bandi, data analytics engineer working with Azure, Databricks and Power BI."
+      content="Portfolio of Sameer Bandi, Data Analytics Engineer specializing in Azure, Databricks, Microsoft Fabric, and Power BI."
     />
-    <meta property="og:title" content="Sameer Bandi — Data Analytics Engineer" />
-    <meta
-      property="og:description"
-      content="8+ years designing cloud data pipelines with Azure Databricks, PySpark, Delta Lake and Power BI."
-    />
-    <meta property="og:type" content="website" />
-    <meta name="twitter:card" content="summary_large_image" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
       rel="stylesheet"
-      href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Work+Sans:wght@300;400;500&family=JetBrains+Mono:wght@400;500&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Work+Sans:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500;600&display=swap"
     />
     <style>
       :root {
@@ -57,12 +50,12 @@
         text-decoration: underline;
       }
       .wrap {
-        max-width: 48rem;
+        max-width: 52rem;
         margin: 0 auto;
         padding: 0 1.5rem 7rem;
       }
       .wrap.wide {
-        max-width: 64rem;
+        max-width: 68rem;
       }
       .mono {
         font-family: var(--mono);
@@ -74,9 +67,7 @@
         letter-spacing: 0.28em;
         color: var(--muted-foreground);
       }
-      h1,
-      h2.display,
-      h3.display {
+      h1, h2.display, h3.display {
         font-family: var(--display);
         font-weight: 400;
       }
@@ -108,25 +99,26 @@
         border-top: 0;
       }
       .hero h1 {
-        font-size: clamp(2.6rem, 7vw, 3.8rem);
-        line-height: 1.05;
-        margin-top: 1.5rem;
+        font-size: clamp(2.5rem, 6.5vw, 3.6rem);
+        line-height: 1.1;
+        margin-top: 1.25rem;
       }
       .hero em {
         color: var(--primary);
         font-style: normal;
       }
       .lead {
-        max-width: 34rem;
+        max-width: 44rem;
         color: var(--muted-foreground);
-        font-size: 1.05rem;
-        margin-top: 2rem;
+        font-size: 1.02rem;
+        margin-top: 1.5rem;
+        line-height: 1.65;
       }
       .belief {
         display: grid;
         grid-template-columns: 3rem 1fr;
         gap: 0.5rem;
-        margin-top: 2.5rem;
+        margin-top: 2rem;
       }
       .belief span.num {
         font-family: var(--mono);
@@ -144,20 +136,21 @@
       }
       .job h3 {
         font-family: var(--display);
-        font-size: 1.9rem;
+        font-size: 1.85rem;
         font-weight: 400;
       }
       .job ul {
         list-style: none;
         margin-top: 1.25rem;
         display: grid;
-        gap: 0.5rem;
+        gap: 0.6rem;
       }
       .job li {
         color: var(--muted-foreground);
         font-size: 0.92rem;
         padding-left: 1.25rem;
         position: relative;
+        line-height: 1.55;
       }
       .job li::before {
         content: "";
@@ -184,8 +177,8 @@
       }
       .grid2 {
         display: grid;
-        gap: 2.5rem;
-        grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
+        gap: 2rem;
+        grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr));
         margin-top: 2.5rem;
       }
       .edu {
@@ -208,15 +201,15 @@
         font-size: 0.85rem;
         color: var(--muted-foreground);
       }
-      /* interactive theme */
+      /* interactive styling */
       .spotlight {
         position: fixed;
         inset: 0;
         pointer-events: none;
         z-index: 0;
         background: radial-gradient(
-          340px circle at var(--x, 50%) var(--y, 20%),
-          color-mix(in oklab, var(--primary) 14%, transparent),
+          360px circle at var(--x, 50%) var(--y, 20%),
+          color-mix(in oklab, var(--primary) 15%, transparent),
           transparent 70%
         );
       }
@@ -238,9 +231,9 @@
         z-index: 1;
         border: 1px solid var(--border);
         border-radius: 1rem;
-        background: color-mix(in oklab, var(--card) 70%, transparent);
+        background: color-mix(in oklab, var(--card) 75%, transparent);
         padding: 1.75rem;
-        backdrop-filter: blur(4px);
+        backdrop-filter: blur(6px);
       }
       .dots span {
         display: inline-block;
@@ -253,9 +246,7 @@
         animation: blink 1s steps(2, start) infinite;
       }
       @keyframes blink {
-        to {
-          opacity: 0;
-        }
+        to { opacity: 0; }
       }
       .nodes {
         display: flex;
@@ -264,7 +255,7 @@
         margin-top: 1.5rem;
       }
       .node {
-        flex: 1 1 10rem;
+        flex: 1 1 11rem;
         text-align: left;
         cursor: pointer;
         border: 1px solid var(--border);
@@ -283,13 +274,13 @@
       .node[aria-pressed="true"] {
         border-color: var(--primary);
         color: var(--foreground);
-        background: color-mix(in oklab, var(--primary) 10%, transparent);
+        background: color-mix(in oklab, var(--primary) 12%, transparent);
       }
       .node b {
         display: block;
         font-family: var(--sans);
-        font-weight: 400;
-        font-size: 0.9rem;
+        font-weight: 500;
+        font-size: 0.92rem;
         margin-top: 0.25rem;
       }
       .cards {
@@ -301,14 +292,12 @@
       .card {
         border: 1px solid var(--border);
         border-radius: 0.75rem;
-        background: color-mix(in oklab, var(--card) 40%, transparent);
+        background: color-mix(in oklab, var(--card) 45%, transparent);
         padding: 1.25rem;
-        transition:
-          transform 0.25s,
-          border-color 0.25s;
+        transition: transform 0.25s, border-color 0.25s;
       }
       .card:hover {
-        transform: translateY(-4px);
+        transform: translateY(-3px);
         border-color: var(--primary);
       }
       .card h3 {
@@ -328,12 +317,12 @@
         border: 1px solid var(--border);
         border-radius: 1rem;
         padding: 1rem 0;
-        margin-top: 4rem;
+        margin-top: 3.5rem;
       }
       .marquee {
         display: flex;
         width: max-content;
-        animation: scroll 40s linear infinite;
+        animation: scroll 45s linear infinite;
         font-family: var(--mono);
         font-size: 0.85rem;
         color: var(--muted-foreground);
@@ -380,10 +369,40 @@
       .tabs button[aria-selected="true"] {
         background: var(--primary);
         color: var(--background);
+        font-weight: 600;
+      }
+      .interactive-console {
+        margin-top: 1.5rem;
+        border: 1px solid var(--border);
+        border-radius: 0.75rem;
+        background: color-mix(in oklab, var(--background) 92%, transparent);
+        padding: 1rem;
+        font-family: var(--mono);
+        font-size: 0.8rem;
+      }
+      .console-log {
+        max-height: 160px;
+        overflow-y: auto;
+        color: var(--muted-foreground);
+        margin-bottom: 0.75rem;
+        line-height: 1.45;
+      }
+      .console-input-row {
+        display: flex;
+        gap: 0.5rem;
+        align-items: center;
+      }
+      .console-input {
+        background: transparent;
+        border: none;
+        outline: none;
+        color: var(--foreground);
+        font-family: var(--mono);
+        font-size: 0.8rem;
+        width: 100%;
       }
       @media (prefers-reduced-motion: reduce) {
-        .marquee,
-        .caret {
+        .marquee, .caret {
           animation: none;
         }
       }
@@ -404,8 +423,8 @@
         email: "bsameer1995@gmail.com",
         phone: "506-566-5115",
         linkedin: "https://linkedin.com/in/bsameer95",
-        intro:
-          "Hey, I'm Sameer — a data analytics engineer based in New Brunswick, Canada. For 8+ years I've designed cloud data platforms on Azure, Databricks and Power BI: pipelines that hold up, numbers that reconcile, and reporting leadership can act on.",
+        summary:
+          "Data Analytics Engineer with 8+ years of cross-industry experience spanning healthcare analytics, supply chain management, and IT consulting. Skilled in building enterprise Power BI reporting solutions, semantic models, and DAX-driven analytics across Azure and Microsoft Fabric. Proven track record partnering with data engineering teams on Lakehouse architectures and trusted ETL pipelines, maintaining compliance with healthcare privacy legislation, and enabling self-service analytics through comprehensive data dictionaries, technical report specifications, and stakeholder training.",
       };
 
       const beliefs = [
@@ -425,116 +444,162 @@
 
       const work = [
         {
-          role: "Data Analyst",
+          role: "Data Analytics Engineer (DA)",
           company: "Medavie Health Services",
-          place: "New Brunswick, Canada",
-          period: "Aug 2025 — Present",
+          place: "NB, Canada",
+          period: "August 2025 – Present",
           summary:
-            "Reporting for healthcare leadership and governance committees, built on SQL Server, SSRS and Power BI.",
+            "Design, maintain, and optimize SQL Server, SSRS, and Power BI reporting solutions supporting healthcare leadership, governance committees, and enterprise reporting requirements.",
           points: [
-            "Consolidate departmental sources into SQL-driven datasets teams can rely on",
-            "Run validation, reconciliation and quality checks across systems to catch drift early",
-            "Partner with IT, HR, PMO, Quality, Finance and Governance to turn asks into reporting",
-            "Handle sensitive health data with strict accuracy, confidentiality and access controls",
+            "Design, maintain, and optimize SQL Server, SSRS, and Power BI reporting solutions supporting healthcare leadership and enterprise reporting requirements.",
+            "Develop and maintain SQL-driven datasets by consolidating data from multiple departmental sources to provide consistent and reliable reporting.",
+            "Perform data validation, reconciliation, and quality checks across multiple sources to identify inconsistencies and improve data accuracy.",
+            "Collaborate with IT, HR, PMO, Quality, Finance, Governance, and healthcare stakeholders to translate business requirements into reliable data and reporting solutions.",
+            "Support healthcare leadership and governance committees by preparing SQL-driven reporting outputs and data insights for quality, finance, operational, and governance decision-making.",
+            "Analyze data requirements and develop SQL queries, reporting datasets, and analytical models aligned with stakeholder needs.",
+            "Troubleshoot SQL, reporting, and data-related issues, performing root-cause analysis and coordinating solutions with technical and business teams.",
+            "Support data governance and quality practices by maintaining accurate, consistent, and appropriately controlled healthcare reporting datasets.",
+            "Work with sensitive healthcare information while following organizational requirements for data accuracy, confidentiality, security, and appropriate data handling.",
+            "Identify opportunities to improve reporting workflows, standardize datasets, and increase reliability of recurring analytical processes.",
           ],
-          stack: ["SQL Server", "SSRS", "Power BI", "Data Governance"],
+          stack: ["SQL Server", "SSRS", "Power BI", "Data Governance", "Healthcare Privacy", "T-SQL"],
         },
         {
-          role: "Data Engineer",
+          role: "Data Engineer / Business Analyst",
           company: "Source Atlantic Limited",
-          place: "New Brunswick, Canada",
-          period: "Dec 2022 — Jul 2025",
+          place: "NB, Canada",
+          period: "April 2022 – July 2025",
           summary:
-            "Enterprise Azure data platform work: Databricks, Delta Live Tables, ADF orchestration and Medallion architecture.",
+            "Architected scalable Azure Medallion data architectures, engineered ADF pipelines, built PySpark models in Databricks, and developed enterprise Power BI semantic models and dashboards.",
           points: [
-            "Built scalable PySpark pipelines in Azure Databricks across structured and semi-structured data",
-            "Shipped Delta Lake and DLT pipelines that raised reliability and data quality for analytics",
-            "Tuned Spark jobs — partitioning, executor sizing, shuffle and skew — to cut processing time",
-            "Orchestrated ingestion with ADF, including CDC workflows for incremental sync",
-            "Monitored the platform with Azure Monitor, Log Analytics and KQL to catch issues first",
-            "Led a Snowflake proof of concept evaluated alongside Synapse and Databricks",
+            "Architected scalable Medallion data architecture (Bronze, Silver, Gold) within Azure Data Lake Storage (ADLS Gen2) to centralize enterprise-wide inventory data, reducing overall cloud storage costs by 75%.",
+            "Engineered robust ETL data pipelines utilizing Azure Data Factory (ADF) and SQL to extract, orchestrate, and ingest distributed relational data, cutting data processing and ingestion costs by 50%.",
+            "Developed distributed data processing workflows using PySpark and Databricks Notebooks to execute large-scale data cleansing and transformations for the silver layer.",
+            "Designed predictive analysis models utilizing PySpark within Databricks to forecast branch inventory trends and optimize regional stock distribution.",
+            "Implemented a high-performance cloud data warehouse using Azure Synapse Analytics to host the curated gold layer, significantly optimizing downstream query execution.",
+            "Built comprehensive tabular data models and wrote advanced DAX measures in Power BI to track complex supply chain metrics, KPIs, and historical stock fluctuations.",
+            "Developed and deployed an enterprise Power BI dashboard via Power BI Service, eliminating hours of data lag to deliver near real-time inventory insights.",
+            "Enforced strict data governance and cloud security by configuring Role-Based Access Control (RBAC) across the Azure ecosystem and Row-Level Security (RLS) within Power BI.",
+            "Orchestrated CI/CD pipelines and version control using GitHub and Azure DevOps to securely manage pipeline code, track Databricks notebooks, and streamline deployment life cycles.",
+            "As a BA: Elicited requirements directly from business stakeholders and translated business questions into Power BI reporting and BI solutions spanning SQL, KQL, and Fabric data sources.",
+            "Created and managed dimensional data models, complex DAX calculations, and automated deployments in Power BI Service.",
           ],
-          stack: ["Azure Databricks", "PySpark", "Delta Live Tables", "ADF", "Synapse", "Kafka"],
+          stack: [
+            "ADLS Gen2",
+            "Azure Data Factory (ADF)",
+            "Databricks",
+            "PySpark",
+            "Azure Synapse",
+            "Microsoft Fabric",
+            "Power BI",
+            "DAX",
+            "RLS",
+            "Azure DevOps",
+          ],
         },
         {
-          role: "Business Analyst",
-          company: "Source Atlantic Limited",
-          place: "New Brunswick, Canada",
-          period: "Apr 2022 — Dec 2022",
+          role: "Power BI Developer / Analytics Engineer (Internship)",
+          company: "New Brunswick Energy and Utilities Board",
+          place: "NB, Canada",
+          period: "October 2021 – December 2021",
           summary:
-            "Translated stakeholder requirements into data models and Power BI reporting for BI initiatives.",
+            "Conducted complex economic analyses and designed dynamic Power BI dashboards monitoring provincial motor fuel supply continuity and regional pricing.",
           points: [
-            "Gathered requirements and defined solution approaches with business stakeholders",
-            "Built data models and semantic layers supporting analytics and reporting",
-            "Developed complex DAX measures and deployed through Power BI Service",
+            "Developed dynamic Power BI dashboards to conduct complex economic analysis on motor fuel gas stations, visualizing metrics critical to provincial supply continuity.",
+            "Engineered data transformation workflows using Power Query and advanced Excel to ingest, clean, and model raw economic data into structured relational models.",
+            "Wrote custom DAX measures and KPIs to track fuel supply trends, pricing fluctuations, and regional distribution for regulatory stakeholders.",
+            "Translated complex economic data into intuitive visual reports, enabling faster, data-driven decision-making for provincial utility analysts.",
           ],
-          stack: ["Power BI", "DAX", "SQL", "Fabric"],
+          stack: ["Power BI", "DAX", "Power Query", "Excel Relational Modeling", "Economic Analytics"],
         },
         {
           role: "Associate Consultant",
-          company: "Hitachi Solutions India",
+          company: "Hitachi Solutions India Pvt. Ltd.",
           place: "India",
-          period: "2017 — 2020",
+          period: "2017 – 2020",
           summary:
-            "Monitoring, diagnostics and reporting for large-scale operations using KQL and Azure Monitor.",
+            "Engineered enterprise Power BI dashboards, tabular models, and automated Azure Monitor diagnostics using KQL.",
           points: [
-            "Wrote KQL queries in Azure Monitor and Log Analytics for fast root-cause diagnostics",
-            "Built alerting and automated actions that cut manual intervention at scale",
-            "Delivered Power BI dashboards on top of KQL datasets for operational teams",
+            "Engineered enterprise Power BI dashboards and semantic datasets, utilizing advanced visualization techniques (bookmarks, multi-level slicing, drill-throughs) to translate complex requirements into actionable business insights.",
+            "Designed and maintained robust tabular data models, writing complex DAX measures to optimize reporting performance and support enterprise-wide business intelligence needs.",
+            "Integrated KQL-based Log Analytics queries with Azure Monitor to establish automated, data-driven alerting systems, significantly reducing system downtime.",
+            "Conducted comprehensive requirement-gathering sessions with cross-functional stakeholders to document technical specifications and ensure reporting alignment with business objectives.",
           ],
-          stack: ["Azure Monitor", "KQL", "Log Analytics", "Power BI"],
+          stack: ["Power BI", "DAX", "Tabular Modeling", "Azure Monitor", "Log Analytics", "KQL"],
         },
       ];
 
       const skills = [
         {
-          group: "Big data & processing",
-          items: ["PySpark", "Spark architecture & tuning", "Delta Live Tables", "Spark SQL"],
-        },
-        {
-          group: "Azure platform",
+          group: "Data Engineering & Architecture",
           items: [
-            "Data Factory",
-            "Synapse Analytics",
-            "Data Lake Gen1/Gen2",
-            "Azure SQL",
-            "Stream Analytics",
-            "Monitor & Log Analytics",
+            "Azure Data Factory (ADF)",
+            "Azure Synapse Analytics",
+            "Databricks",
+            "Microsoft Fabric (Lakehouse/Warehouse)",
+            "ADLS Gen2",
+            "Medallion Architecture",
+            "ETL/ELT Pipelines",
+            "Real-Time/Streaming Data",
           ],
         },
         {
-          group: "Modern ecosystem",
+          group: "Languages & Databases",
           items: [
-            "Snowflake",
-            "Kafka & streaming",
-            "Event-driven processing",
-            "AI/ML in Databricks",
+            "Python",
+            "PySpark",
+            "SQL (T-SQL)",
+            "KQL (Kusto Query Language)",
+            "Azure SQL Database",
+            "SQL Server",
+            "Oracle",
+            "REST APIs",
           ],
         },
         {
-          group: "Microsoft Fabric",
-          items: ["Data engineering", "Warehouse", "Real-time intelligence", "KQL integration"],
+          group: "Business Intelligence & Analytics",
+          items: [
+            "Power BI (Desktop & Service)",
+            "DAX (Performance Optimization & Measures)",
+            "Power Query",
+            "Semantic Data Modeling (Dimensional)",
+            "Row-Level Security (RLS)",
+            "SSRS",
+            "Azure Analysis Services",
+          ],
         },
         {
-          group: "Languages & databases",
-          items: ["SQL Server (T-SQL)", "Python", "PySpark", "KQL"],
-        },
-        {
-          group: "BI & delivery",
-          items: ["Power BI, DAX & RLS", "SSRS", "Semantic models", "Azure DevOps CI/CD", "GitHub"],
+          group: "DevOps & Cloud Governance",
+          items: [
+            "Azure DevOps",
+            "GitHub & Git",
+            "CI/CD Pipelines",
+            "Databricks Notebooks",
+            "RBAC & Cloud Security",
+            "Azure Monitor & Log Analytics",
+            "Data Dictionaries & Governance",
+            "Healthcare Privacy Compliance",
+          ],
         },
       ];
 
       const education = [
-        ["MBA, Business Administration", "University of New Brunswick · 2021"],
-        ["BSc, Computer Science", "GITAM University · 2017"],
-        ["Microsoft Azure Fundamentals", "AZ-900"],
-        ["Microsoft Architect Technologies", "AZ-300"],
+        ["Master of Business Administration", "University of New Brunswick · 2021"],
+        ["Bachelor of Computer Science", "GITAM University · 2017"],
+      ];
+
+      const certifications = [
+        ["Microsoft Certified: Azure Fundamentals", "AZ-900"],
+        ["Microsoft Certified: Azure Architect Technologies", "AZ-300"],
       ];
 
       const app = document.getElementById("app");
       let theme = location.hash === "#interactive" ? "interactive" : "classic";
       let active = 0;
+      let consoleLogs = [
+        "System initialized: Welcome to Sameer Bandi's interactive terminal.",
+        "Type 'help', 'roles', 'skills', 'certifications', or 'contact' to explore.",
+      ];
 
       const contact = `
         <div class="tags mono" style="margin-top:2rem;gap:2rem">
@@ -548,32 +613,32 @@
         <div class="wrap">
           <header class="bar">
             <span style="font-family:var(--display);font-size:1.25rem">${profile.name}</span>
-            <nav><a href="#work">Work</a><a href="#stack">Stack</a><a href="mailto:${profile.email}">Connect</a></nav>
+            <nav><a href="#work">Work</a><a href="#stack">Stack</a><a href="#education">Education</a><a href="mailto:${profile.email}">Connect</a></nav>
           </header>
           <section class="hero">
             <p class="eyebrow">${profile.title}</p>
             <h1>Data should <em>feel</em> trustworthy</h1>
-            <p class="lead">${profile.intro}</p>
-            <p class="eyebrow" style="margin-top:2.5rem">${profile.location} • Open to conversations</p>
+            <p class="lead">${profile.summary}</p>
+            <p class="eyebrow" style="margin-top:2rem">${profile.location} • Open to conversations</p>
           </section>
           <section>
-            <h2 class="eyebrow">Three things I strongly believe in</h2>
+            <h2 class="eyebrow">Guiding Principles</h2>
             ${beliefs
               .map(
                 (b, i) => `<div class="belief"><span class="num">0${i + 1}</span><div>
                   <h3 class="display" style="font-size:1.5rem">${b.title}</h3>
-                  <p class="muted" style="margin-top:.5rem;max-width:32rem">${b.body}</p></div></div>`,
+                  <p class="muted" style="margin-top:.5rem;max-width:34rem">${b.body}</p></div></div>`,
               )
               .join("")}
           </section>
           <section id="work">
-            <h2 class="eyebrow">Selected work</h2>
+            <h2 class="eyebrow">Work Experience</h2>
             ${work
               .map(
                 (j) => `<article class="job">
                   <div class="job-head"><h3>${j.role}</h3><span class="eyebrow">${j.period}</span></div>
-                  <p style="color:var(--primary);font-size:.85rem;margin-top:.25rem">${j.company} · ${j.place}</p>
-                  <p class="muted" style="margin-top:1rem;max-width:34rem">${j.summary}</p>
+                  <p style="color:var(--primary);font-size:.88rem;margin-top:.25rem">${j.company} ·${j.place}</p>
+                  <p class="muted" style="margin-top:1rem;max-width:44rem">${j.summary}</p>
                   <ul>${j.points.map((p) => `<li>${p}</li>`).join("")}</ul>
                   <div class="tags">${j.stack.map((s) => `<span class="tag">${s}</span>`).join("")}</div>
                 </article>`,
@@ -581,23 +646,26 @@
               .join("")}
           </section>
           <section id="stack">
-            <h2 class="eyebrow">The stack I reach for</h2>
+            <h2 class="eyebrow">Technical Skills</h2>
             <div class="grid2">
               ${skills
                 .map(
-                  (s) => `<div><h3 class="display" style="font-size:1.25rem">${s.group}</h3>
-                  <ul class="muted" style="list-style:none;margin-top:.75rem;font-size:.9rem">${s.items.map((i) => `<li>${i}</li>`).join("")}</ul></div>`,
+                  (s) => `<div><h3 class="display" style="font-size:1.3rem">${s.group}</h3>
+                  <ul class="muted" style="list-style:none;margin-top:.75rem;font-size:.9rem;line-height:1.7">${s.items.map((i) => `<li>› ${i}</li>`).join("")}</ul></div>`,
                 )
                 .join("")}
             </div>
           </section>
-          <section>
-            <h2 class="eyebrow">Education & certification</h2>
-            <ul class="edu">${education.map(([t, s]) => `<li><span>${t}</span><span>${s}</span></li>`).join("")}</ul>
+          <section id="education">
+            <h2 class="eyebrow">Education & Certifications</h2>
+            <ul class="edu">
+              ${education.map(([t, s]) => `<li><span>${t}</span><span>${s}</span></li>`).join("")}
+              ${certifications.map(([t, s]) => `<li><span>${t}</span><span>${s}</span></li>`).join("")}
+            </ul>
           </section>
           <section>
-            <h2 class="display" style="font-size:2.5rem;line-height:1.15">Got a pipeline that keeps breaking?</h2>
-            <p class="muted" style="margin-top:1rem;max-width:32rem">I'm always up for a conversation about data platforms, Databricks, or making reporting something people finally trust.</p>
+            <h2 class="display" style="font-size:2.5rem;line-height:1.15">Need high-trust data pipelines or BI reporting?</h2>
+            <p class="muted" style="margin-top:1rem;max-width:34rem">Always ready to discuss data platform architectures, Medallion implementations, Power BI semantic models, or analytics reliability.</p>
             ${contact}
           </section>
         </div>`;
@@ -610,74 +678,95 @@
         <div class="spotlight" id="spot"></div><div class="grid-field"></div>
         <div class="wrap wide" style="position:relative;z-index:1">
           <header class="bar mono" style="text-transform:uppercase;letter-spacing:.2em;font-size:.7rem">
-            <span style="color:var(--primary)">~/sameer.console</span>
+            <span style="color:var(--primary)">~/sameer.terminal</span>
             <span class="muted">${profile.location}</span>
           </header>
           <div class="panel">
             <div class="dots">
               <span style="background:oklch(.6 .2 27)"></span><span style="background:var(--primary)"></span><span style="background:var(--accent)"></span>
             </div>
-            <p class="mono" style="color:var(--accent);margin-top:2rem;font-size:.85rem">$ whoami</p>
-            <h1 style="font-size:clamp(2.8rem,8vw,4.5rem);line-height:1.05;margin-top:.5rem">${profile.name}</h1>
+            <p class="mono" style="color:var(--accent);margin-top:1.75rem;font-size:.85rem">$ whoami</p>
+            <h1 style="font-size:clamp(2.6rem,7vw,4.2rem);line-height:1.05;margin-top:.5rem">${profile.name}</h1>
             <p class="eyebrow" style="margin-top:.75rem">${profile.title}</p>
-            <p class="mono" style="color:var(--accent);margin-top:2rem;font-size:.85rem">$ ls current-obsessions</p>
-            <p class="mono" style="color:var(--primary);font-size:1.6rem;margin-top:.5rem"><span id="typed"></span><span class="caret">▌</span></p>
-            <p class="muted" style="margin-top:2rem;max-width:34rem">${profile.intro}</p>
+            <p class="mono" style="color:var(--accent);margin-top:1.75rem;font-size:.85rem">$ ls competencies</p>
+            <p class="mono" style="color:var(--primary);font-size:1.5rem;margin-top:.5rem"><span id="typed"></span><span class="caret">▌</span></p>
+            <p class="muted" style="margin-top:1.5rem;max-width:44rem">${profile.summary}</p>
           </div>
 
           <section style="border:0">
-            <h2 class="eyebrow">Career pipeline — select a stage</h2>
+            <h2 class="eyebrow">Experience Timeline — Click stage to inspect</h2>
             <div class="nodes">
               ${work
                 .map(
                   (w, i) =>
-                    `<button class="node" aria-pressed="${i === active}" data-i="${i}">${w.period.split(" — ")[0]}<b>${w.company}</b></button>`,
+                    `<button class="node" aria-pressed="${i === active}" data-i="${i}">
+                      <span>${w.period.split("–")[0].trim()}</span>
+                      <b>${w.company}</b>
+                    </button>`,
                 )
                 .join("")}
             </div>
             <div class="panel" style="margin-top:1.5rem">
-              <div class="job-head"><h3 class="display" style="font-size:1.9rem">${j.role}</h3><span class="eyebrow" style="color:var(--primary)">${j.period}</span></div>
+              <div class="job-head">
+                <h3 class="display" style="font-size:1.85rem">${j.role}</h3>
+                <span class="eyebrow" style="color:var(--primary)">${j.period}</span>
+              </div>
               <p class="muted" style="font-size:.9rem;margin-top:.25rem">${j.company} · ${j.place}</p>
-              <p class="muted" style="margin-top:1rem;max-width:42rem">${j.summary}</p>
-              <div class="cards">${j.points.map((p) => `<div class="card muted" style="font-size:.88rem">${p}</div>`).join("")}</div>
-              <div class="tags">${j.stack.map((s) => `<span class="tag" style="border-color:color-mix(in oklab,var(--primary) 40%,transparent);color:var(--primary)">${s}</span>`).join("")}</div>
+              <p class="muted" style="margin-top:1rem;max-width:44rem">${j.summary}</p>
+              <div class="cards">
+                ${j.points.map((p) => `<div class="card muted" style="font-size:.86rem;line-height:1.5">${p}</div>`).join("")}
+              </div>
+              <div class="tags" style="margin-top:1.5rem">
+                ${j.stack.map((s) => `<span class="tag" style="border-color:color-mix(in oklab,var(--primary) 40%,transparent);color:var(--primary)">${s}</span>`).join("")}
+              </div>
             </div>
           </section>
 
-          <div class="marquee-wrap"><div class="marquee">${[...allStack, ...allStack].map((s) => `<span>${s} <b style="color:var(--primary)">/</b></span>`).join("")}</div></div>
+          <div class="marquee-wrap">
+            <div class="marquee">
+              ${[...allStack, ...allStack].map((s) => `<span>${s} <b style="color:var(--primary)">/</b></span>`).join("")}
+            </div>
+          </div>
 
           <section style="border:0">
-            <h2 class="eyebrow">Stack matrix</h2>
+            <h2 class="eyebrow">Interactive CLI Console</h2>
+            <div class="interactive-console">
+              <div class="console-log" id="consoleLog">
+                ${consoleLogs.map((l) => `<div>&gt; ${l}</div>`).join("")}
+              </div>
+              <form id="consoleForm" class="console-input-row" onsubmit="handleConsoleSubmit(event)">
+                <span style="color:var(--accent)">$</span>
+                <input type="text" id="consoleInput" class="console-input" placeholder="Type command here (try 'skills' or 'help')..." autocomplete="off" />
+              </form>
+            </div>
+          </section>
+
+          <section style="border:0">
+            <h2 class="eyebrow">Skills Matrix</h2>
             <div class="cards">
               ${skills
                 .map(
                   (s) =>
-                    `<div class="card"><h3>${s.group}</h3><ul>${s.items.map((i) => `<li>› ${i}</li>`).join("")}</ul></div>`,
+                    `<div class="card">
+                      <h3>${s.group}</h3>
+                      <ul>${s.items.map((i) => `<li>› ${i}</li>`).join("")}</ul>
+                    </div>`,
                 )
                 .join("")}
             </div>
           </section>
 
           <section style="border:0">
+            <h2 class="eyebrow">Education & Certifications</h2>
             <div class="cards">
-              ${beliefs
-                .map(
-                  (b, i) =>
-                    `<div class="card"><span class="mono" style="color:var(--accent);font-size:.72rem">0${i + 1}</span>
-                    <h3 style="margin-top:.5rem">${b.title}</h3><p class="muted" style="font-size:.88rem;margin-top:.5rem">${b.body}</p></div>`,
-                )
-                .join("")}
+              ${education.map(([t, s]) => `<div class="card"><h3>${t}</h3><p class="mono muted" style="font-size:.75rem;margin-top:.4rem">${s}</p></div>`).join("")}
+              ${certifications.map(([t, s]) => `<div class="card"><h3>${t}</h3><p class="mono muted" style="font-size:.75rem;margin-top:.4rem">${s}</p></div>`).join("")}
             </div>
-          </section>
-
-          <section style="border:0">
-            <h2 class="eyebrow">Education & certification</h2>
-            <div class="cards">${education.map(([t, s]) => `<div class="card"><h3>${t}</h3><p class="mono muted" style="font-size:.72rem;margin-top:.4rem">${s}</p></div>`).join("")}</div>
           </section>
 
           <div class="panel">
             <p class="mono" style="color:var(--accent);font-size:.85rem">$ open connection</p>
-            <h2 class="display" style="font-size:2.5rem;line-height:1.15;margin-top:.75rem">Let's make your data trustworthy.</h2>
+            <h2 class="display" style="font-size:2.5rem;line-height:1.15;margin-top:.75rem">Let's build reliable reporting solutions.</h2>
             ${contact}
           </div>
         </div>`;
@@ -689,11 +778,12 @@
         const el = document.getElementById("typed");
         if (!el) return;
         const words = [
-          "PySpark pipelines",
-          "Delta Live Tables",
-          "KQL diagnostics",
-          "Power BI semantics",
-          "CDC ingestion",
+          "Azure Data Factory pipelines",
+          "Medallion Architecture (Bronze/Silver/Gold)",
+          "Databricks & PySpark optimization",
+          "Power BI semantic modeling & DAX",
+          "Healthcare reporting & governance",
+          "KQL diagnostics & Log Analytics",
         ];
         let i = 0,
           n = 0,
@@ -702,17 +792,57 @@
           const word = words[i % words.length];
           n += deleting ? -1 : 1;
           el.textContent = word.slice(0, n);
-          let delay = deleting ? 40 : 75;
+          let delay = deleting ? 35 : 65;
           if (!deleting && n === word.length) {
             deleting = true;
-            delay = 1600;
+            delay = 1800;
           } else if (deleting && n === 0) {
             deleting = false;
             i++;
-            delay = 250;
+            delay = 200;
           }
           typeTimer = setTimeout(tick, delay);
         })();
+      }
+
+      function handleConsoleSubmit(e) {
+        e.preventDefault();
+        const input = document.getElementById("consoleInput");
+        const val = input.value.trim().toLowerCase();
+        if (!val) return;
+        input.value = "";
+
+        consoleLogs.push(val);
+        switch (val) {
+          case "help":
+            consoleLogs.push("Available commands: roles, skills, certifications, contact, clear, whoami");
+            break;
+          case "whoami":
+            consoleLogs.push(`${profile.name} — ${profile.title} based in ${profile.location}`);
+            break;
+          case "roles":
+            work.forEach((w) => consoleLogs.push(`• ${w.role} @ ${w.company} (${w.period})`));
+            break;
+          case "skills":
+            skills.forEach((s) => consoleLogs.push(`[${s.group}]: ${s.items.join(", ")}`));
+            break;
+          case "certifications":
+            certifications.forEach(([c, code]) => consoleLogs.push(`• ${c} (${code})`));
+            break;
+          case "contact":
+            consoleLogs.push(`Email: ${profile.email} | Phone: ${profile.phone} | LinkedIn: ${profile.linkedin}`);
+            break;
+          case "clear":
+            consoleLogs = [];
+            break;
+          default:
+            consoleLogs.push(`Command not recognized: '${val}'. Type 'help' for options.`);
+        }
+        const logBox = document.getElementById("consoleLog");
+        if (logBox) {
+          logBox.innerHTML = consoleLogs.map((l) => `<div>&gt; ${l}</div>`).join("");
+          logBox.scrollTop = logBox.scrollHeight;
+        }
       }
 
       function render() {
@@ -730,6 +860,8 @@
               render();
             }),
           );
+          const logBox = document.getElementById("consoleLog");
+          if (logBox) logBox.scrollTop = logBox.scrollHeight;
         }
       }
 
