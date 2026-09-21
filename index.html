@@ -4,491 +4,207 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Sameer Bandi — Data Analytics Engineer</title>
-    <meta
-      name="description"
-      content="Portfolio of Sameer Bandi, Data Analytics Engineer specializing in Azure, Databricks, Microsoft Fabric, and Power BI."
-    />
+    <meta name="description" content="Portfolio of Sameer Bandi, Data Analytics Engineer." />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      rel="stylesheet"
-      href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Work+Sans:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500;600&display=swap"
-    />
+    <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Work+Sans:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
     <style>
       :root {
-        --background: oklch(0.16 0.008 90);
-        --foreground: oklch(0.94 0.012 90);
-        --card: oklch(0.2 0.009 90);
-        --primary: oklch(0.82 0.14 78);
-        --accent: oklch(0.72 0.09 190);
-        --muted-foreground: oklch(0.68 0.012 90);
-        --border: oklch(0.3 0.01 90);
+        --background: oklch(0.12 0.01 250);
+        --foreground: oklch(0.95 0.01 250);
+        --card: oklch(0.18 0.02 250);
+        --primary: oklch(0.75 0.15 220); /* Cyan / Azure Blue */
+        --accent: oklch(0.65 0.20 280); /* Deep Purple */
+        --muted: oklch(0.60 0.02 250);
+        --border: oklch(0.25 0.02 250);
         --display: "Instrument Serif", Georgia, serif;
         --sans: "Work Sans", system-ui, sans-serif;
         --mono: "JetBrains Mono", ui-monospace, monospace;
       }
-      * {
-        box-sizing: border-box;
-        margin: 0;
-        padding: 0;
-      }
+      
+      * { box-sizing: border-box; margin: 0; padding: 0; }
+      
       body {
         background: var(--background);
         color: var(--foreground);
         font-family: var(--sans);
         -webkit-font-smoothing: antialiased;
-        line-height: 1.55;
+        line-height: 1.6;
         overflow-x: hidden;
-      }
-      ::selection {
-        background: color-mix(in oklab, var(--primary) 35%, transparent);
-      }
-      a {
-        color: var(--primary);
-        text-decoration: none;
-        transition: text-shadow 0.3s;
-      }
-      a:hover {
-        text-decoration: underline;
-        text-shadow: 0 0 8px color-mix(in oklab, var(--primary) 50%, transparent);
+        cursor: none; /* Hide default cursor for custom spring cursor */
       }
       
-      /* Interactive Background Canvas */
-      #bg-canvas {
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100vw;
-        height: 100vh;
-        z-index: 0;
-        pointer-events: none;
-        opacity: 0.4;
-      }
+      ::selection { background: color-mix(in oklab, var(--primary) 30%, transparent); }
+      a { color: var(--primary); text-decoration: none; transition: text-shadow 0.3s; }
+      a:hover { text-decoration: underline; text-shadow: 0 0 10px var(--primary); }
 
-      /* Custom Cursor Glow */
-      #cursor-glow {
-        position: fixed;
-        width: 400px;
-        height: 400px;
-        background: radial-gradient(circle, color-mix(in oklab, var(--primary) 15%, transparent) 0%, transparent 60%);
-        border-radius: 50%;
+      /* Custom Spring Cursor */
+      .cursor-dot {
+        position: fixed; top: 0; left: 0; width: 6px; height: 6px;
+        background: var(--primary); border-radius: 50%;
+        pointer-events: none; z-index: 9999;
         transform: translate(-50%, -50%);
-        pointer-events: none;
-        z-index: 0;
-        transition: width 0.3s, height 0.3s, background 0.3s;
       }
-      body.matrix-mode #cursor-glow {
-        background: radial-gradient(circle, rgba(0, 255, 65, 0.15) 0%, transparent 60%);
+      .cursor-ring {
+        position: fixed; top: 0; left: 0; width: 36px; height: 36px;
+        border: 1px solid color-mix(in oklab, var(--primary) 50%, transparent);
+        border-radius: 50%; pointer-events: none; z-index: 9998;
+        transform: translate(-50%, -50%); transition: width 0.2s, height 0.2s, border-color 0.2s;
       }
-      body.matrix-mode {
-        --primary: #00ff41;
-        --accent: #008f11;
+      .cursor-ring.active { width: 50px; height: 50px; border-color: var(--primary); background: color-mix(in oklab, var(--primary) 10%, transparent); }
+
+      /* Interactive Data Flow Canvas */
+      #data-canvas {
+        position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+        z-index: 0; pointer-events: none; opacity: 0.6;
       }
 
-      .wrap {
-        max-width: 52rem;
-        margin: 0 auto;
-        padding: 0 1.5rem 7rem;
-        position: relative;
-        z-index: 1;
+      /* Layout */
+      .wrap { max-width: 52rem; margin: 0 auto; padding: 0 1.5rem 7rem; position: relative; z-index: 1; }
+      .wrap.wide { max-width: 72rem; }
+      .mono { font-family: var(--mono); }
+      .eyebrow { font-family: var(--mono); font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.25em; color: var(--primary); }
+      h1, h2.display, h3.display { font-family: var(--display); font-weight: 400; }
+      .muted { color: var(--muted); }
+
+      header.bar { display: flex; justify-content: space-between; align-items: center; padding: 1.5rem 0; font-size: 0.9rem; border-bottom: 1px solid var(--border); margin-bottom: 3rem; }
+      header.bar nav { display: flex; gap: 1.5rem; }
+      header.bar nav a { color: var(--muted); transition: color 0.3s; }
+      header.bar nav a:hover { color: var(--foreground); }
+
+      section { padding: 4rem 0; }
+      .hero h1 { font-size: clamp(2.8rem, 7vw, 4.2rem); line-height: 1.1; margin-top: 1.25rem; }
+      .hero em { color: var(--primary); font-style: normal; display: inline-block; }
+      .lead { max-width: 46rem; color: var(--muted); font-size: 1.05rem; margin-top: 1.5rem; line-height: 1.7; }
+
+      /* Glass Panels & 3D Tilt */
+      .panel {
+        position: relative; z-index: 1; border: 1px solid var(--border); border-radius: 1rem;
+        background: color-mix(in oklab, var(--card) 60%, transparent);
+        padding: 2rem; backdrop-filter: blur(16px);
+        transform-style: preserve-3d; transition: border-color 0.4s;
       }
-      .wrap.wide {
-        max-width: 68rem;
+      .panel::before {
+        content: ""; position: absolute; inset: 0; border-radius: 1rem; pointer-events: none;
+        background: radial-gradient(800px circle at var(--mouse-x) var(--mouse-y), color-mix(in oklab, var(--primary) 10%, transparent), transparent 40%);
       }
-      .mono {
-        font-family: var(--mono);
-      }
-      .eyebrow {
-        font-family: var(--mono);
-        font-size: 0.7rem;
-        text-transform: uppercase;
-        letter-spacing: 0.28em;
-        color: var(--muted-foreground);
-      }
-      h1, h2.display, h3.display {
-        font-family: var(--display);
-        font-weight: 400;
-      }
-      .muted {
-        color: var(--muted-foreground);
-      }
-      header.bar {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        padding: 1.5rem 0;
-        font-size: 0.9rem;
-      }
-      header.bar nav {
-        display: flex;
-        gap: 1.5rem;
-      }
-      header.bar nav a {
-        color: var(--muted-foreground);
-      }
-      header.bar nav a:hover {
-        color: var(--foreground);
-      }
-      section {
-        border-top: 1px solid var(--border);
-        padding: 4rem 0;
-      }
-      section.hero {
-        border-top: 0;
-      }
-      .hero h1 {
-        font-size: clamp(2.5rem, 6.5vw, 3.6rem);
-        line-height: 1.1;
-        margin-top: 1.25rem;
-      }
-      .hero em {
-        color: var(--primary);
-        font-style: normal;
-      }
-      .lead {
-        max-width: 44rem;
-        color: var(--muted-foreground);
-        font-size: 1.02rem;
-        margin-top: 1.5rem;
-        line-height: 1.65;
-      }
-      .belief {
-        display: grid;
-        grid-template-columns: 3rem 1fr;
-        gap: 0.5rem;
-        margin-top: 2rem;
-      }
-      .belief span.num {
-        font-family: var(--mono);
-        color: var(--primary);
-      }
-      .job {
-        margin-top: 3.5rem;
-      }
-      .job-head {
-        display: flex;
-        flex-wrap: wrap;
-        justify-content: space-between;
-        align-items: baseline;
-        gap: 0.5rem;
-      }
-      .job h3 {
-        font-family: var(--display);
-        font-size: 1.85rem;
-        font-weight: 400;
-      }
-      .job ul {
-        list-style: none;
-        margin-top: 1.25rem;
-        display: grid;
-        gap: 0.6rem;
-      }
-      .job li {
-        color: var(--muted-foreground);
-        font-size: 0.92rem;
-        padding-left: 1.25rem;
-        position: relative;
-        line-height: 1.55;
-      }
-      .job li::before {
-        content: "";
-        position: absolute;
-        left: 0;
-        top: 0.75em;
-        width: 0.75rem;
-        height: 1px;
-        background: var(--border);
-      }
-      .tags {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 0.5rem;
-        margin-top: 1.25rem;
-      }
+      .panel:hover { border-color: color-mix(in oklab, var(--primary) 50%, transparent); }
+
+      /* Magnetic Buttons & Tags */
+      .magnetic-wrap { display: inline-block; padding: 0.5rem; margin: -0.5rem; }
+      .magnetic { display: inline-block; transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); will-change: transform; }
       
-      /* Interactive Tags */
       .tag {
-        border: 1px solid var(--border);
-        border-radius: 999px;
-        padding: 0.25rem 0.75rem;
-        font-family: var(--mono);
-        font-size: 0.68rem;
-        color: var(--muted-foreground);
-        cursor: pointer;
-        transition: all 0.3s ease;
+        border: 1px solid var(--border); border-radius: 999px; padding: 0.35rem 0.85rem;
+        font-family: var(--mono); font-size: 0.72rem; color: var(--muted);
+        cursor: pointer; transition: all 0.3s ease; background: transparent;
       }
       .tag:hover, .tag.highlight {
-        background: color-mix(in oklab, var(--primary) 20%, transparent);
-        color: var(--foreground);
-        border-color: var(--primary);
-        box-shadow: 0 0 10px color-mix(in oklab, var(--primary) 40%, transparent);
-        transform: translateY(-2px);
+        background: color-mix(in oklab, var(--primary) 15%, transparent); color: var(--foreground);
+        border-color: var(--primary); box-shadow: 0 0 15px color-mix(in oklab, var(--primary) 30%, transparent);
       }
 
-      .grid2 {
-        display: grid;
-        gap: 2rem;
-        grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr));
-        margin-top: 2.5rem;
-      }
-      .edu {
-        list-style: none;
-        margin-top: 2.5rem;
-      }
-      .edu li {
-        display: flex;
-        flex-wrap: wrap;
-        justify-content: space-between;
-        gap: 0.5rem;
-        border-bottom: 1px solid var(--border);
-        padding-bottom: 1rem;
-        margin-bottom: 1.5rem;
-        font-family: var(--display);
-        font-size: 1.25rem;
-      }
-      .edu li span:last-child {
-        font-family: var(--sans);
-        font-size: 0.85rem;
-        color: var(--muted-foreground);
-      }
-
-      /* 3D Transform Elements */
-      .tilt-element {
-        transition: transform 0.1s ease, box-shadow 0.3s ease;
-        transform-style: preserve-3d;
-      }
-
-      .panel {
-        position: relative;
-        z-index: 1;
-        border: 1px solid var(--border);
-        border-radius: 1rem;
-        background: color-mix(in oklab, var(--card) 75%, transparent);
-        padding: 1.75rem;
-        backdrop-filter: blur(12px);
-      }
-      .panel:hover {
-        border-color: color-mix(in oklab, var(--primary) 50%, transparent);
-        box-shadow: 0 10px 30px -10px rgba(0,0,0,0.5);
-      }
-      
-      .dots span {
-        display: inline-block;
-        width: 0.6rem;
-        height: 0.6rem;
-        border-radius: 999px;
-        margin-right: 0.4rem;
-      }
-      .caret {
-        animation: blink 1s steps(2, start) infinite;
-      }
-      @keyframes blink {
-        to { opacity: 0; }
-      }
-      .nodes {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 0.75rem;
-        margin-top: 1.5rem;
-      }
+      /* Timeline & Nodes */
+      .nodes { display: flex; flex-wrap: wrap; gap: 1rem; margin-top: 2rem; }
       .node {
-        flex: 1 1 11rem;
-        text-align: left;
-        cursor: pointer;
-        border: 1px solid var(--border);
-        border-radius: 0.6rem;
-        background: transparent;
-        color: var(--muted-foreground);
-        font-family: var(--mono);
-        font-size: 0.72rem;
-        padding: 0.75rem 1rem;
-        transition: all 0.25s;
+        flex: 1 1 12rem; text-align: left; cursor: pointer; border: 1px solid var(--border);
+        border-radius: 0.75rem; background: transparent; color: var(--muted);
+        padding: 1rem 1.25rem; transition: all 0.3s; position: relative; overflow: hidden;
       }
-      .node:hover {
-        color: var(--foreground);
-        border-color: color-mix(in oklab, var(--primary) 60%, transparent);
-        box-shadow: 0 5px 15px color-mix(in oklab, var(--primary) 20%, transparent);
+      .node::after {
+        content: ''; position: absolute; bottom: 0; left: 0; height: 2px; width: 0%;
+        background: var(--primary); transition: width 0.4s ease;
       }
-      .node.highlight-node {
-        border-color: var(--accent);
-        box-shadow: 0 0 15px color-mix(in oklab, var(--accent) 50%, transparent);
-      }
+      .node:hover { border-color: color-mix(in oklab, var(--primary) 60%, transparent); color: var(--foreground); }
+      .node:hover::after { width: 100%; }
       .node[aria-pressed="true"] {
-        border-color: var(--primary);
-        color: var(--foreground);
-        background: color-mix(in oklab, var(--primary) 12%, transparent);
-        box-shadow: inset 0 0 10px color-mix(in oklab, var(--primary) 20%, transparent);
+        border-color: var(--primary); color: var(--foreground);
+        background: color-mix(in oklab, var(--primary) 8%, transparent);
       }
-      .node b {
-        display: block;
-        font-family: var(--sans);
-        font-weight: 500;
-        font-size: 0.92rem;
-        margin-top: 0.25rem;
-      }
-      .cards {
-        display: grid;
-        gap: 0.75rem;
-        grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr));
-        margin-top: 1.5rem;
-      }
+      .node[aria-pressed="true"]::after { width: 100%; }
+      .node b { display: block; font-family: var(--sans); font-weight: 500; font-size: 1rem; margin-top: 0.35rem; color: var(--foreground); }
+
+      /* Cards */
+      .cards { display: grid; gap: 1rem; grid-template-columns: repeat(auto-fit, minmax(18rem, 1fr)); margin-top: 1.5rem; }
       .card {
-        border: 1px solid var(--border);
-        border-radius: 0.75rem;
-        background: color-mix(in oklab, var(--card) 45%, transparent);
-        padding: 1.25rem;
-        transition: transform 0.1s, border-color 0.25s, box-shadow 0.25s;
+        border: 1px solid var(--border); border-radius: 0.75rem; padding: 1.5rem;
+        background: color-mix(in oklab, var(--card) 40%, transparent);
+        transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275), border-color 0.3s, box-shadow 0.3s;
       }
-      .card:hover {
-        border-color: var(--primary);
-        box-shadow: 0 10px 20px rgba(0,0,0,0.2);
-      }
-      .card h3 {
-        font-family: var(--display);
-        font-size: 1.25rem;
-        font-weight: 400;
-      }
-      .card ul {
-        list-style: none;
-        margin-top: 0.75rem;
-        font-family: var(--mono);
-        font-size: 0.72rem;
-        color: var(--muted-foreground);
-      }
-      .marquee-wrap {
-        overflow: hidden;
-        border: 1px solid var(--border);
-        border-radius: 1rem;
-        padding: 1rem 0;
-        margin-top: 3.5rem;
-        background: color-mix(in oklab, var(--card) 20%, transparent);
-        backdrop-filter: blur(4px);
-      }
-      .marquee {
-        display: flex;
-        width: max-content;
-        animation: scroll 35s linear infinite;
-        font-family: var(--mono);
-        font-size: 0.85rem;
-        color: var(--muted-foreground);
-      }
-      .marquee-wrap:hover .marquee {
-        animation-play-state: paused;
-      }
-      .marquee span {
-        margin: 0 1.25rem;
-        white-space: nowrap;
-        cursor: pointer;
-        transition: color 0.3s;
-      }
-      .marquee span:hover {
-        color: var(--primary);
-      }
-      @keyframes scroll {
-        to { transform: translateX(-50%); }
-      }
-      .tabs {
-        position: fixed;
-        left: 50%;
-        transform: translateX(-50%);
-        bottom: 1.25rem;
-        z-index: 30;
-        display: flex;
-        gap: 0.25rem;
-        padding: 0.3rem;
-        border: 1px solid var(--border);
-        border-radius: 999px;
-        background: color-mix(in oklab, var(--background) 88%, transparent);
-        backdrop-filter: blur(10px);
-        box-shadow: 0 5px 20px rgba(0,0,0,0.3);
-      }
-      .tabs button {
-        font-family: var(--mono);
-        font-size: 0.68rem;
-        text-transform: uppercase;
-        letter-spacing: 0.18em;
-        border: 0;
-        background: transparent;
-        color: var(--muted-foreground);
-        border-radius: 999px;
-        padding: 0.55rem 1.1rem;
-        cursor: pointer;
-        transition: background 0.2s, color 0.2s;
-      }
-      .tabs button:hover {
-        color: var(--foreground);
-      }
-      .tabs button[aria-selected="true"] {
-        background: var(--primary);
-        color: var(--background);
-        font-weight: 600;
-      }
+      .card:hover { border-color: var(--primary); transform: translateY(-5px); box-shadow: 0 10px 30px rgba(0,0,0,0.3); }
+      .card h3 { font-family: var(--display); font-size: 1.35rem; margin-bottom: 0.75rem; }
+      .card ul { list-style: none; font-family: var(--mono); font-size: 0.78rem; color: var(--muted); line-height: 1.8; }
       
+      .job-head { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: baseline; border-bottom: 1px solid var(--border); padding-bottom: 1rem; margin-bottom: 1rem; }
+      .job-head h3 { font-size: 2rem; }
+      .job-bullets li { position: relative; padding-left: 1.25rem; margin-bottom: 0.75rem; color: var(--muted); font-size: 0.95rem; }
+      .job-bullets li::before { content: "›"; position: absolute; left: 0; color: var(--primary); font-family: var(--mono); font-weight: bold; }
+
+      /* Decode Text Effect */
+      .decode-text { display: inline-block; }
+
+      /* Marquee */
+      .marquee-wrap { overflow: hidden; border: 1px solid var(--border); border-radius: 1rem; padding: 1.25rem 0; margin-top: 4rem; background: color-mix(in oklab, var(--card) 20%, transparent); backdrop-filter: blur(8px); }
+      .marquee { display: flex; width: max-content; animation: scroll 40s linear infinite; font-family: var(--mono); font-size: 0.9rem; color: var(--muted); }
+      .marquee-wrap:hover .marquee { animation-play-state: paused; }
+      .marquee span { margin: 0 1.5rem; white-space: nowrap; transition: color 0.3s; }
+      .marquee span:hover { color: var(--primary); }
+      @keyframes scroll { to { transform: translateX(-50%); } }
+
       /* Advanced Terminal */
       .interactive-console {
-        margin-top: 1.5rem;
-        border: 1px solid var(--border);
-        border-radius: 0.75rem;
-        background: rgba(0, 0, 0, 0.6);
-        padding: 1rem;
-        font-family: var(--mono);
-        font-size: 0.8rem;
-        box-shadow: inset 0 0 20px rgba(0,0,0,0.5);
-        backdrop-filter: blur(5px);
+        margin-top: 2rem; border: 1px solid var(--border); border-radius: 0.75rem;
+        background: rgba(5, 5, 10, 0.8); padding: 1.25rem; font-family: var(--mono); font-size: 0.85rem;
+        box-shadow: inset 0 0 30px rgba(0,0,0,0.8); position: relative; overflow: hidden;
       }
-      .console-log {
-        max-height: 180px;
-        overflow-y: auto;
-        color: var(--muted-foreground);
-        margin-bottom: 0.75rem;
-        line-height: 1.5;
+      .interactive-console::after {
+        content: ""; position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+        background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
+        background-size: 100% 4px, 3px 100%; pointer-events: none; z-index: 10;
       }
-      .console-log div {
-        animation: slideIn 0.2s ease-out forwards;
-        opacity: 0;
-        transform: translateX(-10px);
-      }
-      @keyframes slideIn {
-        to { opacity: 1; transform: translateX(0); }
-      }
-      .console-input-row {
-        display: flex;
-        gap: 0.5rem;
-        align-items: center;
-      }
+      .console-header { display: flex; gap: 0.5rem; margin-bottom: 1rem; padding-bottom: 1rem; border-bottom: 1px dashed var(--border); }
+      .console-header span { display: block; width: 12px; height: 12px; border-radius: 50%; }
+      .console-log { max-height: 220px; overflow-y: auto; color: var(--muted); margin-bottom: 1rem; line-height: 1.6; position: relative; z-index: 11; scroll-behavior: smooth; }
+      .console-log div { animation: slideIn 0.25s ease-out forwards; opacity: 0; transform: translateX(-10px); }
+      @keyframes slideIn { to { opacity: 1; transform: translateX(0); } }
+      .console-input-row { display: flex; gap: 0.75rem; align-items: center; position: relative; z-index: 11; }
       .console-input {
-        background: transparent;
-        border: none;
-        outline: none;
-        color: var(--primary);
-        font-family: var(--mono);
-        font-size: 0.85rem;
-        width: 100%;
-        text-shadow: 0 0 5px color-mix(in oklab, var(--primary) 40%, transparent);
+        background: transparent; border: none; outline: none; color: var(--primary);
+        font-family: var(--mono); font-size: 0.9rem; width: 100%;
+        text-shadow: 0 0 8px color-mix(in oklab, var(--primary) 50%, transparent);
       }
-      @media (prefers-reduced-motion: reduce) {
-        .marquee, .caret, .console-log div, .tilt-element {
-          animation: none;
-          transition: none;
-          transform: none !important;
-        }
+
+      /* Tabs */
+      .tabs {
+        position: fixed; left: 50%; transform: translateX(-50%); bottom: 2rem; z-index: 50;
+        display: flex; gap: 0.5rem; padding: 0.4rem; border: 1px solid var(--border); border-radius: 999px;
+        background: color-mix(in oklab, var(--background) 80%, transparent); backdrop-filter: blur(12px);
+        box-shadow: 0 10px 30px rgba(0,0,0,0.5);
       }
+      .tabs button {
+        font-family: var(--mono); font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.2em;
+        border: 0; background: transparent; color: var(--muted); border-radius: 999px;
+        padding: 0.6rem 1.25rem; cursor: pointer; transition: all 0.3s;
+      }
+      .tabs button:hover { color: var(--foreground); background: color-mix(in oklab, var(--muted) 20%, transparent); }
+      .tabs button[aria-selected="true"] { background: var(--primary); color: var(--background); font-weight: 600; box-shadow: 0 0 15px color-mix(in oklab, var(--primary) 40%, transparent); }
     </style>
   </head>
   <body>
-    <!-- Interactive Backgrounds -->
-    <canvas id="bg-canvas"></canvas>
-    <div id="cursor-glow"></div>
+    <!-- Custom Cursor & Background -->
+    <div class="cursor-dot" id="cursor-dot"></div>
+    <div class="cursor-ring" id="cursor-ring"></div>
+    <canvas id="data-canvas"></canvas>
     
     <div id="app"></div>
     
-    <div class="tabs" id="tabs" role="tablist" aria-label="Portfolio themes">
-      <button type="button" role="tab" data-theme="classic">Classic</button>
-      <button type="button" role="tab" data-theme="interactive">Interactive</button>
+    <div class="tabs" id="tabs" role="tablist">
+      <div class="magnetic-wrap"><button class="magnetic" type="button" role="tab" data-theme="classic">Classic</button></div>
+      <div class="magnetic-wrap"><button class="magnetic" type="button" role="tab" data-theme="interactive">Interactive</button></div>
     </div>
 
     <script>
-      // --- CONTENT PAYLOAD (STRICTLY UNEDITED FROM DOCX) ---
+      // --- STRICTLY UNEDITED DATA PAYLOAD ---
       const profile = {
         name: "Sameer Bandi",
         title: "Data Analytics Engineer",
@@ -496,23 +212,13 @@
         email: "bsameer1995@gmail.com",
         phone: "506-566-5115",
         linkedin: "https://linkedin.com/in/bsameer95",
-        summary:
-          "I am open for Data Engineer, Data Analytics Engineer, or Analytics Engineer roles. With 8+ years of cross-industry experience spanning healthcare analytics, supply chain management, and IT consulting, I specialize in building scalable Medallion data architectures, reliable ETL pipelines, and DAX-driven enterprise Power BI solutions that leadership can actually trust.",
+        summary: "I am open for Data Engineer, Data Analytics Engineer, or Analytics Engineer roles. With 8+ years of cross-industry experience spanning healthcare analytics, supply chain management, and IT consulting, I specialize in building scalable Medallion data architectures, reliable ETL pipelines, and DAX-driven enterprise Power BI solutions that leadership can actually trust.",
       };
 
       const beliefs = [
-        {
-          title: "Pipelines should be boring.",
-          body: "The best data platform is the one nobody talks about, because it simply runs — every night, on time, with numbers that reconcile.",
-        },
-        {
-          title: "Chase clarity, not cleverness.",
-          body: "A query someone else can read beats a clever one they can't. Same for models, dashboards, and architecture diagrams.",
-        },
-        {
-          title: "Trust is the real deliverable.",
-          body: "Validation, reconciliation and governance aren't overhead. They are the reason leadership acts on the report at all.",
-        },
+        { title: "Pipelines should be boring.", body: "The best data platform is the one nobody talks about, because it simply runs — every night, on time, with numbers that reconcile." },
+        { title: "Chase clarity, not cleverness.", body: "A query someone else can read beats a clever one they can't. Same for models, dashboards, and architecture diagrams." },
+        { title: "Trust is the real deliverable.", body: "Validation, reconciliation and governance aren't overhead. They are the reason leadership acts on the report at all." },
       ];
 
       const work = [
@@ -521,8 +227,7 @@
           company: "Medavie Health Services",
           place: "NB, Canada",
           period: "August 2025 – Present",
-          summary:
-            "Design, maintain, and optimize SQL Server, SSRS, and Power BI reporting solutions supporting healthcare leadership, governance committees, and enterprise reporting requirements.",
+          summary: "Design, maintain, and optimize SQL Server, SSRS, and Power BI reporting solutions supporting healthcare leadership, governance committees, and enterprise reporting requirements.",
           points: [
             "Develop and maintain SQL-driven datasets by consolidating data from multiple departmental sources to provide consistent and reliable reporting.",
             "Perform data validation, reconciliation, and quality checks across multiple sources to identify inconsistencies and improve data accuracy.",
@@ -541,8 +246,7 @@
           company: "Source Atlantic Limited",
           place: "NB, Canada",
           period: "April 2022 – July 2025",
-          summary:
-            "Architected scalable Azure Medallion data architectures, engineered ADF pipelines, built PySpark models in Databricks, and developed enterprise Power BI semantic models and dashboards.",
+          summary: "Architected scalable Azure Medallion data architectures, engineered ADF pipelines, built PySpark models in Databricks, and developed enterprise Power BI semantic models and dashboards.",
           points: [
             "Architected scalable Medallion data architecture (Bronze, Silver, Gold) within Azure Data Lake Storage (ADLS Gen2) to centralize enterprise-wide inventory data, reducing overall cloud storage costs by 75%.",
             "Engineered robust ETL data pipelines utilizing Azure Data Factory (ADF) and SQL to extract, orchestrate, and ingest distributed relational data, cutting data processing and ingestion costs by 50%.",
@@ -563,8 +267,7 @@
           company: "New Brunswick Energy and Utilities Board",
           place: "NB, Canada",
           period: "October 2021 – December 2021",
-          summary:
-            "Conducted complex economic analyses and designed dynamic Power BI dashboards monitoring provincial motor fuel supply continuity and regional pricing.",
+          summary: "Conducted complex economic analyses and designed dynamic Power BI dashboards monitoring provincial motor fuel supply continuity and regional pricing.",
           points: [
             "Developed dynamic Power BI dashboards to conduct complex economic analysis on motor fuel gas stations, visualizing metrics critical to provincial supply continuity.",
             "Engineered data transformation workflows using Power Query and advanced Excel to ingest, clean, and model raw economic data into structured relational models.",
@@ -578,8 +281,7 @@
           company: "Hitachi Solutions India Pvt. Ltd.",
           place: "India",
           period: "2017 – 2020",
-          summary:
-            "Engineered enterprise Power BI dashboards, tabular models, and automated Azure Monitor diagnostics using KQL.",
+          summary: "Engineered enterprise Power BI dashboards, tabular models, and automated Azure Monitor diagnostics using KQL.",
           points: [
             "Engineered enterprise Power BI dashboards and semantic datasets, utilizing advanced visualization techniques (bookmarks, multi-level slicing, drill-throughs) to translate complex requirements into actionable business insights.",
             "Designed and maintained robust tabular data models, writing complex DAX measures to optimize reporting performance and support enterprise-wide business intelligence needs.",
@@ -591,22 +293,10 @@
       ];
 
       const skills = [
-        {
-          group: "Data Engineering & Architecture",
-          items: ["Azure Data Factory (ADF)", "Azure Synapse Analytics", "Databricks", "Microsoft Fabric (Lakehouse/Warehouse)", "ADLS Gen2", "Medallion Architecture", "ETL/ELT Pipelines", "Real-Time/Streaming Data"],
-        },
-        {
-          group: "Languages & Databases",
-          items: ["Python", "PySpark", "SQL (T-SQL)", "KQL (Kusto Query Language)", "Azure SQL Database", "SQL Server", "Oracle", "REST APIs"],
-        },
-        {
-          group: "Business Intelligence & Analytics",
-          items: ["Power BI (Desktop & Service)", "DAX (Performance Optimization & Measures)", "Power Query", "Semantic Data Modeling (Dimensional)", "Row-Level Security (RLS)", "SSRS", "Azure Analysis Services"],
-        },
-        {
-          group: "DevOps & Cloud Governance",
-          items: ["Azure DevOps", "GitHub & Git", "CI/CD Pipelines", "Databricks Notebooks", "RBAC & Cloud Security", "Azure Monitor & Log Analytics", "Data Dictionaries & Governance", "Healthcare Privacy Compliance"],
-        },
+        { group: "Data Engineering & Architecture", items: ["Azure Data Factory (ADF)", "Azure Synapse Analytics", "Databricks", "Microsoft Fabric (Lakehouse/Warehouse)", "ADLS Gen2", "Medallion Architecture", "ETL/ELT Pipelines", "Real-Time/Streaming Data"] },
+        { group: "Languages & Databases", items: ["Python", "PySpark", "SQL (T-SQL)", "KQL (Kusto Query Language)", "Azure SQL Database", "SQL Server", "Oracle", "REST APIs"] },
+        { group: "Business Intelligence & Analytics", items: ["Power BI (Desktop & Service)", "DAX (Performance Optimization & Measures)", "Power Query", "Semantic Data Modeling (Dimensional)", "Row-Level Security (RLS)", "SSRS", "Azure Analysis Services"] },
+        { group: "DevOps & Cloud Governance", items: ["Azure DevOps", "GitHub & Git", "CI/CD Pipelines", "Databricks Notebooks", "RBAC & Cloud Security", "Azure Monitor & Log Analytics", "Data Dictionaries & Governance", "Healthcare Privacy Compliance"] },
       ];
 
       const education = [
@@ -619,87 +309,67 @@
         ["Microsoft Certified: Azure Architect Technologies", "AZ-300"],
       ];
 
-      // --- STATE MANAGEMENT ---
+      // --- STATE ---
       const app = document.getElementById("app");
       let theme = location.hash === "#interactive" ? "interactive" : "classic";
       let active = 0;
       let activeTag = null;
-      
-      // Terminal State
-      let consoleLogs = [
-        "System initialized: Welcome to Sameer Bandi's interactive terminal.",
-        "Type 'help', 'roles', 'skills', 'certifications', or 'contact' to explore.",
-      ];
+      let consoleLogs = ["System booted. Type 'help', 'roles', 'skills', or 'contact' to interact."];
       let cmdHistory = [];
       let historyIdx = -1;
 
-      const contact = `
+      const contactHtml = `
         <div class="tags mono" style="margin-top:2rem;gap:2rem">
-          <a href="mailto:${profile.email}">${profile.email}</a>
-          <a href="tel:+15065665115">${profile.phone}</a>
-          <a href="${profile.linkedin}" target="_blank" rel="noreferrer">LinkedIn</a>
+          <div class="magnetic-wrap"><a class="magnetic" href="mailto:${profile.email}">${profile.email}</a></div>
+          <div class="magnetic-wrap"><a class="magnetic" href="tel:+15065665115">${profile.phone}</a></div>
+          <div class="magnetic-wrap"><a class="magnetic" href="${profile.linkedin}" target="_blank" rel="noreferrer">LinkedIn</a></div>
         </div>`;
 
-      // --- VIEWS ---
+      // --- TEMPLATES ---
       function classicView() {
         return `
         <div class="wrap">
           <header class="bar">
-            <span style="font-family:var(--display);font-size:1.25rem">SB.</span>
+            <span style="font-family:var(--display);font-size:1.35rem;font-weight:600;">Sameer Bandi</span>
             <nav><a href="#work">Work</a><a href="#stack">Stack</a><a href="#education">Education</a><a href="mailto:${profile.email}">Connect</a></nav>
           </header>
-          <section class="hero tilt-element">
+          <section class="hero panel">
             <p class="eyebrow">${profile.title}</p>
-            <h1>Data should <em>feel</em> trustworthy</h1>
+            <h1 class="decode-text" data-value="Data should feel trustworthy">Data should <em>feel</em> trustworthy</h1>
             <p class="lead">${profile.summary}</p>
             <p class="eyebrow" style="margin-top:2rem">${profile.location}</p>
           </section>
           <section>
             <h2 class="eyebrow">Guiding Principles</h2>
-            ${beliefs
-              .map(
-                (b, i) => `<div class="belief tilt-element"><span class="num">0${i + 1}</span><div>
-                  <h3 class="display" style="font-size:1.5rem">${b.title}</h3>
-                  <p class="muted" style="margin-top:.5rem;max-width:34rem">${b.body}</p></div></div>`,
-              )
-              .join("")}
+            ${beliefs.map((b, i) => `<div class="belief"><span class="num">0${i + 1}</span><div><h3 class="display" style="font-size:1.5rem">${b.title}</h3><p class="muted" style="margin-top:.5rem;max-width:34rem">${b.body}</p></div></div>`).join("")}
           </section>
           <section id="work">
             <h2 class="eyebrow">Work Experience</h2>
-            ${work
-              .map(
-                (j) => `<article class="job tilt-element">
+            ${work.map((j) => `<article class="job">
                   <div class="job-head"><h3>${j.role}</h3><span class="eyebrow">${j.period}</span></div>
                   <p style="color:var(--primary);font-size:.88rem;margin-top:.25rem">${j.company} ·${j.place}</p>
                   <p class="muted" style="margin-top:1rem;max-width:44rem">${j.summary}</p>
-                  <ul>${j.points.map((p) => `<li>${p}</li>`).join("")}</ul>
+                  <ul class="job-bullets">${j.points.map((p) => `<li>${p}</li>`).join("")}</ul>
                   <div class="tags">${j.stack.map((s) => `<span class="tag tech-tag" data-skill="${s}">${s}</span>`).join("")}</div>
-                </article>`,
-              )
-              .join("")}
+                </article>`).join("")}
           </section>
           <section id="stack">
             <h2 class="eyebrow">Technical Skills</h2>
             <div class="grid2">
-              ${skills
-                .map(
-                  (s) => `<div class="tilt-element"><h3 class="display" style="font-size:1.3rem">${s.group}</h3>
-                  <ul class="muted" style="list-style:none;margin-top:.75rem;font-size:.9rem;line-height:1.7">${s.items.map((i) => `<li>› ${i}</li>`).join("")}</ul></div>`,
-                )
-                .join("")}
+              ${skills.map((s) => `<div><h3 class="display" style="font-size:1.3rem">${s.group}</h3><ul class="muted" style="list-style:none;margin-top:.75rem;font-size:.9rem;line-height:1.7">${s.items.map((i) => `<li>› ${i}</li>`).join("")}</ul></div>`).join("")}
             </div>
           </section>
           <section id="education">
             <h2 class="eyebrow">Education & Certifications</h2>
-            <ul class="edu tilt-element">
+            <ul class="edu">
               ${education.map(([t, s]) => `<li><span>${t}</span><span>${s}</span></li>`).join("")}
               ${certifications.map(([t, s]) => `<li><span>${t}</span><span>${s}</span></li>`).join("")}
             </ul>
           </section>
-          <section class="tilt-element">
+          <section class="panel">
             <h2 class="display" style="font-size:2.5rem;line-height:1.15">Need high-trust data pipelines or BI reporting?</h2>
             <p class="muted" style="margin-top:1rem;max-width:34rem">Always ready to discuss data platform architectures, Medallion implementations, Power BI semantic models, or analytics reliability.</p>
-            ${contact}
+            ${contactHtml}
           </section>
         </div>`;
       }
@@ -710,181 +380,197 @@
         return `
         <div class="wrap wide" style="position:relative;z-index:1">
           <header class="bar mono" style="text-transform:uppercase;letter-spacing:.2em;font-size:.7rem">
-            <span style="color:var(--primary)">~/sameer.terminal</span>
+            <span style="color:var(--primary)">~/sameer_bandi.terminal</span>
             <span class="muted">${profile.location}</span>
           </header>
-          <div class="panel tilt-element">
-            <div class="dots">
+          
+          <div class="panel tilt-panel">
+            <div class="console-header">
               <span style="background:oklch(.6 .2 27)"></span><span style="background:var(--primary)"></span><span style="background:var(--accent)"></span>
             </div>
-            <p class="mono" style="color:var(--accent);margin-top:1.75rem;font-size:.85rem">$ whoami</p>
-            <h1 style="font-size:clamp(2.6rem,7vw,4.2rem);line-height:1.05;margin-top:.5rem">${profile.name}</h1>
-            <p class="eyebrow" style="margin-top:.75rem">${profile.title}</p>
-            <p class="mono" style="color:var(--accent);margin-top:1.75rem;font-size:.85rem">$ ls competencies</p>
-            <p class="mono" style="color:var(--primary);font-size:1.5rem;margin-top:.5rem"><span id="typed"></span><span class="caret">▌</span></p>
+            <p class="mono" style="color:var(--accent);margin-top:1rem;font-size:.85rem">$ whoami</p>
+            <h1 class="decode-text" data-value="${profile.name}" style="font-size:clamp(2.6rem,7vw,4.2rem);line-height:1.05;margin-top:.5rem">${profile.name}</h1>
+            <p class="eyebrow decode-text" data-value="${profile.title}" style="margin-top:.75rem">${profile.title}</p>
+            <p class="mono" style="color:var(--accent);margin-top:1.75rem;font-size:.85rem">$ ls core_competencies</p>
+            <p class="mono decode-text" data-value="Enterprise Power BI & Medallion Architecture" style="color:var(--primary);font-size:1.5rem;margin-top:.5rem">Enterprise Power BI & Medallion Architecture<span class="caret">▌</span></p>
             <p class="muted" style="margin-top:1.5rem;max-width:44rem">${profile.summary}</p>
           </div>
 
           <section style="border:0">
-            <h2 class="eyebrow">Experience Timeline — Click stage to inspect (Click tags to filter)</h2>
+            <h2 class="eyebrow">Experience Timeline — Select Stage to Inspect</h2>
             <div class="nodes">
-              ${work
-                .map(
-                  (w, i) =>
-                    `<button class="node tilt-element ${activeTag && w.stack.some(s=>s.includes(activeTag)) ? 'highlight-node' : ''}" aria-pressed="${i === active}" data-i="${i}">
-                      <span>${w.period.split("–")[0].trim()}</span>
-                      <b>${w.company}</b>
-                    </button>`,
-                )
-                .join("")}
+              ${work.map((w, i) =>
+                `<div class="magnetic-wrap"><button class="magnetic node ${activeTag && w.stack.some(s=>s.includes(activeTag)) ? 'highlight' : ''}" aria-pressed="${i === active}" data-i="${i}">
+                  <span>${w.period.split("–")[0].trim()}</span><b>${w.company}</b>
+                </button></div>`).join("")}
             </div>
-            <div class="panel tilt-element" style="margin-top:1.5rem">
+            
+            <div class="panel tilt-panel" style="margin-top:1.5rem">
               <div class="job-head">
-                <h3 class="display" style="font-size:1.85rem">${j.role}</h3>
+                <h3 class="display decode-text" data-value="${j.role}">${j.role}</h3>
                 <span class="eyebrow" style="color:var(--primary)">${j.period}</span>
               </div>
-              <p class="muted" style="font-size:.9rem;margin-top:.25rem">${j.company} · ${j.place}</p>
+              <p class="muted" style="font-size:.9rem">${j.company} · ${j.place}</p>
               <p class="muted" style="margin-top:1rem;max-width:44rem">${j.summary}</p>
               <div class="cards">
-                ${j.points.map((p) => `<div class="card muted tilt-element" style="font-size:.86rem;line-height:1.5">${p}</div>`).join("")}
+                ${j.points.map((p) => `<div class="card muted" style="font-size:.86rem">${p}</div>`).join("")}
               </div>
               <div class="tags" style="margin-top:1.5rem">
-                ${j.stack.map((s) => `<span class="tag tech-tag ${activeTag === s ? 'highlight' : ''}" data-skill="${s}" style="border-color:color-mix(in oklab,var(--primary) 40\%,transparent);color:var(--primary)">${s}</span>`).join("")}
+                ${j.stack.map((s) => `<div class="magnetic-wrap"><span class="magnetic tag tech-tag ${activeTag === s ? 'highlight' : ''}" data-skill="${s}">${s}</span></div>`).join("")}
               </div>
             </div>
           </section>
 
-          <div class="marquee-wrap tilt-element">
+          <div class="marquee-wrap">
             <div class="marquee">
               ${[...allStack, ...allStack].map((s) => `<span class="tech-tag ${activeTag === s ? 'highlight' : ''}" data-skill="${s}">${s} <b style="color:var(--primary)">/</b></span>`).join("")}
             </div>
           </div>
 
           <section style="border:0">
-            <h2 class="eyebrow">Interactive CLI Console</h2>
-            <div class="interactive-console tilt-element">
+            <h2 class="eyebrow">Interactive System Console</h2>
+            <div class="interactive-console tilt-panel">
+              <div class="console-header">
+                <span style="background:oklch(.6 .2 27)"></span><span style="background:var(--primary)"></span><span style="background:var(--accent)"></span>
+              </div>
               <div class="console-log" id="consoleLog">
                 ${consoleLogs.map((l) => `<div>&gt; ${l}</div>`).join("")}
               </div>
               <form id="consoleForm" class="console-input-row">
                 <span style="color:var(--accent)">$</span>
-                <input type="text" id="consoleInput" class="console-input" placeholder="Type command here (Up/Down for history)..." autocomplete="off" autofocus />
+                <input type="text" id="consoleInput" class="console-input" placeholder="Type command (Up/Down for history)..." autocomplete="off" />
               </form>
             </div>
           </section>
 
           <section style="border:0">
-            <h2 class="eyebrow">Skills Matrix</h2>
+            <h2 class="eyebrow">Interactive Skills Matrix</h2>
             <div class="cards">
-              ${skills
-                .map(
-                  (s) =>
-                    `<div class="card tilt-element">
-                      <h3>${s.group}</h3>
-                      <ul style="margin-top:1rem">
-                        ${s.items.map((i) => `<li style="margin-bottom:0.4rem"><span class="tag tech-tag ${activeTag === i ? 'highlight' : ''}" data-skill="${i}">${i}</span></li>`).join("")}
-                      </ul>
-                    </div>`,
-                )
-                .join("")}
+              ${skills.map((s) =>
+                `<div class="card tilt-panel">
+                  <h3>${s.group}</h3>
+                  <ul style="margin-top:1rem; display:flex; flex-wrap:wrap; gap:0.5rem">
+                    ${s.items.map((i) => `<li style="display:inline-block"><div class="magnetic-wrap"><span class="magnetic tag tech-tag ${activeTag === i ? 'highlight' : ''}" data-skill="${i}">${i}</span></div></li>`).join("")}
+                  </ul>
+                </div>`).join("")}
             </div>
           </section>
 
-          <section style="border:0">
-            <h2 class="eyebrow">Education & Certifications</h2>
-            <div class="cards">
-              ${education.map(([t, s]) => `<div class="card tilt-element"><h3>${t}</h3><p class="mono muted" style="font-size:.75rem;margin-top:.4rem">${s}</p></div>`).join("")}
-              ${certifications.map(([t, s]) => `<div class="card tilt-element"><h3>${t}</h3><p class="mono muted" style="font-size:.75rem;margin-top:.4rem">${s}</p></div>`).join("")}
+          <section style="border:0; margin-bottom: 4rem;">
+            <div class="panel tilt-panel">
+              <p class="mono" style="color:var(--accent);font-size:.85rem">$ execute handshake_protocol</p>
+              <h2 class="display" style="font-size:2.5rem;line-height:1.15;margin-top:.75rem">Let's build reliable reporting solutions.</h2>
+              ${contactHtml}
             </div>
           </section>
-
-          <div class="panel tilt-element">
-            <p class="mono" style="color:var(--accent);font-size:.85rem">$ open connection</p>
-            <h2 class="display" style="font-size:2.5rem;line-height:1.15;margin-top:.75rem">Let's build reliable reporting solutions.</h2>
-            ${contact}
-          </div>
         </div>`;
       }
 
-      // --- CLIENT SIDE INTERACTIVITY LOGIC ---
+      // --- ADVANCED INTERACTIONS ---
 
-      let typeTimer;
-      function startTypewriter() {
-        clearTimeout(typeTimer);
-        const el = document.getElementById("typed");
-        if (!el) return;
-        const words = [
-          "Azure Data Factory pipelines",
-          "Medallion Architecture (Bronze/Silver/Gold)",
-          "Databricks & PySpark optimization",
-          "Power BI semantic modeling & DAX",
-          "Healthcare reporting & governance",
-          "KQL diagnostics & Log Analytics",
-        ];
-        let i = 0, n = 0, deleting = false;
-        (function tick() {
-          const word = words[i % words.length];
-          n += deleting ? -1 : 1;
-          el.textContent = word.slice(0, n);
-          let delay = deleting ? 35 : 65;
-          if (!deleting && n === word.length) {
-            deleting = true;
-            delay = 1800;
-          } else if (deleting && n === 0) {
-            deleting = false;
-            i++;
-            delay = 200;
-          }
-          typeTimer = setTimeout(tick, delay);
-        })();
+      // 1. Custom Spring Cursor
+      function initSpringCursor() {
+        const dot = document.getElementById('cursor-dot');
+        const ring = document.getElementById('cursor-ring');
+        let mouseX = window.innerWidth / 2; let mouseY = window.innerHeight / 2;
+        let ringX = mouseX; let ringY = mouseY;
+        let velX = 0; let velY = 0;
+        const friction = 0.75; const tension = 0.15;
+
+        window.addEventListener('mousemove', e => { mouseX = e.clientX; mouseY = e.clientY; });
+        window.addEventListener('mousedown', () => ring.classList.add('active'));
+        window.addEventListener('mouseup', () => ring.classList.remove('active'));
+
+        function animateCursor() {
+          dot.style.left = mouseX + 'px'; dot.style.top = mouseY + 'px';
+          velX += (mouseX - ringX) * tension; velY += (mouseY - ringY) * tension;
+          velX *= friction; velY *= friction;
+          ringX += velX; ringY += velY;
+          ring.style.left = ringX + 'px'; ring.style.top = ringY + 'px';
+          requestAnimationFrame(animateCursor);
+        }
+        animateCursor();
       }
 
-      function attachTerminalEvents() {
+      // 2. Magnetic Buttons
+      function initMagneticElements() {
+        if(window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+        document.querySelectorAll('.magnetic').forEach(elem => {
+          elem.addEventListener('mousemove', e => {
+            const rect = elem.getBoundingClientRect();
+            const x = e.clientX - rect.left - rect.width / 2;
+            const y = e.clientY - rect.top - rect.height / 2;
+            elem.style.transform = `translate(${x * 0.3}px, ${y * 0.3}px)`;
+          });
+          elem.addEventListener('mouseleave', () => {
+            elem.style.transform = 'translate(0px, 0px)';
+          });
+        });
+      }
+
+      // 3. 3D Parallax Tilt Panels with Glare
+      function initTiltPanels() {
+        if(window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+        document.querySelectorAll('.tilt-panel, .panel').forEach(el => {
+          el.addEventListener('mousemove', e => {
+            const rect = el.getBoundingClientRect();
+            const x = e.clientX - rect.left; const y = e.clientY - rect.top;
+            el.style.setProperty('--mouse-x', `${x}px`);
+            el.style.setProperty('--mouse-y', `${y}px`);
+            
+            const xc = rect.width / 2; const yc = rect.height / 2;
+            const dx = (x - xc) / xc; const dy = (y - yc) / yc;
+            el.style.transform = `perspective(1200px) rotateY(${dx * 2}deg) rotateX(${-dy * 2}deg) scale3d(1.01, 1.01, 1.01)`;
+          });
+          el.addEventListener('mouseleave', () => {
+            el.style.transform = 'perspective(1200px) rotateY(0deg) rotateX(0deg) scale3d(1, 1, 1)';
+          });
+        });
+      }
+
+      // 4. Hacker Decode Text Effect
+      function decodeText() {
+        const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*";
+        document.querySelectorAll('.decode-text').forEach(el => {
+          let iteration = 0;
+          const target = el.dataset.value || el.innerText;
+          clearInterval(el.dataset.interval);
+          
+          el.dataset.interval = setInterval(() => {
+            el.innerText = target.split("").map((letter, index) => {
+              if(index < iteration) return target[index];
+              return letters[Math.floor(Math.random() * 42)];
+            }).join("");
+            if(iteration >= target.length) clearInterval(el.dataset.interval);
+            iteration += 1 / 3;
+          }, 20);
+        });
+      }
+
+      // 5. Terminal CLI Logic
+      function initTerminal() {
         const form = document.getElementById("consoleForm");
         const input = document.getElementById("consoleInput");
         if (!form || !input) return;
 
-        // Command Submission
         form.addEventListener("submit", (e) => {
           e.preventDefault();
           const val = input.value.trim();
           if (!val) return;
           input.value = "";
-          
-          cmdHistory.push(val);
-          historyIdx = cmdHistory.length;
-
+          cmdHistory.push(val); historyIdx = cmdHistory.length;
           consoleLogs.push(`<span style="color:var(--foreground)">$ ${val}</span>`);
           
           const cmd = val.toLowerCase();
           switch (cmd) {
-            case "help":
-              consoleLogs.push("Commands: roles, skills, certifications, contact, clear, whoami, matrix");
-              break;
-            case "whoami":
-              consoleLogs.push(`${profile.name} — ${profile.title}. Open for Data Analytics roles based in ${profile.location}`);
-              break;
-            case "roles":
-              work.forEach((w) => consoleLogs.push(`• ${w.role} @ ${w.company} (${w.period})`));
-              break;
-            case "skills":
-              skills.forEach((s) => consoleLogs.push(`[${s.group}]: ${s.items.join(", ")}`));
-              break;
-            case "certifications":
-              certifications.forEach(([c, code]) => consoleLogs.push(`• ${c} (${code})`));
-              break;
-            case "contact":
-              consoleLogs.push(`Email: ${profile.email} | Phone: ${profile.phone}`);
-              break;
-            case "matrix":
-              document.body.classList.toggle('matrix-mode');
-              consoleLogs.push(document.body.classList.contains('matrix-mode') ? "Wake up, Neo..." : "System restored.");
-              break;
-            case "clear":
-              consoleLogs = [];
-              break;
-            default:
-              consoleLogs.push(`Command not recognized: '${val}'. Type 'help'.`);
+            case "help": consoleLogs.push("Commands: roles, skills, certifications, contact, clear, whoami"); break;
+            case "whoami": consoleLogs.push(`Sameer Bandi. Target Roles: Data Analytics Engineer, Data Engineer. Loc: Moncton, NB.`); break;
+            case "roles": work.forEach(w => consoleLogs.push(`• ${w.role} @ ${w.company} (${w.period})`)); break;
+            case "skills": skills.forEach(s => consoleLogs.push(`[${s.group}]: ${s.items.join(", ")}`)); break;
+            case "certifications": certifications.forEach(([c, code]) => consoleLogs.push(`• ${c} (${code})`)); break;
+            case "contact": consoleLogs.push(`Email: ${profile.email} | Phone: ${profile.phone}`); break;
+            case "clear": consoleLogs = []; break;
+            default: consoleLogs.push(`Command '${val}' not found. Type 'help'.`);
           }
           
           const logBox = document.getElementById("consoleLog");
@@ -894,147 +580,84 @@
           }
         });
 
-        // Command History Tracking
         input.addEventListener("keydown", (e) => {
           if (e.key === "ArrowUp") {
             e.preventDefault();
-            if (historyIdx > 0) {
-              historyIdx--;
-              input.value = cmdHistory[historyIdx];
-            }
+            if (historyIdx > 0) { historyIdx--; input.value = cmdHistory[historyIdx]; }
           } else if (e.key === "ArrowDown") {
             e.preventDefault();
-            if (historyIdx < cmdHistory.length - 1) {
-              historyIdx++;
-              input.value = cmdHistory[historyIdx];
-            } else {
-              historyIdx = cmdHistory.length;
-              input.value = "";
-            }
+            if (historyIdx < cmdHistory.length - 1) { historyIdx++; input.value = cmdHistory[historyIdx]; }
+            else { historyIdx = cmdHistory.length; input.value = ""; }
           }
         });
       }
 
-      function init3DTilt() {
-        if(window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
-        
-        document.querySelectorAll('.tilt-element').forEach(el => {
-          el.addEventListener('mousemove', e => {
-            const rect = el.getBoundingClientRect();
-            const x = e.clientX - rect.left;
-            const y = e.clientY - rect.top;
-            const xc = rect.width / 2;
-            const yc = rect.height / 2;
-            const dx = (x - xc) / xc;
-            const dy = (y - yc) / yc;
-            // Apply a subtle 3D rotation based on mouse coordinates
-            el.style.transform = `perspective(1000px) rotateY(${dx * 3}deg) rotateX(${-dy * 3}deg) scale3d(1.01, 1.01, 1.01)`;
-          });
-          
-          el.addEventListener('mouseleave', () => {
-            el.style.transform = 'perspective(1000px) rotateY(0deg) rotateX(0deg) scale3d(1, 1, 1)';
-          });
-        });
-      }
-
-      function attachSkillHighlighting() {
-        document.querySelectorAll('.tech-tag').forEach(tag => {
-          tag.addEventListener('click', (e) => {
-            e.stopPropagation();
-            const skill = tag.dataset.skill;
-            // Toggle filter
-            activeTag = (activeTag === skill) ? null : skill;
-            render(); // Re-render page to apply highlights globally
-          });
-        });
-      }
-
-      // Dynamic Canvas Particle Network
-      function initCanvas() {
-        const canvas = document.getElementById('bg-canvas');
+      // 6. Interactive Medallion Data Pipeline Canvas
+      function initDataCanvas() {
+        const canvas = document.getElementById('data-canvas');
         const ctx = canvas.getContext('2d');
-        let width, height;
-        let particles = [];
+        let width, height, particles = [], ripples = [];
 
-        function resize() {
-          width = canvas.width = window.innerWidth;
-          height = canvas.height = window.innerHeight;
-        }
-        window.addEventListener('resize', resize);
-        resize();
+        function resize() { width = canvas.width = window.innerWidth; height = canvas.height = window.innerHeight; }
+        window.addEventListener('resize', resize); resize();
 
-        class Particle {
+        class DataPacket {
           constructor() {
-            this.x = Math.random() * width;
-            this.y = Math.random() * height;
-            this.vx = (Math.random() - 0.5) * 0.5;
-            this.vy = (Math.random() - 0.5) * 0.5;
-            this.radius = Math.random() * 1.5 + 0.5;
+            this.x = Math.random() * width; this.y = Math.random() * height;
+            this.vx = (Math.random() - 0.5) * 0.8; this.vy = (Math.random() - 0.5) * 0.8;
+            this.radius = Math.random() * 2 + 1;
           }
           update() {
-            this.x += this.vx;
-            this.y += this.vy;
+            this.x += this.vx; this.y += this.vy;
             if (this.x < 0 || this.x > width) this.vx *= -1;
             if (this.y < 0 || this.y > height) this.vy *= -1;
           }
           draw() {
-            ctx.beginPath();
-            ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
-            // Color adapts if matrix mode is on
-            ctx.fillStyle = document.body.classList.contains('matrix-mode') ? '#00ff41' : 'rgba(130, 190, 240, 0.5)';
-            ctx.fill();
+            ctx.beginPath(); ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+            ctx.fillStyle = 'rgba(100, 180, 255, 0.5)'; ctx.fill();
           }
         }
 
-        // Create particles
-        for (let i = 0; i < 50; i++) particles.push(new Particle());
+        class Ripple {
+          constructor(x, y) { this.x = x; this.y = y; this.radius = 0; this.alpha = 1; }
+          update() { this.radius += 4; this.alpha -= 0.02; }
+          draw() {
+            ctx.beginPath(); ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+            ctx.strokeStyle = `rgba(100, 180, 255, ${this.alpha})`; ctx.lineWidth = 2; ctx.stroke();
+          }
+        }
 
-        // Mouse tracking for canvas lines
+        for (let i = 0; i < 60; i++) particles.push(new DataPacket());
+        
+        window.addEventListener('click', (e) => ripples.push(new Ripple(e.clientX, e.clientY)));
+
         let mouse = { x: null, y: null };
-        window.addEventListener('mousemove', e => {
-          mouse.x = e.x;
-          mouse.y = e.y;
-        });
+        window.addEventListener('mousemove', e => { mouse.x = e.clientX; mouse.y = e.clientY; });
 
         function animate() {
           ctx.clearRect(0, 0, width, height);
           
-          particles.forEach(p => {
-            p.update();
-            p.draw();
-          });
+          ripples.forEach((r, i) => { r.update(); r.draw(); if(r.alpha <= 0) ripples.splice(i, 1); });
+          
+          particles.forEach(p => { p.update(); p.draw(); });
 
-          // Draw connections
           for (let i = 0; i < particles.length; i++) {
             for (let j = i; j < particles.length; j++) {
-              const dx = particles[i].x - particles[j].x;
-              const dy = particles[i].y - particles[j].y;
+              const dx = particles[i].x - particles[j].x; const dy = particles[i].y - particles[j].y;
               const dist = Math.sqrt(dx * dx + dy * dy);
-
               if (dist < 120) {
-                ctx.beginPath();
-                const strokeColor = document.body.classList.contains('matrix-mode') ? `rgba(0, 255, 65, ${0.2 - dist/600})` : `rgba(130, 190, 240, ${0.2 - dist/600})`;
-                ctx.strokeStyle = strokeColor;
-                ctx.lineWidth = 0.5;
-                ctx.moveTo(particles[i].x, particles[i].y);
-                ctx.lineTo(particles[j].x, particles[j].y);
-                ctx.stroke();
+                ctx.beginPath(); ctx.strokeStyle = `rgba(100, 180, 255, ${0.15 - dist/800})`;
+                ctx.lineWidth = 1; ctx.moveTo(particles[i].x, particles[i].y); ctx.lineTo(particles[j].x, particles[j].y); ctx.stroke();
               }
             }
-
-            // Connect to mouse
             if (mouse.x != null) {
-              const dxM = particles[i].x - mouse.x;
-              const dyM = particles[i].y - mouse.y;
+              const dxM = particles[i].x - mouse.x; const dyM = particles[i].y - mouse.y;
               const distM = Math.sqrt(dxM * dxM + dyM * dyM);
-              if (distM < 180) {
-                ctx.beginPath();
-                const strokeColor = document.body.classList.contains('matrix-mode') ? `rgba(0, 255, 65, ${0.4 - distM/450})` : `rgba(180, 200, 255, ${0.4 - distM/450})`;
-                ctx.strokeStyle = strokeColor;
-                ctx.lineWidth = 1;
-                ctx.moveTo(particles[i].x, particles[i].y);
-                ctx.lineTo(mouse.x, mouse.y);
-                ctx.stroke();
+              if (distM < 200) {
+                // Magnetic Repulsion Physics from Mouse
+                particles[i].vx += dxM * 0.0001; particles[i].vy += dyM * 0.0001;
+                ctx.beginPath(); ctx.strokeStyle = `rgba(150, 200, 255, ${0.3 - distM/600})`;
+                ctx.lineWidth = 1.5; ctx.moveTo(particles[i].x, particles[i].y); ctx.lineTo(mouse.x, mouse.y); ctx.stroke();
               }
             }
           }
@@ -1043,60 +666,51 @@
         animate();
       }
 
-      // Custom Mouse Tracker Glow
-      function initGlow() {
-        const glow = document.getElementById("cursor-glow");
-        window.addEventListener("mousemove", (e) => {
-          glow.style.left = e.clientX + "px";
-          glow.style.top = e.clientY + "px";
+      // --- GLOBAL RENDER ---
+      function attachSkillHighlighting() {
+        document.querySelectorAll('.tech-tag').forEach(tag => {
+          tag.addEventListener('click', (e) => {
+            e.stopPropagation();
+            activeTag = (activeTag === tag.dataset.skill) ? null : tag.dataset.skill;
+            render(); 
+          });
         });
       }
 
-      // --- MAIN RENDER LOOP ---
       function render() {
         app.innerHTML = theme === "classic" ? classicView() : interactiveView();
         
         document.querySelectorAll("#tabs button").forEach((b) =>
-          b.setAttribute("aria-selected", String(b.dataset.theme === theme)),
+          b.setAttribute("aria-selected", String(b.dataset.theme === theme))
         );
 
-        // Attach specialized interactivity based on theme
+        decodeText();
+        initMagneticElements();
+        initTiltPanels();
+        attachSkillHighlighting();
+
         if (theme === "interactive") {
-          startTypewriter();
-          attachTerminalEvents();
-          
+          initTerminal();
           app.querySelectorAll(".node").forEach((btn) =>
-            btn.addEventListener("click", () => {
-              active = Number(btn.dataset.i);
-              render(); // Re-render panel
-            }),
+            btn.addEventListener("click", () => { active = Number(btn.dataset.i); render(); })
           );
-          
           const logBox = document.getElementById("consoleLog");
           if (logBox) logBox.scrollTop = logBox.scrollHeight;
         }
-
-        // Attach global interactivity
-        init3DTilt();
-        attachSkillHighlighting();
       }
 
-      // --- BOOTSTRAP ---
+      // Boot Sequence
       document.querySelectorAll("#tabs button").forEach((btn) =>
         btn.addEventListener("click", () => {
           if (theme === btn.dataset.theme) return;
-          theme = btn.dataset.theme;
-          location.hash = theme === "interactive" ? "#interactive" : "";
-          activeTag = null; // Reset filters on theme switch
-          render();
-          scrollTo({ top: 0 });
-        }),
+          theme = btn.dataset.theme; location.hash = theme === "interactive" ? "#interactive" : "";
+          activeTag = null; render(); scrollTo({ top: 0, behavior: 'smooth' });
+        })
       );
 
-      // Initialize all systems
+      initSpringCursor();
+      initDataCanvas();
       render();
-      initCanvas();
-      initGlow();
     </script>
   </body>
 </html>
