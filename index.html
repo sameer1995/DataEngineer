@@ -6,764 +6,883 @@
     <title>Sameer Bandi — Data Analytics Engineer</title>
     <meta
       name="description"
-      content="Interactive portfolio of Sameer Bandi, Data Analytics Engineer specializing in Azure, Databricks, Microsoft Fabric, and Power BI."
+      content="Portfolio of Sameer Bandi, Data Analytics Engineer specializing in Azure, Databricks, Microsoft Fabric, and Power BI."
     />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
       rel="stylesheet"
-      href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500;700&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Work+Sans:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500;600&display=swap"
     />
     <style>
       :root {
-        --bg-dark: #0f172a;
-        --bg-panel: #1e293b;
-        --text-main: #f8fafc;
-        --text-muted: #94a3b8;
-        --primary: #38bdf8;
-        --primary-glow: rgba(56, 189, 248, 0.4);
-        --accent: #818cf8;
-        --border: #334155;
+        --background: oklch(0.16 0.008 90);
+        --foreground: oklch(0.94 0.012 90);
+        --card: oklch(0.2 0.009 90);
+        --primary: oklch(0.82 0.14 78);
+        --accent: oklch(0.72 0.09 190);
+        --muted-foreground: oklch(0.68 0.012 90);
+        --border: oklch(0.3 0.01 90);
         --display: "Instrument Serif", Georgia, serif;
-        --sans: "Inter", system-ui, sans-serif;
+        --sans: "Work Sans", system-ui, sans-serif;
         --mono: "JetBrains Mono", ui-monospace, monospace;
       }
-      
       * {
         box-sizing: border-box;
         margin: 0;
         padding: 0;
       }
-
       body {
-        background: var(--bg-dark);
-        color: var(--text-main);
+        background: var(--background);
+        color: var(--foreground);
         font-family: var(--sans);
         -webkit-font-smoothing: antialiased;
-        line-height: 1.6;
-        overflow-x: hidden;
-        cursor: none; 
+        line-height: 1.55;
       }
-
       ::selection {
-        background: var(--primary);
-        color: var(--bg-dark);
+        background: color-mix(in oklab, var(--primary) 35%, transparent);
       }
-
       a {
         color: var(--primary);
         text-decoration: none;
-        transition: all 0.3s ease;
       }
-
       a:hover {
-        text-shadow: 0 0 8px var(--primary-glow);
+        text-decoration: underline;
       }
-
-      /* Custom Cursor */
-      #cursor, #cursor-trail {
-        position: fixed;
-        top: 0;
-        left: 0;
-        pointer-events: none;
-        border-radius: 50%;
-        transform: translate(-50%, -50%);
-        z-index: 9999;
-      }
-      #cursor {
-        width: 8px;
-        height: 8px;
-        background: var(--primary);
-        transition: width 0.2s, height 0.2s;
-      }
-      #cursor-trail {
-        width: 32px;
-        height: 32px;
-        border: 1px solid var(--primary);
-        transition: transform 0.1s, width 0.2s, height 0.2s;
-      }
-      body:hover #cursor { width: 12px; height: 12px; }
-
-      /* Background Canvas */
-      #network-canvas {
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100vw;
-        height: 100vh;
-        z-index: -1;
-        opacity: 0.6;
-      }
-
-      .container {
-        max-width: 72rem;
+      .wrap {
+        max-width: 52rem;
         margin: 0 auto;
-        padding: 2rem 1.5rem 8rem;
-        position: relative;
-        z-index: 1;
+        padding: 0 1.5rem 7rem;
       }
-
-      .mono { font-family: var(--mono); }
+      .wrap.wide {
+        max-width: 68rem;
+      }
+      .mono {
+        font-family: var(--mono);
+      }
       .eyebrow {
         font-family: var(--mono);
-        font-size: 0.75rem;
+        font-size: 0.7rem;
         text-transform: uppercase;
-        letter-spacing: 0.2em;
-        color: var(--primary);
+        letter-spacing: 0.28em;
+        color: var(--muted-foreground);
       }
-
-      /* Header */
-      header {
+      h1, h2.display, h3.display {
+        font-family: var(--display);
+        font-weight: 400;
+      }
+      .muted {
+        color: var(--muted-foreground);
+      }
+      header.bar {
         display: flex;
         justify-content: space-between;
         align-items: center;
-        padding: 1rem 0 3rem;
-        border-bottom: 1px solid var(--border);
-        margin-bottom: 4rem;
+        padding: 1.5rem 0;
+        font-size: 0.9rem;
       }
-
-      .logo {
-        font-family: var(--display);
-        font-size: 1.8rem;
-        color: var(--text-main);
-      }
-
-      /* Hero Section */
-      .hero-title {
-        font-family: var(--display);
-        font-size: clamp(3rem, 8vw, 5rem);
-        line-height: 1;
-        margin: 1rem 0 1.5rem;
-      }
-      .hero-title span {
-        background: linear-gradient(to right, var(--primary), var(--accent));
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-      }
-      .hero-desc {
-        font-size: 1.1rem;
-        color: var(--text-muted);
-        max-width: 50rem;
-        margin-bottom: 2rem;
-      }
-
-      /* Panels */
-      .glass-panel {
-        background: rgba(30, 41, 59, 0.4);
-        backdrop-filter: blur(12px);
-        -webkit-backdrop-filter: blur(12px);
-        border: 1px solid var(--border);
-        border-radius: 1rem;
-        padding: 2rem;
-        transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
-      }
-      .glass-panel:hover {
-        border-color: var(--primary);
-        box-shadow: 0 0 20px var(--primary-glow);
-        transform: translateY(-2px);
-      }
-
-      /* Grid Layouts */
-      .grid-2 {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-        gap: 2rem;
-        margin: 2rem 0 4rem;
-      }
-
-      /* Experience Timeline */
-      .timeline {
-        border-left: 2px solid var(--border);
-        padding-left: 2rem;
-        margin-left: 1rem;
+      header.bar nav {
         display: flex;
-        flex-direction: column;
-        gap: 3rem;
+        gap: 1.5rem;
       }
-      .job-card {
-        position: relative;
-        opacity: 0.5;
-        transition: opacity 0.4s ease;
+      header.bar nav a {
+        color: var(--muted-foreground);
       }
-      .job-card:hover, .job-card.active-filter {
-        opacity: 1;
+      header.bar nav a:hover {
+        color: var(--foreground);
       }
-      .job-card::before {
-        content: '';
-        position: absolute;
-        left: -2.4rem;
-        top: 0.3rem;
-        width: 12px;
-        height: 12px;
-        border-radius: 50%;
-        background: var(--bg-dark);
-        border: 2px solid var(--primary);
-        transition: background 0.3s ease, box-shadow 0.3s ease;
+      section {
+        border-top: 1px solid var(--border);
+        padding: 4rem 0;
       }
-      .job-card:hover::before {
-        background: var(--primary);
-        box-shadow: 0 0 10px var(--primary-glow);
+      section.hero {
+        border-top: 0;
       }
-      .job-header {
+      .hero h1 {
+        font-size: clamp(2.5rem, 6.5vw, 3.6rem);
+        line-height: 1.1;
+        margin-top: 1.25rem;
+      }
+      .hero em {
+        color: var(--primary);
+        font-style: normal;
+      }
+      .lead {
+        max-width: 44rem;
+        color: var(--muted-foreground);
+        font-size: 1.02rem;
+        margin-top: 1.5rem;
+        line-height: 1.65;
+      }
+      .belief {
+        display: grid;
+        grid-template-columns: 3rem 1fr;
+        gap: 0.5rem;
+        margin-top: 2rem;
+      }
+      .belief span.num {
+        font-family: var(--mono);
+        color: var(--primary);
+      }
+      .job {
+        margin-top: 3.5rem;
+      }
+      .job-head {
         display: flex;
         flex-wrap: wrap;
         justify-content: space-between;
         align-items: baseline;
-        margin-bottom: 0.5rem;
+        gap: 0.5rem;
       }
-      .job-title {
+      .job h3 {
         font-family: var(--display);
-        font-size: 1.8rem;
-        color: var(--text-main);
+        font-size: 1.85rem;
+        font-weight: 400;
       }
-      .job-company {
-        color: var(--accent);
-        font-family: var(--mono);
-        font-size: 0.85rem;
-      }
-      .job-bullets {
-        margin-top: 1rem;
+      .job ul {
         list-style: none;
+        margin-top: 1.25rem;
+        display: grid;
+        gap: 0.6rem;
       }
-      .job-bullets li {
-        color: var(--text-muted);
-        font-size: 0.95rem;
-        margin-bottom: 0.75rem;
-        padding-left: 1.5rem;
+      .job li {
+        color: var(--muted-foreground);
+        font-size: 0.92rem;
+        padding-left: 1.25rem;
         position: relative;
+        line-height: 1.55;
       }
-      .job-bullets li::before {
-        content: "›";
+      .job li::before {
+        content: "";
         position: absolute;
         left: 0;
-        color: var(--primary);
-        font-family: var(--mono);
-        font-weight: bold;
+        top: 0.75em;
+        width: 0.75rem;
+        height: 1px;
+        background: var(--border);
       }
-
-      /* Interactive Skills */
-      .skill-tag {
+      .tags {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+        margin-top: 1.25rem;
+      }
+      .tag {
+        border: 1px solid var(--border);
+        border-radius: 999px;
+        padding: 0.25rem 0.75rem;
+        font-family: var(--mono);
+        font-size: 0.68rem;
+        color: var(--muted-foreground);
+      }
+      .grid2 {
+        display: grid;
+        gap: 2rem;
+        grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr));
+        margin-top: 2.5rem;
+      }
+      .edu {
+        list-style: none;
+        margin-top: 2.5rem;
+      }
+      .edu li {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
+        gap: 0.5rem;
+        border-bottom: 1px solid var(--border);
+        padding-bottom: 1rem;
+        margin-bottom: 1.5rem;
+        font-family: var(--display);
+        font-size: 1.25rem;
+      }
+      .edu li span:last-child {
+        font-family: var(--sans);
+        font-size: 0.85rem;
+        color: var(--muted-foreground);
+      }
+      /* interactive styling */
+      .spotlight {
+        position: fixed;
+        inset: 0;
+        pointer-events: none;
+        z-index: 0;
+        background: radial-gradient(
+          360px circle at var(--x, 50%) var(--y, 20%),
+          color-mix(in oklab, var(--primary) 15%, transparent),
+          transparent 70%
+        );
+      }
+      .grid-field {
+        position: fixed;
+        inset: 0;
+        pointer-events: none;
+        z-index: 0;
+        opacity: 0.35;
+        background-image:
+          linear-gradient(to right, var(--border) 1px, transparent 1px),
+          linear-gradient(to bottom, var(--border) 1px, transparent 1px);
+        background-size: 64px 64px;
+        -webkit-mask-image: radial-gradient(ellipse at 50% 0%, black, transparent 75%);
+        mask-image: radial-gradient(ellipse at 50% 0%, black, transparent 75%);
+      }
+      .panel {
+        position: relative;
+        z-index: 1;
+        border: 1px solid var(--border);
+        border-radius: 1rem;
+        background: color-mix(in oklab, var(--card) 75%, transparent);
+        padding: 1.75rem;
+        backdrop-filter: blur(6px);
+      }
+      .dots span {
         display: inline-block;
-        padding: 0.4rem 0.8rem;
-        margin: 0.25rem;
-        border: 1px solid var(--border);
-        border-radius: 2rem;
-        font-family: var(--mono);
-        font-size: 0.75rem;
-        color: var(--text-muted);
-        background: transparent;
+        width: 0.6rem;
+        height: 0.6rem;
+        border-radius: 999px;
+        margin-right: 0.4rem;
+      }
+      .caret {
+        animation: blink 1s steps(2, start) infinite;
+      }
+      @keyframes blink {
+        to { opacity: 0; }
+      }
+      .nodes {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.75rem;
+        margin-top: 1.5rem;
+      }
+      .node {
+        flex: 1 1 11rem;
+        text-align: left;
         cursor: pointer;
-        transition: all 0.2s ease;
-      }
-      .skill-tag:hover, .skill-tag.active {
-        border-color: var(--primary);
-        color: var(--primary);
-        background: rgba(56, 189, 248, 0.1);
-        box-shadow: 0 0 10px var(--primary-glow);
-      }
-
-      /* Terminal Emulator */
-      .terminal {
-        background: #000;
         border: 1px solid var(--border);
-        border-radius: 0.5rem;
-        padding: 1.5rem;
+        border-radius: 0.6rem;
+        background: transparent;
+        color: var(--muted-foreground);
+        font-family: var(--mono);
+        font-size: 0.72rem;
+        padding: 0.75rem 1rem;
+        transition: all 0.25s;
+      }
+      .node:hover {
+        color: var(--foreground);
+        border-color: color-mix(in oklab, var(--primary) 60%, transparent);
+      }
+      .node[aria-pressed="true"] {
+        border-color: var(--primary);
+        color: var(--foreground);
+        background: color-mix(in oklab, var(--primary) 12%, transparent);
+      }
+      .node b {
+        display: block;
+        font-family: var(--sans);
+        font-weight: 500;
+        font-size: 0.92rem;
+        margin-top: 0.25rem;
+      }
+      .cards {
+        display: grid;
+        gap: 0.75rem;
+        grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr));
+        margin-top: 1.5rem;
+      }
+      .card {
+        border: 1px solid var(--border);
+        border-radius: 0.75rem;
+        background: color-mix(in oklab, var(--card) 45%, transparent);
+        padding: 1.25rem;
+        transition: transform 0.25s, border-color 0.25s;
+      }
+      .card:hover {
+        transform: translateY(-3px);
+        border-color: var(--primary);
+      }
+      .card h3 {
+        font-family: var(--display);
+        font-size: 1.25rem;
+        font-weight: 400;
+      }
+      .card ul {
+        list-style: none;
+        margin-top: 0.75rem;
+        font-family: var(--mono);
+        font-size: 0.72rem;
+        color: var(--muted-foreground);
+      }
+      .marquee-wrap {
+        overflow: hidden;
+        border: 1px solid var(--border);
+        border-radius: 1rem;
+        padding: 1rem 0;
+        margin-top: 3.5rem;
+      }
+      .marquee {
+        display: flex;
+        width: max-content;
+        animation: scroll 45s linear infinite;
         font-family: var(--mono);
         font-size: 0.85rem;
-        box-shadow: inset 0 0 20px rgba(0,0,0,0.8);
+        color: var(--muted-foreground);
       }
-      .terminal-header {
+      .marquee span {
+        margin: 0 1.25rem;
+        white-space: nowrap;
+      }
+      @keyframes scroll {
+        to {
+          transform: translateX(-50%);
+        }
+      }
+      .tabs {
+        position: fixed;
+        left: 50%;
+        transform: translateX(-50%);
+        bottom: 1.25rem;
+        z-index: 30;
         display: flex;
-        gap: 0.5rem;
-        margin-bottom: 1rem;
-        padding-bottom: 1rem;
-        border-bottom: 1px dashed var(--border);
+        gap: 0.25rem;
+        padding: 0.3rem;
+        border: 1px solid var(--border);
+        border-radius: 999px;
+        background: color-mix(in oklab, var(--background) 88%, transparent);
+        backdrop-filter: blur(10px);
       }
-      .t-dot { width: 12px; height: 12px; border-radius: 50%; }
-      .terminal-output {
-        color: var(--text-muted);
-        min-height: 150px;
-        max-height: 300px;
+      .tabs button {
+        font-family: var(--mono);
+        font-size: 0.68rem;
+        text-transform: uppercase;
+        letter-spacing: 0.18em;
+        border: 0;
+        background: transparent;
+        color: var(--muted-foreground);
+        border-radius: 999px;
+        padding: 0.55rem 1.1rem;
+        cursor: pointer;
+        transition: background 0.2s, color 0.2s;
+      }
+      .tabs button:hover {
+        color: var(--foreground);
+      }
+      .tabs button[aria-selected="true"] {
+        background: var(--primary);
+        color: var(--background);
+        font-weight: 600;
+      }
+      .interactive-console {
+        margin-top: 1.5rem;
+        border: 1px solid var(--border);
+        border-radius: 0.75rem;
+        background: color-mix(in oklab, var(--background) 92%, transparent);
+        padding: 1rem;
+        font-family: var(--mono);
+        font-size: 0.8rem;
+      }
+      .console-log {
+        max-height: 160px;
         overflow-y: auto;
-        margin-bottom: 1rem;
+        color: var(--muted-foreground);
+        margin-bottom: 0.75rem;
+        line-height: 1.45;
       }
-      .terminal-output p { margin-bottom: 0.5rem; }
-      .terminal-input-line {
+      .console-input-row {
         display: flex;
-        align-items: center;
         gap: 0.5rem;
+        align-items: center;
       }
-      .terminal-input {
+      .console-input {
         background: transparent;
         border: none;
-        color: var(--primary);
-        font-family: var(--mono);
-        font-size: 0.85rem;
-        width: 100%;
         outline: none;
-      }
-
-      /* Interactive Marquee */
-      .marquee-container {
-        overflow: hidden;
-        white-space: nowrap;
-        position: relative;
-        padding: 2rem 0;
-        margin: 4rem 0;
-        border-top: 1px solid var(--border);
-        border-bottom: 1px solid var(--border);
-      }
-      .marquee-content {
-        display: inline-block;
-        animation: marquee 25s linear infinite;
+        color: var(--foreground);
         font-family: var(--mono);
-        color: var(--border);
-        font-size: 2rem;
-        text-transform: uppercase;
+        font-size: 0.8rem;
+        width: 100%;
       }
-      .marquee-container:hover .marquee-content {
-        animation-play-state: paused;
-        color: var(--primary);
-        text-shadow: 0 0 15px var(--primary-glow);
-        transition: color 0.5s;
-      }
-      @keyframes marquee {
-        0% { transform: translateX(0); }
-        100% { transform: translateX(-50%); }
-      }
-
-      /* Animations */
-      .fade-up {
-        opacity: 0;
-        transform: translateY(30px);
-        transition: opacity 0.8s ease, transform 0.8s ease;
-      }
-      .fade-up.visible {
-        opacity: 1;
-        transform: translateY(0);
-      }
-
-      @media (max-width: 768px) {
-        body { cursor: auto; }
-        #cursor, #cursor-trail { display: none; }
-        .hero-title { font-size: 2.5rem; }
-        .container { padding: 1rem 1rem 4rem; }
-        .timeline { margin-left: 0; padding-left: 1.5rem; }
+      @media (prefers-reduced-motion: reduce) {
+        .marquee, .caret {
+          animation: none;
+        }
       }
     </style>
   </head>
   <body>
-    <!-- Custom Cursor -->
-    <div id="cursor"></div>
-    <div id="cursor-trail"></div>
-
-    <!-- Interactive Background -->
-    <canvas id="network-canvas"></canvas>
-
-    <div class="container">
-      <header class="fade-up">
-        <div class="logo">Sameer Bandi</div>
-        <nav style="display: flex; gap: 1.5rem;" class="mono">
-          <a href="#experience">~/experience</a>
-          <a href="#skills">~/skills</a>
-          <a href="#terminal">~/terminal</a>
-        </nav>
-      </header>
-
-      <section class="fade-up" style="margin-bottom: 6rem;">
-        <p class="eyebrow" id="typewriter-title"></p>
-        <h1 class="hero-title">Engineering <span>Trust</span> Into Data Ecosystems</h1>
-        <p class="hero-desc">
-          I'm <strong>Sameer Bandi</strong>, based in Moncton, NB (Open to Relocate). I am currently open for <strong>Data Engineer</strong>, <strong>Data Analytics Engineer</strong>, or <strong>Analytics Engineer</strong> roles. With 8+ years of cross-industry experience spanning healthcare, supply chain, and IT consulting, I architect scalable Medallion data platforms, build reliable ETL pipelines, and deliver DAX-driven enterprise Power BI solutions that leadership can actually trust.
-        </p>
-        <div style="display: flex; gap: 1rem; margin-top: 2rem;">
-          <a href="#experience" class="glass-panel" style="padding: 0.75rem 1.5rem; color: var(--primary); display: inline-block; font-family: var(--mono);">Deploy Pipeline ›</a>
-          <a href="mailto:bsameer1995@gmail.com" class="glass-panel" style="padding: 0.75rem 1.5rem; display: inline-block; font-family: var(--mono);">init_contact()</a>
-        </div>
-      </section>
-
-      <section id="skills" class="fade-up" style="margin-bottom: 6rem;">
-        <h2 class="eyebrow" style="margin-bottom: 1.5rem;">Interactive Skills Matrix (Click to Filter Experience)</h2>
-        <div class="glass-panel" id="skills-container">
-          <!-- Populated by JS -->
-        </div>
-      </section>
-
-      <section id="experience" class="fade-up" style="margin-bottom: 6rem;">
-        <h2 class="eyebrow" style="margin-bottom: 2rem;">Professional Execution</h2>
-        <div class="timeline" id="experience-timeline">
-          <!-- Populated by JS -->
-        </div>
-      </section>
-
-      <div class="marquee-container fade-up">
-        <div class="marquee-content">
-          AZURE DATA FACTORY • DATABRICKS • PYSPARK • POWER BI • DELTA LAKE • MICROSOFT FABRIC • SQL SERVER • KQL • DAX • AZURE SYNAPSE • 
-          AZURE DATA FACTORY • DATABRICKS • PYSPARK • POWER BI • DELTA LAKE • MICROSOFT FABRIC • SQL SERVER • KQL • DAX • AZURE SYNAPSE •
-        </div>
-      </div>
-
-      <section id="terminal" class="fade-up" style="margin-bottom: 4rem;">
-        <h2 class="eyebrow" style="margin-bottom: 1.5rem;">System Console</h2>
-        <div class="terminal">
-          <div class="terminal-header">
-            <div class="t-dot" style="background: #ef4444;"></div>
-            <div class="t-dot" style="background: #eab308;"></div>
-            <div class="t-dot" style="background: #22c55e;"></div>
-          </div>
-          <div class="terminal-output" id="terminal-output">
-            <p style="color: var(--accent);">SameerOS (v2.0.26) loaded.</p>
-            <p>Type <span style="color:var(--primary)">'help'</span> to see available commands.</p>
-          </div>
-          <form class="terminal-input-line" id="terminal-form">
-            <span style="color: var(--accent);">guest@sameer-portfolio:~$</span>
-            <input type="text" id="terminal-input" class="terminal-input" autocomplete="off" autofocus />
-          </form>
-        </div>
-      </section>
-
-      <footer class="glass-panel fade-up" style="text-align: center; margin-top: 4rem; padding: 2rem;">
-        <h3 class="display" style="font-size: 1.8rem; margin-bottom: 1rem;">Let's talk data architecture.</h3>
-        <p class="mono" style="color: var(--text-muted); font-size: 0.85rem;">bsameer1995@gmail.com | 506-566-5115 | Moncton, NB</p>
-      </footer>
+    <div id="app"></div>
+    <div class="tabs" id="tabs" role="tablist" aria-label="Portfolio themes">
+      <button type="button" role="tab" data-theme="classic">Classic</button>
+      <button type="button" role="tab" data-theme="interactive">Interactive</button>
     </div>
 
     <script>
-      // --- Data Payload ---
-      const resumeData = {
-        skills: [
-          "Azure Data Factory (ADF)", "Azure Synapse Analytics", "Databricks", "Microsoft Fabric", 
-          "ADLS Gen2", "Medallion Architecture", "ETL/ELT", "PySpark", "SQL (T-SQL)", 
-          "Python", "KQL", "Power BI", "DAX", "Power Query", "Data Modeling", "RLS", 
-          "SSRS", "Azure DevOps", "CI/CD", "Data Governance"
-        ],
-        experience: [
-          {
-            role: "Data Analytics Engineer (DA)",
-            company: "Medavie Health Services",
-            period: "August 2025 – Present",
-            location: "NB, Canada",
-            tags: ["SQL (T-SQL)", "SSRS", "Power BI", "Data Governance", "Healthcare Privacy"],
-            bullets: [
-              "Design, maintain, and optimize SQL Server, SSRS, and Power BI reporting solutions supporting healthcare leadership and enterprise reporting requirements.",
-              "Develop and maintain SQL-driven datasets by consolidating data from multiple departmental sources to provide consistent and reliable reporting.",
-              "Perform data validation, reconciliation, and quality checks across multiple sources to identify inconsistencies and improve data accuracy.",
-              "Collaborate with IT, HR, PMO, Quality, Finance, Governance, and healthcare stakeholders to translate business requirements into reliable data and reporting solutions.",
-              "Support healthcare leadership and governance committees by preparing SQL-driven reporting outputs and data insights for quality, finance, operational, and governance decision-making.",
-              "Analyze data requirements and develop SQL queries, reporting datasets, and analytical models aligned with stakeholder needs.",
-              "Troubleshoot SQL, reporting, and data-related issues, performing root-cause analysis and coordinating solutions with technical and business teams.",
-              "Support data governance and quality practices by maintaining accurate, consistent, and appropriately controlled healthcare reporting datasets.",
-              "Work with sensitive healthcare information while following organizational requirements for data accuracy, confidentiality, security, and appropriate data handling.",
-              "Identify opportunities to improve reporting workflows, standardize datasets, and increase reliability of recurring analytical processes."
-            ]
-          },
-          {
-            role: "Data Engineer / Business Analyst",
-            company: "Source Atlantic Limited",
-            period: "April 2022 – July 2025",
-            location: "NB, Canada",
-            tags: ["ADLS Gen2", "Azure Data Factory (ADF)", "Databricks", "PySpark", "Azure Synapse", "Microsoft Fabric", "Power BI", "DAX", "RLS", "Azure DevOps", "CI/CD"],
-            bullets: [
-              "Architected scalable Medallion data architecture (Bronze, Silver, Gold) within Azure Data Lake Storage (ADLS Gen2) to centralize enterprise-wide inventory data, reducing overall cloud storage costs by 75%.",
-              "Engineered robust ETL data pipelines utilizing Azure Data Factory (ADF) and SQL to extract, orchestrate, and ingest distributed relational data, cutting data processing and ingestion costs by 50%.",
-              "Developed distributed data processing workflows using PySpark and Databricks Notebooks to execute large-scale data cleansing and transformations for the silver layer.",
-              "Designed predictive analysis models utilizing PySpark within Databricks to forecast branch inventory trends and optimize regional stock distribution.",
-              "Implemented a high-performance cloud data warehouse using Azure Synapse Analytics to host the curated gold layer, significantly optimizing downstream query execution.",
-              "Built comprehensive tabular data models and wrote advanced DAX measures in Power BI to track complex supply chain metrics, KPIs, and historical stock fluctuations.",
-              "Developed and deployed an enterprise Power BI dashboard via Power BI Service, eliminating hours of data lag to deliver near real-time inventory insights.",
-              "Enforced strict data governance and cloud security by configuring Role-Based Access Control (RBAC) across the Azure ecosystem to manage administrative data access.",
-              "Configured Row-Level Security (RLS) within Power BI data models, ensuring branch managers and regional staff only accessed authorized, location-specific data.",
-              "Orchestrated CI/CD pipelines and version control using GitHub and Azure DevOps to securely manage pipeline code, track Databricks notebooks, and streamline deployment life cycles.",
-              "As a BA: Elicited requirements directly from business stakeholders and translated business questions into Power BI reporting and BI solutions spanning SQL, KQL, and Fabric data sources.",
-              "Created and managed dimensional data models to support analytics, reporting, and business intelligence needs.",
-              "Designed and developed Power BI reports and dashboards, including complex DAX calculations and measures, tailored to specific stakeholder requirements.",
-              "Managed Power BI Desktop and Power BI Service deployment, including automation of cloud updates."
-            ]
-          },
-          {
-            role: "Power BI Developer / Analytics Engineer (Internship)",
-            company: "New Brunswick Energy and Utilities Board",
-            period: "October 2021 – December 2021",
-            location: "NB, Canada",
-            tags: ["Power BI", "Power Query", "DAX", "Data Modeling"],
-            bullets: [
-              "Developed dynamic Power BI dashboards to conduct complex economic analysis on motor fuel gas stations, visualizing metrics critical to provincial supply continuity.",
-              "Engineered data transformation workflows using Power Query and advanced Excel to ingest, clean, and model raw economic data into structured relational models.",
-              "Wrote custom DAX measures and KPIs to track fuel supply trends, pricing fluctuations, and regional distribution for regulatory stakeholders.",
-              "Translated complex economic data into intuitive visual reports, enabling faster, data-driven decision-making for provincial utility analysts."
-            ]
-          },
-          {
-            role: "Associate Consultant",
-            company: "Hitachi Solutions India Pvt. Ltd.",
-            period: "2017 – 2020",
-            location: "India",
-            tags: ["Power BI", "DAX", "KQL", "Azure Monitor", "Data Modeling"],
-            bullets: [
-              "Engineered enterprise Power BI dashboards and semantic datasets, utilizing advanced visualization techniques (bookmarks, multi-level slicing, drill-throughs) to translate complex requirements into actionable business insights.",
-              "Designed and maintained robust tabular data models, writing complex DAX measures to optimize reporting performance and support enterprise-wide business intelligence needs.",
-              "Integrated KQL-based Log Analytics queries with Azure Monitor to establish automated, data-driven alerting systems, significantly reducing system downtime.",
-              "Conducted comprehensive requirement-gathering sessions with cross-functional stakeholders to document technical specifications and ensure reporting alignment with business objectives."
-            ]
-          }
-        ],
-        education: [
-          "MBA, University of New Brunswick (2021)",
-          "BSc Computer Science, GITAM University (2017)",
-          "Azure Fundamentals (AZ-900)",
-          "Azure Architect Technologies (AZ-300)"
-        ]
+      const profile = {
+        name: "Sameer Bandi",
+        title: "Data Analytics Engineer",
+        location: "Moncton, NB, Canada",
+        email: "bsameer1995@gmail.com",
+        phone: "506-566-5115",
+        linkedin: "https://linkedin.com/in/bsameer95",
+        summary:
+          "I am open for Data Engineer, Data Analytics Engineer, or Analytics Engineer roles. With 8+ years of cross-industry experience spanning healthcare analytics, supply chain management, and IT consulting, I specialize in building scalable Medallion data architectures, reliable ETL pipelines, and DAX-driven enterprise Power BI solutions that leadership can actually trust.",
       };
 
-      // --- DOM Initialization & Client-Side Interactivity ---
-      document.addEventListener("DOMContentLoaded", () => {
-        initCustomCursor();
-        initTypewriter();
-        renderSkills();
-        renderExperience();
-        initScrollAnimations();
-        initTerminal();
-        initCanvasNetwork();
+      const beliefs = [
+        {
+          title: "Pipelines should be boring.",
+          body: "The best data platform is the one nobody talks about, because it simply runs — every night, on time, with numbers that reconcile.",
+        },
+        {
+          title: "Chase clarity, not cleverness.",
+          body: "A query someone else can read beats a clever one they can't. Same for models, dashboards, and architecture diagrams.",
+        },
+        {
+          title: "Trust is the real deliverable.",
+          body: "Validation, reconciliation and governance aren't overhead. They are the reason leadership acts on the report at all.",
+        },
+      ];
+
+      const work = [
+        {
+          role: "Data Analytics Engineer (DA)",
+          company: "Medavie Health Services",
+          place: "NB, Canada",
+          period: "August 2025 – Present",
+          summary:
+            "Design, maintain, and optimize SQL Server, SSRS, and Power BI reporting solutions supporting healthcare leadership, governance committees, and enterprise reporting requirements.",
+          points: [
+            "Develop and maintain SQL-driven datasets by consolidating data from multiple departmental sources to provide consistent and reliable reporting.",
+            "Perform data validation, reconciliation, and quality checks across multiple sources to identify inconsistencies and improve data accuracy.",
+            "Collaborate with IT, HR, PMO, Quality, Finance, Governance, and healthcare stakeholders to translate business requirements into reliable data and reporting solutions.",
+            "Support healthcare leadership and governance committees by preparing SQL-driven reporting outputs and data insights for quality, finance, operational, and governance decision-making.",
+            "Analyze data requirements and develop SQL queries, reporting datasets, and analytical models aligned with stakeholder needs.",
+            "Troubleshoot SQL, reporting, and data-related issues, performing root-cause analysis and coordinating solutions with technical and business teams.",
+            "Support data governance and quality practices by maintaining accurate, consistent, and appropriately controlled healthcare reporting datasets.",
+            "Work with sensitive healthcare information while following organizational requirements for data accuracy, confidentiality, security, and appropriate data handling.",
+            "Identify opportunities to improve reporting workflows, standardize datasets, and increase reliability of recurring analytical processes.",
+          ],
+          stack: ["SQL Server", "SSRS", "Power BI", "Data Governance", "Healthcare Privacy", "T-SQL"],
+        },
+        {
+          role: "Data Engineer / Business Analyst",
+          company: "Source Atlantic Limited",
+          place: "NB, Canada",
+          period: "April 2022 – July 2025",
+          summary:
+            "Architected scalable Azure Medallion data architectures, engineered ADF pipelines, built PySpark models in Databricks, and developed enterprise Power BI semantic models and dashboards.",
+          points: [
+            "Architected scalable Medallion data architecture (Bronze, Silver, Gold) within Azure Data Lake Storage (ADLS Gen2) to centralize enterprise-wide inventory data, reducing overall cloud storage costs by 75%.",
+            "Engineered robust ETL data pipelines utilizing Azure Data Factory (ADF) and SQL to extract, orchestrate, and ingest distributed relational data, cutting data processing and ingestion costs by 50%.",
+            "Developed distributed data processing workflows using PySpark and Databricks Notebooks to execute large-scale data cleansing and transformations for the silver layer.",
+            "Designed predictive analysis models utilizing PySpark within Databricks to forecast branch inventory trends and optimize regional stock distribution.",
+            "Implemented a high-performance cloud data warehouse using Azure Synapse Analytics to host the curated gold layer, significantly optimizing downstream query execution.",
+            "Built comprehensive tabular data models and wrote advanced DAX measures in Power BI to track complex supply chain metrics, KPIs, and historical stock fluctuations.",
+            "Developed and deployed an enterprise Power BI dashboard via Power BI Service, eliminating hours of data lag to deliver near real-time inventory insights.",
+            "Enforced strict data governance and cloud security by configuring Role-Based Access Control (RBAC) across the Azure ecosystem and Row-Level Security (RLS) within Power BI.",
+            "Orchestrated CI/CD pipelines and version control using GitHub and Azure DevOps to securely manage pipeline code, track Databricks notebooks, and streamline deployment life cycles.",
+            "As a BA: Elicited requirements directly from business stakeholders and translated business questions into Power BI reporting and BI solutions spanning SQL, KQL, and Fabric data sources.",
+            "Created and managed dimensional data models, complex DAX calculations, and automated deployments in Power BI Service.",
+          ],
+          stack: [
+            "ADLS Gen2",
+            "Azure Data Factory (ADF)",
+            "Databricks",
+            "PySpark",
+            "Azure Synapse",
+            "Microsoft Fabric",
+            "Power BI",
+            "DAX",
+            "RLS",
+            "Azure DevOps",
+          ],
+        },
+        {
+          role: "Power BI Developer / Analytics Engineer (Internship)",
+          company: "New Brunswick Energy and Utilities Board",
+          place: "NB, Canada",
+          period: "October 2021 – December 2021",
+          summary:
+            "Conducted complex economic analyses and designed dynamic Power BI dashboards monitoring provincial motor fuel supply continuity and regional pricing.",
+          points: [
+            "Developed dynamic Power BI dashboards to conduct complex economic analysis on motor fuel gas stations, visualizing metrics critical to provincial supply continuity.",
+            "Engineered data transformation workflows using Power Query and advanced Excel to ingest, clean, and model raw economic data into structured relational models.",
+            "Wrote custom DAX measures and KPIs to track fuel supply trends, pricing fluctuations, and regional distribution for regulatory stakeholders.",
+            "Translated complex economic data into intuitive visual reports, enabling faster, data-driven decision-making for provincial utility analysts.",
+          ],
+          stack: ["Power BI", "DAX", "Power Query", "Excel Relational Modeling", "Economic Analytics"],
+        },
+        {
+          role: "Associate Consultant",
+          company: "Hitachi Solutions India Pvt. Ltd.",
+          place: "India",
+          period: "2017 – 2020",
+          summary:
+            "Engineered enterprise Power BI dashboards, tabular models, and automated Azure Monitor diagnostics using KQL.",
+          points: [
+            "Engineered enterprise Power BI dashboards and semantic datasets, utilizing advanced visualization techniques (bookmarks, multi-level slicing, drill-throughs) to translate complex requirements into actionable business insights.",
+            "Designed and maintained robust tabular data models, writing complex DAX measures to optimize reporting performance and support enterprise-wide business intelligence needs.",
+            "Integrated KQL-based Log Analytics queries with Azure Monitor to establish automated, data-driven alerting systems, significantly reducing system downtime.",
+            "Conducted comprehensive requirement-gathering sessions with cross-functional stakeholders to document technical specifications and ensure reporting alignment with business objectives.",
+          ],
+          stack: ["Power BI", "DAX", "Tabular Modeling", "Azure Monitor", "Log Analytics", "KQL"],
+        },
+      ];
+
+      const skills = [
+        {
+          group: "Data Engineering & Architecture",
+          items: [
+            "Azure Data Factory (ADF)",
+            "Azure Synapse Analytics",
+            "Databricks",
+            "Microsoft Fabric (Lakehouse/Warehouse)",
+            "ADLS Gen2",
+            "Medallion Architecture",
+            "ETL/ELT Pipelines",
+            "Real-Time/Streaming Data",
+          ],
+        },
+        {
+          group: "Languages & Databases",
+          items: [
+            "Python",
+            "PySpark",
+            "SQL (T-SQL)",
+            "KQL (Kusto Query Language)",
+            "Azure SQL Database",
+            "SQL Server",
+            "Oracle",
+            "REST APIs",
+          ],
+        },
+        {
+          group: "Business Intelligence & Analytics",
+          items: [
+            "Power BI (Desktop & Service)",
+            "DAX (Performance Optimization & Measures)",
+            "Power Query",
+            "Semantic Data Modeling (Dimensional)",
+            "Row-Level Security (RLS)",
+            "SSRS",
+            "Azure Analysis Services",
+          ],
+        },
+        {
+          group: "DevOps & Cloud Governance",
+          items: [
+            "Azure DevOps",
+            "GitHub & Git",
+            "CI/CD Pipelines",
+            "Databricks Notebooks",
+            "RBAC & Cloud Security",
+            "Azure Monitor & Log Analytics",
+            "Data Dictionaries & Governance",
+            "Healthcare Privacy Compliance",
+          ],
+        },
+      ];
+
+      const education = [
+        ["Master of Business Administration", "University of New Brunswick · 2021"],
+        ["Bachelor of Computer Science", "GITAM University · 2017"],
+      ];
+
+      const certifications = [
+        ["Microsoft Certified: Azure Fundamentals", "AZ-900"],
+        ["Microsoft Certified: Azure Architect Technologies", "AZ-300"],
+      ];
+
+      const app = document.getElementById("app");
+      let theme = location.hash === "#interactive" ? "interactive" : "classic";
+      let active = 0;
+      let consoleLogs = [
+        "System initialized: Welcome to Sameer Bandi's interactive terminal.",
+        "Type 'help', 'roles', 'skills', 'certifications', or 'contact' to explore.",
+      ];
+
+      const contact = `
+        <div class="tags mono" style="margin-top:2rem;gap:2rem">
+          <a href="mailto:${profile.email}">${profile.email}</a>
+          <a href="tel:+15065665115">${profile.phone}</a>
+          <a href="${profile.linkedin}" target="_blank" rel="noreferrer">LinkedIn</a>
+        </div>`;
+
+      function classicView() {
+        return `
+        <div class="wrap">
+          <header class="bar">
+            <span style="font-family:var(--display);font-size:1.25rem">SB.</span>
+            <nav><a href="#work">Work</a><a href="#stack">Stack</a><a href="#education">Education</a><a href="mailto:${profile.email}">Connect</a></nav>
+          </header>
+          <section class="hero">
+            <p class="eyebrow">${profile.title}</p>
+            <h1>Data should <em>feel</em> trustworthy</h1>
+            <p class="lead">${profile.summary}</p>
+            <p class="eyebrow" style="margin-top:2rem">${profile.location}</p>
+          </section>
+          <section>
+            <h2 class="eyebrow">Guiding Principles</h2>
+            ${beliefs
+              .map(
+                (b, i) => `<div class="belief"><span class="num">0${i + 1}</span><div>
+                  <h3 class="display" style="font-size:1.5rem">${b.title}</h3>
+                  <p class="muted" style="margin-top:.5rem;max-width:34rem">${b.body}</p></div></div>`,
+              )
+              .join("")}
+          </section>
+          <section id="work">
+            <h2 class="eyebrow">Work Experience</h2>
+            ${work
+              .map(
+                (j) => `<article class="job">
+                  <div class="job-head"><h3>${j.role}</h3><span class="eyebrow">${j.period}</span></div>
+                  <p style="color:var(--primary);font-size:.88rem;margin-top:.25rem">${j.company} ·${j.place}</p>
+                  <p class="muted" style="margin-top:1rem;max-width:44rem">${j.summary}</p>
+                  <ul>${j.points.map((p) => `<li>${p}</li>`).join("")}</ul>
+                  <div class="tags">${j.stack.map((s) => `<span class="tag">${s}</span>`).join("")}</div>
+                </article>`,
+              )
+              .join("")}
+          </section>
+          <section id="stack">
+            <h2 class="eyebrow">Technical Skills</h2>
+            <div class="grid2">
+              ${skills
+                .map(
+                  (s) => `<div><h3 class="display" style="font-size:1.3rem">${s.group}</h3>
+                  <ul class="muted" style="list-style:none;margin-top:.75rem;font-size:.9rem;line-height:1.7">${s.items.map((i) => `<li>› ${i}</li>`).join("")}</ul></div>`,
+                )
+                .join("")}
+            </div>
+          </section>
+          <section id="education">
+            <h2 class="eyebrow">Education & Certifications</h2>
+            <ul class="edu">
+              ${education.map(([t, s]) => `<li><span>${t}</span><span>${s}</span></li>`).join("")}
+              ${certifications.map(([t, s]) => `<li><span>${t}</span><span>${s}</span></li>`).join("")}
+            </ul>
+          </section>
+          <section>
+            <h2 class="display" style="font-size:2.5rem;line-height:1.15">Need high-trust data pipelines or BI reporting?</h2>
+            <p class="muted" style="margin-top:1rem;max-width:34rem">Always ready to discuss data platform architectures, Medallion implementations, Power BI semantic models, or analytics reliability.</p>
+            ${contact}
+          </section>
+        </div>`;
+      }
+
+      function interactiveView() {
+        const j = work[active];
+        const allStack = skills.flatMap((s) => s.items);
+        return `
+        <div class="spotlight" id="spot"></div><div class="grid-field"></div>
+        <div class="wrap wide" style="position:relative;z-index:1">
+          <header class="bar mono" style="text-transform:uppercase;letter-spacing:.2em;font-size:.7rem">
+            <span style="color:var(--primary)">~/sameer.terminal</span>
+            <span class="muted">${profile.location}</span>
+          </header>
+          <div class="panel">
+            <div class="dots">
+              <span style="background:oklch(.6 .2 27)"></span><span style="background:var(--primary)"></span><span style="background:var(--accent)"></span>
+            </div>
+            <p class="mono" style="color:var(--accent);margin-top:1.75rem;font-size:.85rem">$ whoami</p>
+            <h1 style="font-size:clamp(2.6rem,7vw,4.2rem);line-height:1.05;margin-top:.5rem">${profile.name}</h1>
+            <p class="eyebrow" style="margin-top:.75rem">${profile.title}</p>
+            <p class="mono" style="color:var(--accent);margin-top:1.75rem;font-size:.85rem">$ ls competencies</p>
+            <p class="mono" style="color:var(--primary);font-size:1.5rem;margin-top:.5rem"><span id="typed"></span><span class="caret">▌</span></p>
+            <p class="muted" style="margin-top:1.5rem;max-width:44rem">${profile.summary}</p>
+          </div>
+
+          <section style="border:0">
+            <h2 class="eyebrow">Experience Timeline — Click stage to inspect</h2>
+            <div class="nodes">
+              ${work
+                .map(
+                  (w, i) =>
+                    `<button class="node" aria-pressed="${i === active}" data-i="${i}">
+                      <span>${w.period.split("–")[0].trim()}</span>
+                      <b>${w.company}</b>
+                    </button>`,
+                )
+                .join("")}
+            </div>
+            <div class="panel" style="margin-top:1.5rem">
+              <div class="job-head">
+                <h3 class="display" style="font-size:1.85rem">${j.role}</h3>
+                <span class="eyebrow" style="color:var(--primary)">${j.period}</span>
+              </div>
+              <p class="muted" style="font-size:.9rem;margin-top:.25rem">${j.company} · ${j.place}</p>
+              <p class="muted" style="margin-top:1rem;max-width:44rem">${j.summary}</p>
+              <div class="cards">
+                ${j.points.map((p) => `<div class="card muted" style="font-size:.86rem;line-height:1.5">${p}</div>`).join("")}
+              </div>
+              <div class="tags" style="margin-top:1.5rem">
+                ${j.stack.map((s) => `<span class="tag" style="border-color:color-mix(in oklab,var(--primary) 40%,transparent);color:var(--primary)">${s}</span>`).join("")}
+              </div>
+            </div>
+          </section>
+
+          <div class="marquee-wrap">
+            <div class="marquee">
+              ${[...allStack, ...allStack].map((s) => `<span>${s} <b style="color:var(--primary)">/</b></span>`).join("")}
+            </div>
+          </div>
+
+          <section style="border:0">
+            <h2 class="eyebrow">Interactive CLI Console</h2>
+            <div class="interactive-console">
+              <div class="console-log" id="consoleLog">
+                ${consoleLogs.map((l) => `<div>&gt; ${l}</div>`).join("")}
+              </div>
+              <form id="consoleForm" class="console-input-row" onsubmit="handleConsoleSubmit(event)">
+                <span style="color:var(--accent)">$</span>
+                <input type="text" id="consoleInput" class="console-input" placeholder="Type command here (try 'skills' or 'help')..." autocomplete="off" />
+              </form>
+            </div>
+          </section>
+
+          <section style="border:0">
+            <h2 class="eyebrow">Skills Matrix</h2>
+            <div class="cards">
+              ${skills
+                .map(
+                  (s) =>
+                    `<div class="card">
+                      <h3>${s.group}</h3>
+                      <ul>${s.items.map((i) => `<li>› ${i}</li>`).join("")}</ul>
+                    </div>`,
+                )
+                .join("")}
+            </div>
+          </section>
+
+          <section style="border:0">
+            <h2 class="eyebrow">Education & Certifications</h2>
+            <div class="cards">
+              ${education.map(([t, s]) => `<div class="card"><h3>${t}</h3><p class="mono muted" style="font-size:.75rem;margin-top:.4rem">${s}</p></div>`).join("")}
+              ${certifications.map(([t, s]) => `<div class="card"><h3>${t}</h3><p class="mono muted" style="font-size:.75rem;margin-top:.4rem">${s}</p></div>`).join("")}
+            </div>
+          </section>
+
+          <div class="panel">
+            <p class="mono" style="color:var(--accent);font-size:.85rem">$ open connection</p>
+            <h2 class="display" style="font-size:2.5rem;line-height:1.15;margin-top:.75rem">Let's build reliable reporting solutions.</h2>
+            ${contact}
+          </div>
+        </div>`;
+      }
+
+      let typeTimer;
+      function startTypewriter() {
+        clearTimeout(typeTimer);
+        const el = document.getElementById("typed");
+        if (!el) return;
+        const words = [
+          "Azure Data Factory pipelines",
+          "Medallion Architecture (Bronze/Silver/Gold)",
+          "Databricks & PySpark optimization",
+          "Power BI semantic modeling & DAX",
+          "Healthcare reporting & governance",
+          "KQL diagnostics & Log Analytics",
+        ];
+        let i = 0,
+          n = 0,
+          deleting = false;
+        (function tick() {
+          const word = words[i % words.length];
+          n += deleting ? -1 : 1;
+          el.textContent = word.slice(0, n);
+          let delay = deleting ? 35 : 65;
+          if (!deleting && n === word.length) {
+            deleting = true;
+            delay = 1800;
+          } else if (deleting && n === 0) {
+            deleting = false;
+            i++;
+            delay = 200;
+          }
+          typeTimer = setTimeout(tick, delay);
+        })();
+      }
+
+      function handleConsoleSubmit(e) {
+        e.preventDefault();
+        const input = document.getElementById("consoleInput");
+        const val = input.value.trim().toLowerCase();
+        if (!val) return;
+        input.value = "";
+
+        consoleLogs.push(val);
+        switch (val) {
+          case "help":
+            consoleLogs.push("Available commands: roles, skills, certifications, contact, clear, whoami");
+            break;
+          case "whoami":
+            consoleLogs.push(`${profile.name} — ${profile.title}. Open for Data Engineer, Data Analytics Engineer, or Analytics Engineer roles based in ${profile.location}`);
+            break;
+          case "roles":
+            work.forEach((w) => consoleLogs.push(`• ${w.role} @ ${w.company} (${w.period})`));
+            break;
+          case "skills":
+            skills.forEach((s) => consoleLogs.push(`[${s.group}]: ${s.items.join(", ")}`));
+            break;
+          case "certifications":
+            certifications.forEach(([c, code]) => consoleLogs.push(`• ${c} (${code})`));
+            break;
+          case "contact":
+            consoleLogs.push(`Email: ${profile.email} | Phone: ${profile.phone} | LinkedIn: ${profile.linkedin}`);
+            break;
+          case "clear":
+            consoleLogs = [];
+            break;
+          default:
+            consoleLogs.push(`Command not recognized: '${val}'. Type 'help' for options.`);
+        }
+        const logBox = document.getElementById("consoleLog");
+        if (logBox) {
+          logBox.innerHTML = consoleLogs.map((l) => `<div>&gt; ${l}</div>`).join("");
+          logBox.scrollTop = logBox.scrollHeight;
+        }
+      }
+
+      function render() {
+        app.innerHTML = theme === "classic" ? classicView() : interactiveView();
+        document
+          .querySelectorAll("#tabs button")
+          .forEach((b) =>
+            b.setAttribute("aria-selected", String(b.dataset.theme === theme)),
+          );
+        if (theme === "interactive") {
+          startTypewriter();
+          app.querySelectorAll(".node").forEach((btn) =>
+            btn.addEventListener("click", () => {
+              active = Number(btn.dataset.i);
+              render();
+            }),
+          );
+          const logBox = document.getElementById("consoleLog");
+          if (logBox) logBox.scrollTop = logBox.scrollHeight;
+        }
+      }
+
+      document.querySelectorAll("#tabs button").forEach((btn) =>
+        btn.addEventListener("click", () => {
+          if (theme === btn.dataset.theme) return;
+          theme = btn.dataset.theme;
+          location.hash = theme === "interactive" ? "#interactive" : "";
+          render();
+          scrollTo({ top: 0 });
+        }),
+      );
+
+      window.addEventListener("pointermove", (e) => {
+        const spot = document.getElementById("spot");
+        if (spot) {
+          spot.style.setProperty("--x", e.clientX + "px");
+          spot.style.setProperty("--y", e.clientY + "px");
+        }
       });
 
-      // 1. Custom Cursor Logic
-      function initCustomCursor() {
-        const cursor = document.getElementById('cursor');
-        const trail = document.getElementById('cursor-trail');
-        
-        let mouseX = 0, mouseY = 0;
-        let trailX = 0, trailY = 0;
-
-        window.addEventListener('mousemove', (e) => {
-          mouseX = e.clientX;
-          mouseY = e.clientY;
-          cursor.style.left = mouseX + 'px';
-          cursor.style.top = mouseY + 'px';
-        });
-
-        function animateTrail() {
-          trailX += (mouseX - trailX) * 0.15;
-          trailY += (mouseY - trailY) * 0.15;
-          trail.style.left = trailX + 'px';
-          trail.style.top = trailY + 'px';
-          requestAnimationFrame(animateTrail);
-        }
-        animateTrail();
-      }
-
-      // 2. Typewriter Effect
-      function initTypewriter() {
-        const text = "> Data Analytics Engineer";
-        const el = document.getElementById("typewriter-title");
-        let i = 0;
-        function type() {
-          if (i < text.length) {
-            el.innerHTML += text.charAt(i);
-            i++;
-            setTimeout(type, 100);
-          } else {
-            el.innerHTML += '<span style="animation: blink 1s infinite">_</span>';
-          }
-        }
-        setTimeout(type, 500);
-      }
-
-      // 3. Render Skills with Filtering Logic
-      let activeFilter = null;
-      function renderSkills() {
-        const container = document.getElementById('skills-container');
-        resumeData.skills.forEach(skill => {
-          const btn = document.createElement('button');
-          btn.className = 'skill-tag';
-          btn.innerText = skill;
-          btn.onclick = () => toggleSkillFilter(skill, btn);
-          container.appendChild(btn);
-        });
-      }
-
-      function toggleSkillFilter(skill, btn) {
-        document.querySelectorAll('.skill-tag').forEach(el => el.classList.remove('active'));
-        if (activeFilter === skill) {
-          activeFilter = null; // Turn off filter
-          document.querySelectorAll('.job-card').forEach(card => card.classList.remove('active-filter'));
-        } else {
-          activeFilter = skill;
-          btn.classList.add('active');
-          document.querySelectorAll('.job-card').forEach(card => {
-            const tags = JSON.parse(card.dataset.tags || '[]');
-            if (tags.some(t => t.toLowerCase().includes(skill.toLowerCase()) || skill.toLowerCase().includes(t.toLowerCase()))) {
-              card.classList.add('active-filter');
-            } else {
-              card.classList.remove('active-filter');
-            }
-          });
-        }
-      }
-
-      // 4. Render Experience Timeline
-      function renderExperience() {
-        const container = document.getElementById('experience-timeline');
-        resumeData.experience.forEach((job, index) => {
-          const card = document.createElement('article');
-          card.className = 'job-card glass-panel';
-          card.dataset.tags = JSON.stringify(job.tags);
-          card.innerHTML = `
-            <div class="job-header">
-              <h3 class="job-title">${job.role}</h3>
-              <span class="mono" style="color:var(--primary); font-size: 0.85rem">${job.period}</span>
-            </div>
-            <p class="job-company">${job.company} · ${job.location}</p>
-            <div style="margin-top: 1rem;">
-              ${job.tags.map(tag => `<span class="skill-tag" style="padding: 0.2rem 0.5rem; font-size: 0.65rem;">${tag}</span>`).join('')}
-            </div>
-            <ul class="job-bullets">
-              ${job.bullets.map(bullet => `<li>${bullet}</li>`).join('')}
-            </ul>
-          `;
-          container.appendChild(card);
-        });
-      }
-
-      // 5. Scroll Animations (Intersection Observer)
-      function initScrollAnimations() {
-        const observer = new IntersectionObserver((entries) => {
-          entries.forEach(entry => {
-            if (entry.isIntersecting) {
-              entry.target.classList.add('visible');
-            }
-          });
-        }, { threshold: 0.1 });
-
-        document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
-      }
-
-      // 6. Interactive Terminal
-      function initTerminal() {
-        const form = document.getElementById('terminal-form');
-        const input = document.getElementById('terminal-input');
-        const output = document.getElementById('terminal-output');
-
-        function printLog(html) {
-          const p = document.createElement('p');
-          p.innerHTML = html;
-          output.appendChild(p);
-          output.scrollTop = output.scrollHeight;
-        }
-
-        form.addEventListener('submit', (e) => {
-          e.preventDefault();
-          const val = input.value.trim();
-          if (!val) return;
-          
-          printLog(`<span style="color:var(--text-muted)">guest@sameer-portfolio:~$</span> ${val}`);
-          input.value = '';
-
-          const cmd = val.toLowerCase();
-          if (cmd === 'help') {
-            printLog('Available commands: <br> - <span style="color:var(--primary)">whoami</span>: Display profile summary <br> - <span style="color:var(--primary)">education</span>: List degrees and certifications <br> - <span style="color:var(--primary)">hire</span>: Get contact info <br> - <span style="color:var(--primary)">clear</span>: Clear terminal');
-          } else if (cmd === 'whoami') {
-            printLog('Sameer Bandi.<br>Open to Data Engineer, Data Analytics Engineer, or Analytics Engineer roles.<br>Building scalable pipelines across Azure, Databricks, and Fabric.<br>Location: Moncton, NB (Open to Relocate).');
-          } else if (cmd === 'education') {
-            resumeData.education.forEach(ed => printLog(`- ${ed}`));
-          } else if (cmd === 'hire') {
-            printLog('Initiating contact sequence...<br>Email: bsameer1995@gmail.com<br>Phone: 506-566-5115<br>Ready to build reliable data ecosystems.');
-          } else if (cmd === 'clear') {
-            output.innerHTML = '';
-          } else {
-            printLog(`Command not found: ${cmd}. Type 'help' for available commands.`);
-          }
-        });
-      }
-
-      // 7. HTML5 Canvas Network Background
-      function initCanvasNetwork() {
-        const canvas = document.getElementById('network-canvas');
-        const ctx = canvas.getContext('2d');
-        let width, height;
-        let particles = [];
-
-        function resize() {
-          width = canvas.width = window.innerWidth;
-          height = canvas.height = window.innerHeight;
-        }
-        window.addEventListener('resize', resize);
-        resize();
-
-        class Particle {
-          constructor() {
-            this.x = Math.random() * width;
-            this.y = Math.random() * height;
-            this.vx = (Math.random() - 0.5) * 0.5;
-            this.vy = (Math.random() - 0.5) * 0.5;
-            this.radius = Math.random() * 1.5 + 0.5;
-          }
-          update() {
-            this.x += this.vx;
-            this.y += this.vy;
-            if (this.x < 0 || this.x > width) this.vx *= -1;
-            if (this.y < 0 || this.y > height) this.vy *= -1;
-          }
-          draw() {
-            ctx.beginPath();
-            ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
-            ctx.fillStyle = 'rgba(56, 189, 248, 0.5)';
-            ctx.fill();
-          }
-        }
-
-        for (let i = 0; i < 70; i++) particles.push(new Particle());
-
-        // Mouse interaction
-        let mouse = { x: null, y: null };
-        window.addEventListener('mousemove', e => {
-          mouse.x = e.x;
-          mouse.y = e.y;
-        });
-
-        function animate() {
-          ctx.clearRect(0, 0, width, height);
-          
-          particles.forEach(p => {
-            p.update();
-            p.draw();
-          });
-
-          // Connect particles
-          for (let i = 0; i < particles.length; i++) {
-            for (let j = i; j < particles.length; j++) {
-              const dx = particles[i].x - particles[j].x;
-              const dy = particles[i].y - particles[j].y;
-              const dist = Math.sqrt(dx * dx + dy * dy);
-
-              if (dist < 120) {
-                ctx.beginPath();
-                ctx.strokeStyle = `rgba(56, 189, 248, ${0.2 - dist/600})`;
-                ctx.lineWidth = 0.5;
-                ctx.moveTo(particles[i].x, particles[i].y);
-                ctx.lineTo(particles[j].x, particles[j].y);
-                ctx.stroke();
-              }
-            }
-
-            // Connect to mouse
-            if (mouse.x != null) {
-              const dxM = particles[i].x - mouse.x;
-              const dyM = particles[i].y - mouse.y;
-              const distM = Math.sqrt(dxM * dxM + dyM * dyM);
-              if (distM < 150) {
-                ctx.beginPath();
-                ctx.strokeStyle = `rgba(129, 140, 248, ${0.4 - distM/375})`;
-                ctx.lineWidth = 1;
-                ctx.moveTo(particles[i].x, particles[i].y);
-                ctx.lineTo(mouse.x, mouse.y);
-                ctx.stroke();
-              }
-            }
-          }
-          requestAnimationFrame(animate);
-        }
-        animate();
-      }
+      render();
     </script>
   </body>
 </html>
