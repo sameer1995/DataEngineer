@@ -142,6 +142,8 @@
 
       /* Decode Text Effect */
       .decode-text { display: inline-block; }
+      .caret { animation: blink 1s steps(2, start) infinite; }
+      @keyframes blink { to { opacity: 0; } }
 
       /* Marquee */
       .marquee-wrap { overflow: hidden; border: 1px solid var(--border); border-radius: 1rem; padding: 1.25rem 0; margin-top: 4rem; background: color-mix(in oklab, var(--card) 20%, transparent); backdrop-filter: blur(8px); }
@@ -173,21 +175,6 @@
         font-family: var(--mono); font-size: 0.9rem; width: 100%;
         text-shadow: 0 0 8px color-mix(in oklab, var(--primary) 50%, transparent);
       }
-
-      /* Tabs */
-      .tabs {
-        position: fixed; left: 50%; transform: translateX(-50%); bottom: 2rem; z-index: 50;
-        display: flex; gap: 0.5rem; padding: 0.4rem; border: 1px solid var(--border); border-radius: 999px;
-        background: color-mix(in oklab, var(--background) 80%, transparent); backdrop-filter: blur(12px);
-        box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-      }
-      .tabs button {
-        font-family: var(--mono); font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.2em;
-        border: 0; background: transparent; color: var(--muted); border-radius: 999px;
-        padding: 0.6rem 1.25rem; cursor: pointer; transition: all 0.3s;
-      }
-      .tabs button:hover { color: var(--foreground); background: color-mix(in oklab, var(--muted) 20%, transparent); }
-      .tabs button[aria-selected="true"] { background: var(--primary); color: var(--background); font-weight: 600; box-shadow: 0 0 15px color-mix(in oklab, var(--primary) 40%, transparent); }
     </style>
   </head>
   <body>
@@ -197,11 +184,6 @@
     <canvas id="data-canvas"></canvas>
     
     <div id="app"></div>
-    
-    <div class="tabs" id="tabs" role="tablist">
-      <div class="magnetic-wrap"><button class="magnetic" type="button" role="tab" data-theme="classic">Classic</button></div>
-      <div class="magnetic-wrap"><button class="magnetic" type="button" role="tab" data-theme="interactive">Interactive</button></div>
-    </div>
 
     <script>
       // --- STRICTLY UNEDITED DATA PAYLOAD ---
@@ -214,12 +196,6 @@
         linkedin: "https://linkedin.com/in/bsameer95",
         summary: "I am open for Data Engineer, Data Analytics Engineer, or Analytics Engineer roles. With 8+ years of cross-industry experience spanning healthcare analytics, supply chain management, and IT consulting, I specialize in building scalable Medallion data architectures, reliable ETL pipelines, and DAX-driven enterprise Power BI solutions that leadership can actually trust.",
       };
-
-      const beliefs = [
-        { title: "Pipelines should be boring.", body: "The best data platform is the one nobody talks about, because it simply runs — every night, on time, with numbers that reconcile." },
-        { title: "Chase clarity, not cleverness.", body: "A query someone else can read beats a clever one they can't. Same for models, dashboards, and architecture diagrams." },
-        { title: "Trust is the real deliverable.", body: "Validation, reconciliation and governance aren't overhead. They are the reason leadership acts on the report at all." },
-      ];
 
       const work = [
         {
@@ -311,7 +287,6 @@
 
       // --- STATE ---
       const app = document.getElementById("app");
-      let theme = location.hash === "#interactive" ? "interactive" : "classic";
       let active = 0;
       let activeTag = null;
       let consoleLogs = ["System booted. Type 'help', 'roles', 'skills', or 'contact' to interact."];
@@ -325,55 +300,7 @@
           <div class="magnetic-wrap"><a class="magnetic" href="${profile.linkedin}" target="_blank" rel="noreferrer">LinkedIn</a></div>
         </div>`;
 
-      // --- TEMPLATES ---
-      function classicView() {
-        return `
-        <div class="wrap">
-          <header class="bar">
-            <span style="font-family:var(--display);font-size:1.35rem;font-weight:600;">Sameer Bandi</span>
-            <nav><a href="#work">Work</a><a href="#stack">Stack</a><a href="#education">Education</a><a href="mailto:${profile.email}">Connect</a></nav>
-          </header>
-          <section class="hero panel">
-            <p class="eyebrow">${profile.title}</p>
-            <h1 class="decode-text" data-value="Data should feel trustworthy">Data should <em>feel</em> trustworthy</h1>
-            <p class="lead">${profile.summary}</p>
-            <p class="eyebrow" style="margin-top:2rem">${profile.location}</p>
-          </section>
-          <section>
-            <h2 class="eyebrow">Guiding Principles</h2>
-            ${beliefs.map((b, i) => `<div class="belief"><span class="num">0${i + 1}</span><div><h3 class="display" style="font-size:1.5rem">${b.title}</h3><p class="muted" style="margin-top:.5rem;max-width:34rem">${b.body}</p></div></div>`).join("")}
-          </section>
-          <section id="work">
-            <h2 class="eyebrow">Work Experience</h2>
-            ${work.map((j) => `<article class="job">
-                  <div class="job-head"><h3>${j.role}</h3><span class="eyebrow">${j.period}</span></div>
-                  <p style="color:var(--primary);font-size:.88rem;margin-top:.25rem">${j.company} ·${j.place}</p>
-                  <p class="muted" style="margin-top:1rem;max-width:44rem">${j.summary}</p>
-                  <ul class="job-bullets">${j.points.map((p) => `<li>${p}</li>`).join("")}</ul>
-                  <div class="tags">${j.stack.map((s) => `<span class="tag tech-tag" data-skill="${s}">${s}</span>`).join("")}</div>
-                </article>`).join("")}
-          </section>
-          <section id="stack">
-            <h2 class="eyebrow">Technical Skills</h2>
-            <div class="grid2">
-              ${skills.map((s) => `<div><h3 class="display" style="font-size:1.3rem">${s.group}</h3><ul class="muted" style="list-style:none;margin-top:.75rem;font-size:.9rem;line-height:1.7">${s.items.map((i) => `<li>› ${i}</li>`).join("")}</ul></div>`).join("")}
-            </div>
-          </section>
-          <section id="education">
-            <h2 class="eyebrow">Education & Certifications</h2>
-            <ul class="edu">
-              ${education.map(([t, s]) => `<li><span>${t}</span><span>${s}</span></li>`).join("")}
-              ${certifications.map(([t, s]) => `<li><span>${t}</span><span>${s}</span></li>`).join("")}
-            </ul>
-          </section>
-          <section class="panel">
-            <h2 class="display" style="font-size:2.5rem;line-height:1.15">Need high-trust data pipelines or BI reporting?</h2>
-            <p class="muted" style="margin-top:1rem;max-width:34rem">Always ready to discuss data platform architectures, Medallion implementations, Power BI semantic models, or analytics reliability.</p>
-            ${contactHtml}
-          </section>
-        </div>`;
-      }
-
+      // --- RENDER VIEW ---
       function interactiveView() {
         const j = work[active];
         const allStack = skills.flatMap((s) => s.items);
@@ -511,7 +438,7 @@
       // 3. 3D Parallax Tilt Panels with Glare
       function initTiltPanels() {
         if(window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
-        document.querySelectorAll('.tilt-panel, .panel').forEach(el => {
+        document.querySelectorAll('.tilt-panel').forEach(el => {
           el.addEventListener('mousemove', e => {
             const rect = el.getBoundingClientRect();
             const x = e.clientX - rect.left; const y = e.clientY - rect.top;
@@ -677,37 +604,27 @@
         });
       }
 
-      function render() {
-        app.innerHTML = theme === "classic" ? classicView() : interactiveView();
-        
-        document.querySelectorAll("#tabs button").forEach((b) =>
-          b.setAttribute("aria-selected", String(b.dataset.theme === theme))
+      function attachNodeSelection() {
+        app.querySelectorAll(".node").forEach((btn) =>
+          btn.addEventListener("click", () => { active = Number(btn.dataset.i); render(); })
         );
+      }
 
+      function render() {
+        app.innerHTML = interactiveView();
+        
         decodeText();
         initMagneticElements();
         initTiltPanels();
         attachSkillHighlighting();
+        attachNodeSelection();
+        initTerminal();
 
-        if (theme === "interactive") {
-          initTerminal();
-          app.querySelectorAll(".node").forEach((btn) =>
-            btn.addEventListener("click", () => { active = Number(btn.dataset.i); render(); })
-          );
-          const logBox = document.getElementById("consoleLog");
-          if (logBox) logBox.scrollTop = logBox.scrollHeight;
-        }
+        const logBox = document.getElementById("consoleLog");
+        if (logBox) logBox.scrollTop = logBox.scrollHeight;
       }
 
       // Boot Sequence
-      document.querySelectorAll("#tabs button").forEach((btn) =>
-        btn.addEventListener("click", () => {
-          if (theme === btn.dataset.theme) return;
-          theme = btn.dataset.theme; location.hash = theme === "interactive" ? "#interactive" : "";
-          activeTag = null; render(); scrollTo({ top: 0, behavior: 'smooth' });
-        })
-      );
-
       initSpringCursor();
       initDataCanvas();
       render();
