@@ -1,0 +1,757 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Sameer Bandi — Data Analytics Engineer</title>
+    <meta
+      name="description"
+      content="Portfolio of Sameer Bandi, data analytics engineer working with Azure, Databricks and Power BI."
+    />
+    <meta property="og:title" content="Sameer Bandi — Data Analytics Engineer" />
+    <meta
+      property="og:description"
+      content="8+ years designing cloud data pipelines with Azure Databricks, PySpark, Delta Lake and Power BI."
+    />
+    <meta property="og:type" content="website" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Work+Sans:wght@300;400;500&family=JetBrains+Mono:wght@400;500&display=swap"
+    />
+    <style>
+      :root {
+        --background: oklch(0.16 0.008 90);
+        --foreground: oklch(0.94 0.012 90);
+        --card: oklch(0.2 0.009 90);
+        --primary: oklch(0.82 0.14 78);
+        --accent: oklch(0.72 0.09 190);
+        --muted-foreground: oklch(0.68 0.012 90);
+        --border: oklch(0.3 0.01 90);
+        --display: "Instrument Serif", Georgia, serif;
+        --sans: "Work Sans", system-ui, sans-serif;
+        --mono: "JetBrains Mono", ui-monospace, monospace;
+      }
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+      body {
+        background: var(--background);
+        color: var(--foreground);
+        font-family: var(--sans);
+        -webkit-font-smoothing: antialiased;
+        line-height: 1.55;
+      }
+      ::selection {
+        background: color-mix(in oklab, var(--primary) 35%, transparent);
+      }
+      a {
+        color: var(--primary);
+        text-decoration: none;
+      }
+      a:hover {
+        text-decoration: underline;
+      }
+      .wrap {
+        max-width: 48rem;
+        margin: 0 auto;
+        padding: 0 1.5rem 7rem;
+      }
+      .wrap.wide {
+        max-width: 64rem;
+      }
+      .mono {
+        font-family: var(--mono);
+      }
+      .eyebrow {
+        font-family: var(--mono);
+        font-size: 0.7rem;
+        text-transform: uppercase;
+        letter-spacing: 0.28em;
+        color: var(--muted-foreground);
+      }
+      h1,
+      h2.display,
+      h3.display {
+        font-family: var(--display);
+        font-weight: 400;
+      }
+      .muted {
+        color: var(--muted-foreground);
+      }
+      header.bar {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 1.5rem 0;
+        font-size: 0.9rem;
+      }
+      header.bar nav {
+        display: flex;
+        gap: 1.5rem;
+      }
+      header.bar nav a {
+        color: var(--muted-foreground);
+      }
+      header.bar nav a:hover {
+        color: var(--foreground);
+      }
+      section {
+        border-top: 1px solid var(--border);
+        padding: 4rem 0;
+      }
+      section.hero {
+        border-top: 0;
+      }
+      .hero h1 {
+        font-size: clamp(2.6rem, 7vw, 3.8rem);
+        line-height: 1.05;
+        margin-top: 1.5rem;
+      }
+      .hero em {
+        color: var(--primary);
+        font-style: normal;
+      }
+      .lead {
+        max-width: 34rem;
+        color: var(--muted-foreground);
+        font-size: 1.05rem;
+        margin-top: 2rem;
+      }
+      .belief {
+        display: grid;
+        grid-template-columns: 3rem 1fr;
+        gap: 0.5rem;
+        margin-top: 2.5rem;
+      }
+      .belief span.num {
+        font-family: var(--mono);
+        color: var(--primary);
+      }
+      .job {
+        margin-top: 3.5rem;
+      }
+      .job-head {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
+        align-items: baseline;
+        gap: 0.5rem;
+      }
+      .job h3 {
+        font-family: var(--display);
+        font-size: 1.9rem;
+        font-weight: 400;
+      }
+      .job ul {
+        list-style: none;
+        margin-top: 1.25rem;
+        display: grid;
+        gap: 0.5rem;
+      }
+      .job li {
+        color: var(--muted-foreground);
+        font-size: 0.92rem;
+        padding-left: 1.25rem;
+        position: relative;
+      }
+      .job li::before {
+        content: "";
+        position: absolute;
+        left: 0;
+        top: 0.75em;
+        width: 0.75rem;
+        height: 1px;
+        background: var(--border);
+      }
+      .tags {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+        margin-top: 1.25rem;
+      }
+      .tag {
+        border: 1px solid var(--border);
+        border-radius: 999px;
+        padding: 0.25rem 0.75rem;
+        font-family: var(--mono);
+        font-size: 0.68rem;
+        color: var(--muted-foreground);
+      }
+      .grid2 {
+        display: grid;
+        gap: 2.5rem;
+        grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
+        margin-top: 2.5rem;
+      }
+      .edu {
+        list-style: none;
+        margin-top: 2.5rem;
+      }
+      .edu li {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
+        gap: 0.5rem;
+        border-bottom: 1px solid var(--border);
+        padding-bottom: 1rem;
+        margin-bottom: 1.5rem;
+        font-family: var(--display);
+        font-size: 1.25rem;
+      }
+      .edu li span:last-child {
+        font-family: var(--sans);
+        font-size: 0.85rem;
+        color: var(--muted-foreground);
+      }
+      /* interactive theme */
+      .spotlight {
+        position: fixed;
+        inset: 0;
+        pointer-events: none;
+        z-index: 0;
+        background: radial-gradient(
+          340px circle at var(--x, 50%) var(--y, 20%),
+          color-mix(in oklab, var(--primary) 14%, transparent),
+          transparent 70%
+        );
+      }
+      .grid-field {
+        position: fixed;
+        inset: 0;
+        pointer-events: none;
+        z-index: 0;
+        opacity: 0.35;
+        background-image:
+          linear-gradient(to right, var(--border) 1px, transparent 1px),
+          linear-gradient(to bottom, var(--border) 1px, transparent 1px);
+        background-size: 64px 64px;
+        -webkit-mask-image: radial-gradient(ellipse at 50% 0%, black, transparent 75%);
+        mask-image: radial-gradient(ellipse at 50% 0%, black, transparent 75%);
+      }
+      .panel {
+        position: relative;
+        z-index: 1;
+        border: 1px solid var(--border);
+        border-radius: 1rem;
+        background: color-mix(in oklab, var(--card) 70%, transparent);
+        padding: 1.75rem;
+        backdrop-filter: blur(4px);
+      }
+      .dots span {
+        display: inline-block;
+        width: 0.6rem;
+        height: 0.6rem;
+        border-radius: 999px;
+        margin-right: 0.4rem;
+      }
+      .caret {
+        animation: blink 1s steps(2, start) infinite;
+      }
+      @keyframes blink {
+        to {
+          opacity: 0;
+        }
+      }
+      .nodes {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.75rem;
+        margin-top: 1.5rem;
+      }
+      .node {
+        flex: 1 1 10rem;
+        text-align: left;
+        cursor: pointer;
+        border: 1px solid var(--border);
+        border-radius: 0.6rem;
+        background: transparent;
+        color: var(--muted-foreground);
+        font-family: var(--mono);
+        font-size: 0.72rem;
+        padding: 0.75rem 1rem;
+        transition: all 0.25s;
+      }
+      .node:hover {
+        color: var(--foreground);
+        border-color: color-mix(in oklab, var(--primary) 60%, transparent);
+      }
+      .node[aria-pressed="true"] {
+        border-color: var(--primary);
+        color: var(--foreground);
+        background: color-mix(in oklab, var(--primary) 10%, transparent);
+      }
+      .node b {
+        display: block;
+        font-family: var(--sans);
+        font-weight: 400;
+        font-size: 0.9rem;
+        margin-top: 0.25rem;
+      }
+      .cards {
+        display: grid;
+        gap: 0.75rem;
+        grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr));
+        margin-top: 1.5rem;
+      }
+      .card {
+        border: 1px solid var(--border);
+        border-radius: 0.75rem;
+        background: color-mix(in oklab, var(--card) 40%, transparent);
+        padding: 1.25rem;
+        transition:
+          transform 0.25s,
+          border-color 0.25s;
+      }
+      .card:hover {
+        transform: translateY(-4px);
+        border-color: var(--primary);
+      }
+      .card h3 {
+        font-family: var(--display);
+        font-size: 1.25rem;
+        font-weight: 400;
+      }
+      .card ul {
+        list-style: none;
+        margin-top: 0.75rem;
+        font-family: var(--mono);
+        font-size: 0.72rem;
+        color: var(--muted-foreground);
+      }
+      .marquee-wrap {
+        overflow: hidden;
+        border: 1px solid var(--border);
+        border-radius: 1rem;
+        padding: 1rem 0;
+        margin-top: 4rem;
+      }
+      .marquee {
+        display: flex;
+        width: max-content;
+        animation: scroll 40s linear infinite;
+        font-family: var(--mono);
+        font-size: 0.85rem;
+        color: var(--muted-foreground);
+      }
+      .marquee span {
+        margin: 0 1.25rem;
+        white-space: nowrap;
+      }
+      @keyframes scroll {
+        to {
+          transform: translateX(-50%);
+        }
+      }
+      .tabs {
+        position: fixed;
+        left: 50%;
+        transform: translateX(-50%);
+        bottom: 1.25rem;
+        z-index: 30;
+        display: flex;
+        gap: 0.25rem;
+        padding: 0.3rem;
+        border: 1px solid var(--border);
+        border-radius: 999px;
+        background: color-mix(in oklab, var(--background) 88%, transparent);
+        backdrop-filter: blur(10px);
+      }
+      .tabs button {
+        font-family: var(--mono);
+        font-size: 0.68rem;
+        text-transform: uppercase;
+        letter-spacing: 0.18em;
+        border: 0;
+        background: transparent;
+        color: var(--muted-foreground);
+        border-radius: 999px;
+        padding: 0.55rem 1.1rem;
+        cursor: pointer;
+        transition: background 0.2s, color 0.2s;
+      }
+      .tabs button:hover {
+        color: var(--foreground);
+      }
+      .tabs button[aria-selected="true"] {
+        background: var(--primary);
+        color: var(--background);
+      }
+      @media (prefers-reduced-motion: reduce) {
+        .marquee,
+        .caret {
+          animation: none;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div id="app"></div>
+    <div class="tabs" id="tabs" role="tablist" aria-label="Portfolio themes">
+      <button type="button" role="tab" data-theme="classic">Classic</button>
+      <button type="button" role="tab" data-theme="interactive">Interactive</button>
+    </div>
+
+    <script>
+      const profile = {
+        name: "Sameer Bandi",
+        title: "Data Analytics Engineer",
+        location: "New Brunswick, Canada",
+        email: "bsameer1995@gmail.com",
+        phone: "506-566-5115",
+        linkedin: "https://linkedin.com/in/bsameer95",
+        intro:
+          "Hey, I'm Sameer — a data analytics engineer based in New Brunswick, Canada. For 8+ years I've designed cloud data platforms on Azure, Databricks and Power BI: pipelines that hold up, numbers that reconcile, and reporting leadership can act on.",
+      };
+
+      const beliefs = [
+        {
+          title: "Pipelines should be boring.",
+          body: "The best data platform is the one nobody talks about, because it simply runs — every night, on time, with numbers that reconcile.",
+        },
+        {
+          title: "Chase clarity, not cleverness.",
+          body: "A query someone else can read beats a clever one they can't. Same for models, dashboards, and architecture diagrams.",
+        },
+        {
+          title: "Trust is the real deliverable.",
+          body: "Validation, reconciliation and governance aren't overhead. They are the reason leadership acts on the report at all.",
+        },
+      ];
+
+      const work = [
+        {
+          role: "Data Analyst",
+          company: "Medavie Health Services",
+          place: "New Brunswick, Canada",
+          period: "Aug 2025 — Present",
+          summary:
+            "Reporting for healthcare leadership and governance committees, built on SQL Server, SSRS and Power BI.",
+          points: [
+            "Consolidate departmental sources into SQL-driven datasets teams can rely on",
+            "Run validation, reconciliation and quality checks across systems to catch drift early",
+            "Partner with IT, HR, PMO, Quality, Finance and Governance to turn asks into reporting",
+            "Handle sensitive health data with strict accuracy, confidentiality and access controls",
+          ],
+          stack: ["SQL Server", "SSRS", "Power BI", "Data Governance"],
+        },
+        {
+          role: "Data Engineer",
+          company: "Source Atlantic Limited",
+          place: "New Brunswick, Canada",
+          period: "Dec 2022 — Jul 2025",
+          summary:
+            "Enterprise Azure data platform work: Databricks, Delta Live Tables, ADF orchestration and Medallion architecture.",
+          points: [
+            "Built scalable PySpark pipelines in Azure Databricks across structured and semi-structured data",
+            "Shipped Delta Lake and DLT pipelines that raised reliability and data quality for analytics",
+            "Tuned Spark jobs — partitioning, executor sizing, shuffle and skew — to cut processing time",
+            "Orchestrated ingestion with ADF, including CDC workflows for incremental sync",
+            "Monitored the platform with Azure Monitor, Log Analytics and KQL to catch issues first",
+            "Led a Snowflake proof of concept evaluated alongside Synapse and Databricks",
+          ],
+          stack: ["Azure Databricks", "PySpark", "Delta Live Tables", "ADF", "Synapse", "Kafka"],
+        },
+        {
+          role: "Business Analyst",
+          company: "Source Atlantic Limited",
+          place: "New Brunswick, Canada",
+          period: "Apr 2022 — Dec 2022",
+          summary:
+            "Translated stakeholder requirements into data models and Power BI reporting for BI initiatives.",
+          points: [
+            "Gathered requirements and defined solution approaches with business stakeholders",
+            "Built data models and semantic layers supporting analytics and reporting",
+            "Developed complex DAX measures and deployed through Power BI Service",
+          ],
+          stack: ["Power BI", "DAX", "SQL", "Fabric"],
+        },
+        {
+          role: "Associate Consultant",
+          company: "Hitachi Solutions India",
+          place: "India",
+          period: "2017 — 2020",
+          summary:
+            "Monitoring, diagnostics and reporting for large-scale operations using KQL and Azure Monitor.",
+          points: [
+            "Wrote KQL queries in Azure Monitor and Log Analytics for fast root-cause diagnostics",
+            "Built alerting and automated actions that cut manual intervention at scale",
+            "Delivered Power BI dashboards on top of KQL datasets for operational teams",
+          ],
+          stack: ["Azure Monitor", "KQL", "Log Analytics", "Power BI"],
+        },
+      ];
+
+      const skills = [
+        {
+          group: "Big data & processing",
+          items: ["PySpark", "Spark architecture & tuning", "Delta Live Tables", "Spark SQL"],
+        },
+        {
+          group: "Azure platform",
+          items: [
+            "Data Factory",
+            "Synapse Analytics",
+            "Data Lake Gen1/Gen2",
+            "Azure SQL",
+            "Stream Analytics",
+            "Monitor & Log Analytics",
+          ],
+        },
+        {
+          group: "Modern ecosystem",
+          items: [
+            "Snowflake",
+            "Kafka & streaming",
+            "Event-driven processing",
+            "AI/ML in Databricks",
+          ],
+        },
+        {
+          group: "Microsoft Fabric",
+          items: ["Data engineering", "Warehouse", "Real-time intelligence", "KQL integration"],
+        },
+        {
+          group: "Languages & databases",
+          items: ["SQL Server (T-SQL)", "Python", "PySpark", "KQL"],
+        },
+        {
+          group: "BI & delivery",
+          items: ["Power BI, DAX & RLS", "SSRS", "Semantic models", "Azure DevOps CI/CD", "GitHub"],
+        },
+      ];
+
+      const education = [
+        ["MBA, Business Administration", "University of New Brunswick · 2021"],
+        ["BSc, Computer Science", "GITAM University · 2017"],
+        ["Microsoft Azure Fundamentals", "AZ-900"],
+        ["Microsoft Architect Technologies", "AZ-300"],
+      ];
+
+      const app = document.getElementById("app");
+      let theme = location.hash === "#interactive" ? "interactive" : "classic";
+      let active = 0;
+
+      const contact = `
+        <div class="tags mono" style="margin-top:2rem;gap:2rem">
+          <a href="mailto:${profile.email}">${profile.email}</a>
+          <a href="tel:+15065665115">${profile.phone}</a>
+          <a href="${profile.linkedin}" target="_blank" rel="noreferrer">LinkedIn</a>
+        </div>`;
+
+      function classicView() {
+        return `
+        <div class="wrap">
+          <header class="bar">
+            <span style="font-family:var(--display);font-size:1.25rem">${profile.name}</span>
+            <nav><a href="#work">Work</a><a href="#stack">Stack</a><a href="mailto:${profile.email}">Connect</a></nav>
+          </header>
+          <section class="hero">
+            <p class="eyebrow">${profile.title}</p>
+            <h1>Data should <em>feel</em> trustworthy</h1>
+            <p class="lead">${profile.intro}</p>
+            <p class="eyebrow" style="margin-top:2.5rem">${profile.location} • Open to conversations</p>
+          </section>
+          <section>
+            <h2 class="eyebrow">Three things I strongly believe in</h2>
+            ${beliefs
+              .map(
+                (b, i) => `<div class="belief"><span class="num">0${i + 1}</span><div>
+                  <h3 class="display" style="font-size:1.5rem">${b.title}</h3>
+                  <p class="muted" style="margin-top:.5rem;max-width:32rem">${b.body}</p></div></div>`,
+              )
+              .join("")}
+          </section>
+          <section id="work">
+            <h2 class="eyebrow">Selected work</h2>
+            ${work
+              .map(
+                (j) => `<article class="job">
+                  <div class="job-head"><h3>${j.role}</h3><span class="eyebrow">${j.period}</span></div>
+                  <p style="color:var(--primary);font-size:.85rem;margin-top:.25rem">${j.company} · ${j.place}</p>
+                  <p class="muted" style="margin-top:1rem;max-width:34rem">${j.summary}</p>
+                  <ul>${j.points.map((p) => `<li>${p}</li>`).join("")}</ul>
+                  <div class="tags">${j.stack.map((s) => `<span class="tag">${s}</span>`).join("")}</div>
+                </article>`,
+              )
+              .join("")}
+          </section>
+          <section id="stack">
+            <h2 class="eyebrow">The stack I reach for</h2>
+            <div class="grid2">
+              ${skills
+                .map(
+                  (s) => `<div><h3 class="display" style="font-size:1.25rem">${s.group}</h3>
+                  <ul class="muted" style="list-style:none;margin-top:.75rem;font-size:.9rem">${s.items.map((i) => `<li>${i}</li>`).join("")}</ul></div>`,
+                )
+                .join("")}
+            </div>
+          </section>
+          <section>
+            <h2 class="eyebrow">Education & certification</h2>
+            <ul class="edu">${education.map(([t, s]) => `<li><span>${t}</span><span>${s}</span></li>`).join("")}</ul>
+          </section>
+          <section>
+            <h2 class="display" style="font-size:2.5rem;line-height:1.15">Got a pipeline that keeps breaking?</h2>
+            <p class="muted" style="margin-top:1rem;max-width:32rem">I'm always up for a conversation about data platforms, Databricks, or making reporting something people finally trust.</p>
+            ${contact}
+          </section>
+        </div>`;
+      }
+
+      function interactiveView() {
+        const j = work[active];
+        const allStack = skills.flatMap((s) => s.items);
+        return `
+        <div class="spotlight" id="spot"></div><div class="grid-field"></div>
+        <div class="wrap wide" style="position:relative;z-index:1">
+          <header class="bar mono" style="text-transform:uppercase;letter-spacing:.2em;font-size:.7rem">
+            <span style="color:var(--primary)">~/sameer.console</span>
+            <span class="muted">${profile.location}</span>
+          </header>
+          <div class="panel">
+            <div class="dots">
+              <span style="background:oklch(.6 .2 27)"></span><span style="background:var(--primary)"></span><span style="background:var(--accent)"></span>
+            </div>
+            <p class="mono" style="color:var(--accent);margin-top:2rem;font-size:.85rem">$ whoami</p>
+            <h1 style="font-size:clamp(2.8rem,8vw,4.5rem);line-height:1.05;margin-top:.5rem">${profile.name}</h1>
+            <p class="eyebrow" style="margin-top:.75rem">${profile.title}</p>
+            <p class="mono" style="color:var(--accent);margin-top:2rem;font-size:.85rem">$ ls current-obsessions</p>
+            <p class="mono" style="color:var(--primary);font-size:1.6rem;margin-top:.5rem"><span id="typed"></span><span class="caret">▌</span></p>
+            <p class="muted" style="margin-top:2rem;max-width:34rem">${profile.intro}</p>
+          </div>
+
+          <section style="border:0">
+            <h2 class="eyebrow">Career pipeline — select a stage</h2>
+            <div class="nodes">
+              ${work
+                .map(
+                  (w, i) =>
+                    `<button class="node" aria-pressed="${i === active}" data-i="${i}">${w.period.split(" — ")[0]}<b>${w.company}</b></button>`,
+                )
+                .join("")}
+            </div>
+            <div class="panel" style="margin-top:1.5rem">
+              <div class="job-head"><h3 class="display" style="font-size:1.9rem">${j.role}</h3><span class="eyebrow" style="color:var(--primary)">${j.period}</span></div>
+              <p class="muted" style="font-size:.9rem;margin-top:.25rem">${j.company} · ${j.place}</p>
+              <p class="muted" style="margin-top:1rem;max-width:42rem">${j.summary}</p>
+              <div class="cards">${j.points.map((p) => `<div class="card muted" style="font-size:.88rem">${p}</div>`).join("")}</div>
+              <div class="tags">${j.stack.map((s) => `<span class="tag" style="border-color:color-mix(in oklab,var(--primary) 40%,transparent);color:var(--primary)">${s}</span>`).join("")}</div>
+            </div>
+          </section>
+
+          <div class="marquee-wrap"><div class="marquee">${[...allStack, ...allStack].map((s) => `<span>${s} <b style="color:var(--primary)">/</b></span>`).join("")}</div></div>
+
+          <section style="border:0">
+            <h2 class="eyebrow">Stack matrix</h2>
+            <div class="cards">
+              ${skills
+                .map(
+                  (s) =>
+                    `<div class="card"><h3>${s.group}</h3><ul>${s.items.map((i) => `<li>› ${i}</li>`).join("")}</ul></div>`,
+                )
+                .join("")}
+            </div>
+          </section>
+
+          <section style="border:0">
+            <div class="cards">
+              ${beliefs
+                .map(
+                  (b, i) =>
+                    `<div class="card"><span class="mono" style="color:var(--accent);font-size:.72rem">0${i + 1}</span>
+                    <h3 style="margin-top:.5rem">${b.title}</h3><p class="muted" style="font-size:.88rem;margin-top:.5rem">${b.body}</p></div>`,
+                )
+                .join("")}
+            </div>
+          </section>
+
+          <section style="border:0">
+            <h2 class="eyebrow">Education & certification</h2>
+            <div class="cards">${education.map(([t, s]) => `<div class="card"><h3>${t}</h3><p class="mono muted" style="font-size:.72rem;margin-top:.4rem">${s}</p></div>`).join("")}</div>
+          </section>
+
+          <div class="panel">
+            <p class="mono" style="color:var(--accent);font-size:.85rem">$ open connection</p>
+            <h2 class="display" style="font-size:2.5rem;line-height:1.15;margin-top:.75rem">Let's make your data trustworthy.</h2>
+            ${contact}
+          </div>
+        </div>`;
+      }
+
+      let typeTimer;
+      function startTypewriter() {
+        clearTimeout(typeTimer);
+        const el = document.getElementById("typed");
+        if (!el) return;
+        const words = [
+          "PySpark pipelines",
+          "Delta Live Tables",
+          "KQL diagnostics",
+          "Power BI semantics",
+          "CDC ingestion",
+        ];
+        let i = 0,
+          n = 0,
+          deleting = false;
+        (function tick() {
+          const word = words[i % words.length];
+          n += deleting ? -1 : 1;
+          el.textContent = word.slice(0, n);
+          let delay = deleting ? 40 : 75;
+          if (!deleting && n === word.length) {
+            deleting = true;
+            delay = 1600;
+          } else if (deleting && n === 0) {
+            deleting = false;
+            i++;
+            delay = 250;
+          }
+          typeTimer = setTimeout(tick, delay);
+        })();
+      }
+
+      function render() {
+        app.innerHTML = theme === "classic" ? classicView() : interactiveView();
+        document
+          .querySelectorAll("#tabs button")
+          .forEach((b) =>
+            b.setAttribute("aria-selected", String(b.dataset.theme === theme)),
+          );
+        if (theme === "interactive") {
+          startTypewriter();
+          app.querySelectorAll(".node").forEach((btn) =>
+            btn.addEventListener("click", () => {
+              active = Number(btn.dataset.i);
+              render();
+            }),
+          );
+        }
+      }
+
+      document.querySelectorAll("#tabs button").forEach((btn) =>
+        btn.addEventListener("click", () => {
+          if (theme === btn.dataset.theme) return;
+          theme = btn.dataset.theme;
+          location.hash = theme === "interactive" ? "#interactive" : "";
+          render();
+          scrollTo({ top: 0 });
+        }),
+      );
+
+      window.addEventListener("pointermove", (e) => {
+        const spot = document.getElementById("spot");
+        if (spot) {
+          spot.style.setProperty("--x", e.clientX + "px");
+          spot.style.setProperty("--y", e.clientY + "px");
+        }
+      });
+
+      render();
+    </script>
+  </body>
+</html>
