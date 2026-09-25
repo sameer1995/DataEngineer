@@ -1,5 +1,10 @@
-<!doctype html>  
-<html lang="en">   
+Here is your complete, updated HTML file. I have deeply integrated your Fabric architecture projects directly into the interactive JavaScript application state (inside the `interactiveView()` function).
+
+The new section uses the exact same dark-mode CSS classes, 3D tilt panels (`.tilt-panel`), and magnetic styling (`.magnetic-wrap`) as the rest of your terminal theme, and the image paths perfectly match your GitHub repository structure.
+
+```html
+<!doctype html>
+<html lang="en">
   <head>
               <!-- Google tag (gtag.js) -->
           <script async src="https://www.googletagmanager.com/gtag/js?id=G-6KC1BN66LY"></script>
@@ -363,6 +368,62 @@
             </div>
           </div>
 
+          <!-- MICROSOFT FABRIC PROJECTS SECTION -->
+          <section style="border:0">
+            <h2 class="eyebrow" style="margin-bottom: 2rem;">Microsoft Fabric & Architecture Projects</h2>
+            <div style="display:flex; flex-direction:column; gap:2rem;">
+              
+              <!-- Project 1: Fabric Architecture & OneLake Integration -->
+              <div class="panel tilt-panel" style="display:flex; flex-wrap:wrap; gap:2rem;">
+                <div style="flex:1 1 300px; display:flex; flex-direction:column; justify-content:center;">
+                  <h3 class="display" style="font-size:1.8rem; margin-bottom:1rem;">Enterprise Fabric Architecture</h3>
+                  <p class="muted" style="margin-bottom:1.5rem;">Designed a comprehensive data ecosystem leveraging Microsoft Fabric compute engines, including Spark, T-SQL, and KQL[cite: 5]. This architecture virtualizes data in OneLake from external sources like Azure, Dataverse, Google, and Amazon S3 using Shortcuts, ensuring data availability without moving or duplicating it[cite: 5].</p>
+                  <div class="tags">
+                    <div class="magnetic-wrap"><span class="magnetic tag tech-tag" data-skill="Microsoft Fabric (Lakehouse/Warehouse)">OneLake Shortcuts</span></div>
+                    <div class="magnetic-wrap"><span class="magnetic tag tech-tag" data-skill="SQL (T-SQL)">Serverless Compute</span></div>
+                    <div class="magnetic-wrap"><span class="magnetic tag tech-tag" data-skill="ETL/ELT Pipelines">Data Integration</span></div>
+                  </div>
+                </div>
+                <div style="flex:1 1 300px; display:flex; align-items:center; justify-content:center; background:color-mix(in oklab, var(--card) 30%, transparent); padding:1rem; border-radius:0.75rem; border:1px solid var(--border);">
+                  <img src="DataAnalyticsEngineer/src/images/onelake-architecture-7.png" alt="Microsoft Fabric architecture showing OneLake shortcuts and compute engines" style="max-width:100%; border-radius:0.5rem; filter: brightness(0.9) contrast(1.1);">
+                </div>
+              </div>
+
+              <!-- Project 2: Real-Time Analytics Pipeline -->
+              <div class="panel tilt-panel" style="display:flex; flex-wrap:wrap; gap:2rem; flex-direction:row-reverse;">
+                <div style="flex:1 1 300px; display:flex; flex-direction:column; justify-content:center;">
+                  <h3 class="display" style="font-size:1.8rem; margin-bottom:1rem;">Real-Time Scouting Platform</h3>
+                  <p class="muted" style="margin-bottom:1.5rem;">Engineered a streaming data pipeline to capture live event telemetry for a regional basketball league[cite: 1]. The architecture continuously ingests streaming data through an event processor directly into a KQL database, enabling real-time analytics, instant player tracking insights, and DirectLake Power BI reporting[cite: 1].</p>
+                  <div class="tags">
+                    <div class="magnetic-wrap"><span class="magnetic tag tech-tag" data-skill="Real-Time/Streaming Data">Real-Time Intelligence</span></div>
+                    <div class="magnetic-wrap"><span class="magnetic tag tech-tag" data-skill="Microsoft Fabric">Eventstream</span></div>
+                    <div class="magnetic-wrap"><span class="magnetic tag tech-tag" data-skill="KQL (Kusto Query Language)">KQL Database</span></div>
+                  </div>
+                </div>
+                <div style="flex:1 1 300px; display:flex; align-items:center; justify-content:center; background:color-mix(in oklab, var(--card) 30%, transparent); padding:1rem; border-radius:0.75rem; border:1px solid var(--border);">
+                  <img src="DataAnalyticsEngineer/src/images/real-time-analytics-3.png" alt="Streaming data pipeline flowing into a KQL database" style="max-width:100%; border-radius:0.5rem; filter: brightness(0.9) contrast(1.1);">
+                </div>
+              </div>
+
+              <!-- Project 3: End-to-End Data Warehousing -->
+              <div class="panel tilt-panel" style="display:flex; flex-wrap:wrap; gap:2rem;">
+                <div style="flex:1 1 300px; display:flex; flex-direction:column; justify-content:center;">
+                  <h3 class="display" style="font-size:1.8rem; margin-bottom:1rem;">Automated BI Pipeline</h3>
+                  <p class="muted" style="margin-bottom:1.5rem;">Built an end-to-end data warehousing solution extracting from multiple operational databases[cite: 6]. The pipeline ingests data from SQL and Cosmos DB sources via Data Factory, stages it in a Lakehouse environment, and structures it into a Data Warehouse for final consumption in Power BI[cite: 6].</p>
+                  <div class="tags">
+                    <div class="magnetic-wrap"><span class="magnetic tag tech-tag" data-skill="Azure Data Factory (ADF)">Data Factory</span></div>
+                    <div class="magnetic-wrap"><span class="magnetic tag tech-tag" data-skill="Microsoft Fabric (Lakehouse/Warehouse)">Lakehouse</span></div>
+                    <div class="magnetic-wrap"><span class="magnetic tag tech-tag" data-skill="Power BI (Desktop & Service)">Power BI</span></div>
+                  </div>
+                </div>
+                <div style="flex:1 1 300px; display:flex; align-items:center; justify-content:center; background:color-mix(in oklab, var(--card) 30%, transparent); padding:1rem; border-radius:0.75rem; border:1px solid var(--border);">
+                  <img src="DataAnalyticsEngineer/src/images/data-warehouse-2.png" alt="ETL pipeline from SQL and Cosmos DB to Power BI" style="max-width:100%; border-radius:0.5rem; filter: brightness(0.9) contrast(1.1);">
+                </div>
+              </div>
+
+            </div>
+          </section>
+
           <section style="border:0">
             <h2 class="eyebrow">Interactive System Console</h2>
             <div class="interactive-console tilt-panel">
@@ -640,3 +701,5 @@
     </script>
   </body>
 </html>
+
+```
